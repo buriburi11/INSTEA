@@ -69,4 +69,88 @@ https://github.com/TEAM-OR-OWNER/INSTEA.git
 
 If you already cloned the repository, go to its existing folder instead of cloning it again.
 
-## 4.
+## 4. Open the frontend folder
+
+If the React project is in a folder named `frontend`, run:
+
+```bash
+cd ~/projects/INSTEA/frontend
+```
+
+If `package.json` is in the repository’s top-level folder, use that folder instead.
+
+Check that you are in the right place:
+
+```bash
+ls
+```
+
+You should see `package.json`. If the project includes `package-lock.json`, use the next step to install the dependencies.
+
+## 5. Install project dependencies
+
+Run:
+
+```bash
+npm ci
+```
+
+This installs the exact dependency versions recorded in `package-lock.json`. Use `npm install` if the project does not yet have a `package-lock.json`.
+
+## 6. Start the website
+
+```bash
+npm run dev
+```
+
+Open the local address printed in the terminal, commonly:
+
+```text
+http://localhost:5173
+```
+
+Keep the terminal running while you use the site. Press `Ctrl+C` in that terminal to stop the development server.
+
+## 7. Run the linter
+
+In a second terminal, go to the frontend folder and run:
+
+```bash
+npm run lint
+```
+
+If the project’s `package.json` does not have a `lint` script, ask the team before adding or changing project configuration.
+
+## Troubleshooting
+
+### `npm: command not found`
+
+Make sure Node.js was installed inside WSL, then reload the shell:
+
+```bash
+source ~/.bashrc
+nvm use --lts
+```
+
+### `npm ci` reports a lock-file error
+
+Confirm you are in the frontend folder and that `package.json` and `package-lock.json` are present:
+
+```bash
+pwd
+ls
+```
+
+If the project has no lock file yet, run `npm install` once and commit the generated `package-lock.json` so the team can use `npm ci`.
+
+### Vite says the port is already in use
+
+Use the alternate local address Vite prints, or stop the other development server with `Ctrl+C`.
+
+## Team notes
+
+- Use the Node.js version selected by `nvm` in WSL.
+- Run frontend commands from the folder containing the frontend `package.json`.
+- Commit `package-lock.json` when dependencies change.
+- Do not commit `node_modules/`, `.env` files, API keys, or other secrets.
+- Backend setup is separate; this guide covers the React frontend only.
