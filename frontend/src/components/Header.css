@@ -1,0 +1,132 @@
+.header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 15px 25px 10px 10px;
+    border-bottom: 2px solid #E4DACA;
+}
+
+/*size of logo */
+.header .logo {
+    width: 250px;
+    height: auto;
+    flex-shrink: 0;
+}
+
+/* font of menu...*/
+.header-nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 2vw, 50px);
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: #2A2A27;
+    margin: 0 auto;
+}
+
+/*font effects*/
+.header-nav a {
+    color: #1F3B2E;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    text-decoration: none;
+}
+
+.header-nav a:hover {
+    color: #8A6A35;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* when on active page */
+.header-nav a.active {
+    background-color: #EDE5D7;
+    color: #1F3B2E;
+    border-radius: 10px;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+/* icons */
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/*bell and shopping bag */
+.header-side-icons {
+    cursor: pointer;
+}
+
+.header-side-icons:hover {
+    opacity: 0.7;
+}
+
+
+/* user initials icon */
+.user-initials-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #C2A066;
+    color: #1F3B2E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.user-initials-icon:hover {
+    opacity: 0.9;
+    border: 2px solid #1F3B2E;
+    text-decoration: none;
+}
+
+/*order now button */
+.order-button {
+    background-color: #1F3B2E;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.order-button:hover {
+    opacity: 0.9;
+    border: 2px solid #1F3B2E;
+    text-decoration: none;
+}
+
+/* For smaller desktops screens */
+@media (max-width: 1200px) {
+    .header .logo {
+        width: 180px;
+    } 
+
+    .header-nav {
+        font-size: 12px;
+        gap: 12px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .header-icons {
+        gap: 10px;
+    }
+
+    .order-button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}
