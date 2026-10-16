@@ -121,6 +121,32 @@ npm run lint
 
 If the project’s `package.json` does not have a `lint` script, ask the team before adding or changing project configuration.
 
+## 8. Run the tests
+
+The frontend uses [Vitest](https://vitest.dev) with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and jsdom.
+
+From the frontend folder, run the tests once:
+
+```bash
+npm run test:run
+```
+
+Or start watch mode, which reruns tests when you save a file:
+
+```bash
+npm test
+```
+
+Press `q` to quit watch mode.
+
+### Writing tests
+
+- Put test files next to the component they test and name them `ComponentName.test.jsx`, for example `src/components/Footer.test.jsx`.
+- `describe`, `it`, and `expect` are available globally, so you do not need to import them.
+- Matchers such as `toBeInTheDocument()` and `toHaveAttribute()` come from `@testing-library/jest-dom` and are loaded by `src/setupTests.js`.
+- Wrap components that use `NavLink` or other router features in a `MemoryRouter` from `react-router`. See `Footer.test.jsx` for an example.
+- Test settings live in the `test` section of `vite.config.js`.
+
 ## Troubleshooting
 
 ### `npm: command not found`
@@ -152,5 +178,6 @@ Use the alternate local address Vite prints, or stop the other development serve
 - Use the Node.js version selected by `nvm` in WSL.
 - Run frontend commands from the folder containing the frontend `package.json`.
 - Commit `package-lock.json` when dependencies change.
-- Do not commit `node_modules/`, `.env` files, API keys, or other secrets.
+- Run `npm run test:run` and `npm run lint` before opening a pull request.
+- Do not commit `node_modules/`, `.env` files, API keys, or other secrets. The root `.gitignore` excludes dependencies, build output, and `.env` files; use `.env.example` to share variable names without values.
 - Backend setup is separate; this guide covers the React frontend only.
