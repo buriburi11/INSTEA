@@ -31,4 +31,9 @@ describe('Footer', () => {
     expect(instagram).toHaveAttribute('target', '_blank')
     expect(instagram).toHaveAttribute('rel', 'noopener noreferrer')
   })
+
+  it('shows the app name from the environment config', () => {
+    renderFooter()
+    expect(screen.getByText(/© 2026 INSTEA\. All rights reserved\./)).toBeInTheDocument()
+  })
 })
