@@ -17,8 +17,12 @@ function Footer() {
                 <p>Premium tea and coffee, slow-steeped with botanical ingredients in Sacramento since 2027.</p>
 
                 <div className="footer-socials">
-                    <img src={instagramLogo} alt="Instagram" />
-                    <img src={facebookLogo} alt="Facebook" />
+                    <a href="https://www.instagram.com/instea_official/" target='_blank' rel="noopener noreferrer" >
+                        <img src={instagramLogo} alt="Instagram" />
+                    </a>
+                    <a href="https://www.facebook.com/insteacoffeebar/" target='_blank' rel="noopener noreferrer" >
+                        <img src={facebookLogo} alt="Facebook" />
+                    </a>
                 </div>
             </div>
 
