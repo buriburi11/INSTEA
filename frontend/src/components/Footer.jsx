@@ -4,6 +4,7 @@ import facebookLogo from '../assets/Facebook_Logo.png';
 import instagramLogo from '../assets/Instagram_logo.png';
 import './Footer.css';
 import { NavLink } from 'react-router';
+import { env } from '../config/env';
 
 function Footer() {
     return (
@@ -77,7 +78,7 @@ function Footer() {
             </div>
 
             <div className="footer-bottom">
-                <p>© 2026 INSTEA. All rights reserved.</p>
+                <p>© 2026 {env.appName}. All rights reserved.</p>
                 <p> Payments securely processed by Square.</p>
             </div>
 
