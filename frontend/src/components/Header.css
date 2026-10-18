@@ -130,3 +130,76 @@
         font-size: 12px;
     }
 }
+
+/* ====================
+     MOBILE NAVIGATION
+   ==================== */
+
+.mobile-menu-toggle, .mobile-nav {                                                               /* Hide mobile navigation controls on desktop sized screens */
+    display: none;
+}
+
+/* ================
+     MOBILE HEADER
+   ================ */
+
+@media (max-width: 768px) {                                                                      /* FOR MOBILE SIZED SCREENS */
+    .mobile-menu-toggle {                                                                        /* Show mobile menu toggle button on mobile sized screens */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .header {
+        position: relative;                                                                      /* Make the header a positioned element to allow absolute positioning of the mobile navigation menu */
+        padding-right: 8px;                                                                      /* Decrease padding to the right to accommodate the mobile menu toggle button */
+    }
+
+    .header-nav {                                                                                /* Hide desktop navigation links on mobile sized screens */
+        display: none;
+    }
+
+    .header-icons {                                                                              /* Hide desktop icons on mobile sized screens */
+        margin-left: auto;                                                                       /* Push the icons to the right */
+    }
+
+    .header-icons .order-button {                                                                /* Hide order button on mobile sized screens */
+        display: none;
+    }
+
+    .header .logo {
+        width: 145px;                                                                            /* Decrease logo size on mobile sized screens */
+    }
+
+    .mobile-nav:not([hidden]) {                                                                  /* Show mobile navigation menu when it is not hidden */
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+
+        background-color: #FAF6EE;
+        padding: 20px;
+        box-sizing: border-box;
+        z-index: 10;                                                                             /* Ensure the mobile navigation menu appears above other content */
+    }
+
+    .mobile-nav a {                                                                              /* Style mobile navigation links */
+        color: #1F3B2E;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+    .mobile-nav .mobile-order-button {                                                           /* Style mobile order button */
+        background-color: #1F3B2E;
+        color: white;
+        border-radius: 10px;
+        padding: 10px 20px;
+        text-align: center;
+        font-weight: 600;
+    }
+}
