@@ -1,4 +1,4 @@
-import { useState } from 'react'
+//import { useState } from 'react'
 
 /*import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
@@ -6,16 +6,63 @@ import viteLogo from './assets/vite.svg'  */
 import './App.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import { Routes, Route } from 'react-router'
+import AdminLayout from './layouts/AdminLayout.jsx'
+import AdminPlaceholder from './pages/admin/AdminPlaceholder.jsx'
 
 
 function App() {
-  const [count, setCount] = useState(0)
 
+  
   return (
-    <>
-        <Header />
-        <Footer />
-    </>  
+    <Routes>
+      {/* Admin pages share the sidebar, header, and content layout. */}
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route
+          index
+          element={<AdminPlaceholder title="Dashboard" />}
+        />
+        <Route
+          path="orders"
+          element={<AdminPlaceholder title="Orders" />}
+        />
+        <Route
+          path="products"
+          element={<AdminPlaceholder title="Products" />}
+        />
+        <Route
+          path="customers"
+          element={<AdminPlaceholder title="Customers" />}
+        />
+        <Route
+          path="loyalty"
+          element={<AdminPlaceholder title="Loyalty" />}
+        />
+        <Route
+          path="community"
+          element={<AdminPlaceholder title="Community" />}
+        />
+        <Route
+          path="roles"
+          element={<AdminPlaceholder title="Roles & Access" />}
+        />
+        <Route
+          path="*"
+          element={<AdminPlaceholder title="Admin page not found" />}
+        />
+      </Route>
+
+      {/* Preserve the public layout until public page routes are added. */}
+      <Route
+        path="*"
+        element={
+          <>
+            <Header />
+            <Footer />
+          </>
+        }
+      />
+    </Routes>
   )
 }
 

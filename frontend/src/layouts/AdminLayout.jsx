@@ -1,6 +1,7 @@
+import { Outlet } from 'react-router'
 import './AdminLayout.css'
 
-export default function AdminLayout({ children }) {
+export default function AdminLayout() {
   return (
     <div className="admin-shell">
       <aside className="admin-shell__sidebar">
@@ -37,7 +38,7 @@ export default function AdminLayout({ children }) {
         </header>
 
         <main className="admin-shell__content">
-          {children}
+          <Outlet />
         </main>
       </div>
     </div>
