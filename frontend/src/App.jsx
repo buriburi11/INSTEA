@@ -8,10 +8,13 @@ import { Routes, Route } from 'react-router'
 import PageLayout from './components/PageLayout'
 import AdminLayout from './layouts/AdminLayout.jsx'
 import AdminPlaceholder from './pages/admin/AdminPlaceholder.jsx'
+import StaffLogin from './pages/admin/StaffLogin.jsx'
 
 function App() {
   return (
     <Routes>
+      {/* Staff sign-in is separate from public and admin layouts. */}
+      <Route path="/staff_portal" element={<StaffLogin />} />
       {/* Admin pages share the sidebar, header, and content layout. */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route
