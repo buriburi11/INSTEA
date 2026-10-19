@@ -5,12 +5,13 @@ import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'  */
 import './App.css'
 import PageLayout from './components/PageLayout'
+import Home from './components/Home'
 
 
 function App() {
   return (
     <PageLayout>
-
+      <Home />
     </PageLayout>
   );
 }
