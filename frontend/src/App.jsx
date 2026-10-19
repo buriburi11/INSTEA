@@ -4,17 +4,12 @@
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'  */
 import './App.css'
-<<<<<<< HEAD
-import Header from './components/Header'
-import Footer from './components/Footer'
 import { Routes, Route } from 'react-router'
+import PageLayout from './components/PageLayout'
 import AdminLayout from './layouts/AdminLayout.jsx'
 import AdminPlaceholder from './pages/admin/AdminPlaceholder.jsx'
 
-
 function App() {
-
-  
   return (
     <Routes>
       {/* Admin pages share the sidebar, header, and content layout. */}
@@ -53,29 +48,10 @@ function App() {
         />
       </Route>
 
-      {/* Preserve the public layout until public page routes are added. */}
-      <Route
-        path="*"
-        element={
-          <>
-            <Header />
-            <Footer />
-          </>
-        }
-      />
+      {/* Public pages use the team's shared public layout. */}
+      <Route path="*" element={<PageLayout />} />
     </Routes>
   )
-=======
-import PageLayout from './components/PageLayout'
-
-
-function App() {
-  return (
-    <PageLayout>
-
-    </PageLayout>
-  );
->>>>>>> origin/main
 }
 
 export default App;
