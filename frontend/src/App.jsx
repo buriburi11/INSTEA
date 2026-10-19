@@ -10,6 +10,7 @@ import PageLayout from './components/PageLayout'
 import Home from './components/Home'
 import About from './components/About'
 import Locations from './components/Locations';
+import Events from './components/Events';
 
 
 function App() {
@@ -22,6 +23,8 @@ function App() {
         <Route path="/about" element={<About />} />                                                             {/* About page */}
 
         <Route path="/locations" element={<Locations />} />                                                     {/* Location page */}
+
+        <Route path="/events" element={<Events />} />                                                           {/* Events page */}
 
       </Routes>
 

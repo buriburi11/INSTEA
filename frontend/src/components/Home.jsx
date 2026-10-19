@@ -58,7 +58,7 @@ function Home() {
 
                 <div className="home-signature-heading">
                     <div className="home-signature-heading-text">
-                        <h2>Signature &amp; Seasonal</h2>
+                        <h2>Signature &amp; seasonal</h2>
 
                         <p>
                             Handcrafted fresh with botanical ingredients.
