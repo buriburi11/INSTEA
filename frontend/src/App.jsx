@@ -4,6 +4,7 @@
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'  */
 import './App.css'
+<<<<<<< HEAD
 import Header from './components/Header'
 import Footer from './components/Footer'
 import { Routes, Route } from 'react-router'
@@ -64,9 +65,20 @@ function App() {
       />
     </Routes>
   )
+=======
+import PageLayout from './components/PageLayout'
+
+
+function App() {
+  return (
+    <PageLayout>
+
+    </PageLayout>
+  );
+>>>>>>> origin/main
 }
 
-export default App
+export default App;
 
 /*          <img src={heroImg} className="base" width="170" height="179" alt="" />
           <img src={reactLogo} className="framework" alt="React logo" />
