@@ -1,0 +1,1194 @@
+/* =========================
+     HOMEPAGE HEADING FONT
+   =========================*/
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
+
+/* ======================
+     HOME MAIN SECTION
+   ====================== */
+
+.home-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  padding: 80px 0;
+}
+
+.home-main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.home-main-image {
+    flex: 1;
+    min-width: 0;
+    min-height: 420px;
+    background-color: #e8e2d6;
+    border-radius: 12px;
+}
+
+.home-main-image img {
+    display: block;
+    width: 100%;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/* =====================
+     HOME MAIN LOCATION
+   ===================== */
+
+.home-main-location {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 24px;
+    color: #77736c;
+    font-size: 13px;
+    text-align: left;
+}
+
+.home-main-location-pin {
+    color: #8A6A35;
+    font-size: 20px;
+}
+
+.home-main-location-dot {
+    color: #8A6A35;
+}
+
+/* ========================
+     HOME MAIN TYPOGRAPHY
+   ======================== */
+
+.home-main-content h1 {
+    font-size: clamp(40px, 4.5vw, 68px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: #234b3a;
+    text-align: left;
+    margin: 0 0 24px;
+}
+
+.home-main-content h1 span {
+    display: block;
+    font-style: italic;
+    color: #946826;
+}
+
+.home-main-content p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: #6b6375;
+    text-align: left;
+    max-width: 480px;
+    margin: 0 0 32px;
+}
+
+/* ====================
+     HOME MAIN BUTTONS
+   ==================== */
+
+.home-main-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.home-main-actions button {
+    padding: 14px 26px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: default;
+    opacity: 1;
+}
+
+/* Order Now button */
+.home-main-actions button:first-child {
+    background-color: #234b3a;
+    color: #ffffff;
+    border: 1px solid #234b3a;
+}
+
+/* Join INSTEA Rewards button */
+.home-main-actions button:last-child {
+    background-color: transparent;
+    color: #234b3a;
+    border: 1px solid #234b3a;
+}
+
+/* ===============================
+     HOME MAIN RESPONSIVE LAYOUT
+   =============================== */
+
+@media (max-width: 768px) {
+    .home-main {
+        flex-direction: column;
+        gap: 32px;
+        padding: 48px 0;
+    }
+
+    .home-main-content {
+        width: 100%;
+    }
+
+    .home-main-image {
+        width: 100%;
+        min-height: 300px;
+        flex: none;
+    }
+
+    .home-main-image img {
+    height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .home-main {
+        padding: 32px 0;
+    }
+
+    .home-main-content h1 {
+        font-size: 40px;
+    }
+
+    .home-main-content p {
+        font-size: 16px;
+    }
+
+    .home-main-image {
+        min-height: 240px;
+    }
+
+    .home-main-image img {
+    height: 240px;
+    }
+}
+
+/* ================================
+     SIGNATURE & SEASONAL SECTION
+   ================================ */
+
+.home-signature {
+    padding: 80px 0;
+}
+
+.home-signature-heading {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    text-align: left;
+    margin-bottom: 36px;
+}
+
+.home-signature-menu {
+    background: none;
+    border: none;
+    padding: 0;
+    color: #234b3a;
+    font-size: 16px;
+    font-weight: 600;
+    opacity: 1;
+    cursor: default;
+}
+
+.home-signature-heading h2 {
+    font-size: clamp(32px, 3vw, 38px);
+    font-weight: 600;
+    line-height: 1.2;
+    color: #234b3a;
+    margin: 0 0 16px;
+}
+
+.home-signature-heading p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #6b6375;
+    margin: 0;
+}
+
+/* ====================================
+     SIGNATURE & SEASONAL DRINK CARDS
+   ==================================== */
+
+.home-signature-products {
+    display: grid;
+    grid-template-columns: 2fr repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+}
+
+.drink-card {
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: left;
+}
+
+/* ------- FEATURED DRINK CARD ------- */
+
+.drink-card-featured {
+    position: relative;
+    min-height: 460px;
+}
+
+.drink-card-featured .drink-card-image {
+    position: absolute;
+    inset: 0;
+    aspect-ratio: auto;
+}
+
+.drink-card-featured .drink-card-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px 26px;
+    background: rgba(20, 48, 36, 0.88);
+    gap: 8px;
+}
+
+.drink-card-featured .drink-card-content h3 {
+    color: #ffffff;
+    font-size: 26px;
+}
+
+.drink-card-featured .drink-card-content p {
+    color: #e8e2d6;
+}
+
+/* ------- FEATURED DRINK CARD END ------- */
+/* ------- FEATURED DRINK BADGE ------- */
+
+.drink-card-badge {
+    display: inline-block;
+    margin-bottom: 12px;
+    
+    z-index: 1;
+
+    padding: 8px 14px;
+    border-radius: 6px;
+
+    background-color: #c9a86a;
+    color: #234b3a;
+
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+
+    align-self: flex-start;
+}
+
+/* ------- FEATURED DRINK BADGE END------- */
+/* ------- FEATURED DRINK ACTION ------- */
+
+.drink-card-featured-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-top: 20px;
+    padding: 0;
+
+    background: transparent;
+    border: none;
+
+    color: #b6863f;
+    font-size: 14px;
+    font-weight: 600;
+
+    opacity: 1;
+    cursor: default;
+}
+
+.drink-card-featured-action span {
+    font-size: 18px;
+}
+
+/* ------- FEATURED DRINK ACTION END ------- */
+/* ------- DRINK CARD ------- */
+
+.drink-card-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 5;
+    background-color: #e8e2d6;
+    color: #6b6375;
+    font-size: 14px;
+    position: relative;
+}
+
+.drink-card:not(.drink-card-featured) .drink-card-image {
+    aspect-ratio: 4 / 3;
+}
+
+.drink-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.drink-card-content {
+    padding: 20px;
+}
+
+.drink-card-content h3 {
+    font-size: 20px;
+    font-weight: 400;
+    color: #234b3a;
+    margin: 0 0 12px;
+}
+
+.drink-card-content p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #6b6375;
+    margin: 0;
+}
+
+/* ------- DRINK CARD END ------- */
+/* ------- DRINK CARD FAVORITE ICON ------- */
+
+.drink-card-favorite {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    background-color: #ffffff;
+    border-radius: 50%;
+
+    color: #234b3a;
+    font-size: 22px;
+}
+
+/* ------- DRINK CARD FAVORITE ICON END------- */
+/* ------- SMALL DRINK CARD BADGES ------- */
+
+.drink-card-small-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 1;
+
+    padding: 6px 10px;
+    border-radius: 4px;
+
+    background-color: #ffffff;
+    color: #234b3a;
+
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ------- SMALL DRINK CARD BADGES END------- */
+/* ------- DRINK CARD FOOTER ------- */
+
+.drink-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+.drink-card-price {
+    font-size: 14px;
+    font-weight: 600;
+    color: #234b3a;
+}
+
+.drink-card-footer button {
+    padding: 9px 18px;
+    border: 1px solid #234b3a;
+    border-radius: 10px;
+    background-color: #234b3a;
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 1;
+    cursor: default;
+}
+
+/* ======================================================
+     SIGNATURE & SEASONAL DRINK CARDS RESPONSIVE LAYOUT
+   ====================================================== */
+
+@media (max-width: 900px) {
+    .home-signature-products {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .home-signature-products {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===================
+     REWARDS SECTION
+   =================== */
+
+.home-rewards {
+    background-color: #1F3B2E;
+    color: #ffffff;
+    padding: 80px 48px;
+    margin: 80px 0;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    box-sizing: border-box;
+}
+
+.home-rewards-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+
+@media (max-width: 768px) {
+    .home-rewards-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+/* ======================
+     REWARDS TYPOGRAPHY
+   ====================== */
+
+.home-rewards-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #c9a86a;
+    text-align: left;
+    margin: 0 0 12px;
+}
+
+.home-rewards-left h2 {
+    font-size: clamp(32px, 3.5vw, 48px);
+    font-weight: 400;
+    line-height: 1.1;
+    color: #ffffff;
+    text-align: left;
+    margin: 0 0 28px;
+}
+
+.home-rewards-left h2 span {
+    display: block;
+}
+
+.home-rewards-left h2 em {
+    font-style: italic;
+    font-weight: inherit;
+}
+
+.home-rewards-description {
+    font-size: 17px;
+    line-height: 1.6;
+    color: #c5cbc6;
+    text-align: left;
+    max-width: 480px;
+    margin: 0 0 32px;
+}
+
+/* ==================
+     REWARDS BUTTONS
+   ================== */
+
+.home-rewards-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.home-rewards-actions button {
+    padding: 14px 24px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    opacity: 1;
+    cursor: default;
+}
+
+/* Join INSTEA Rewards button */
+.home-rewards-join {
+    background-color: #c9a86a;
+    color: #234b3a;
+    border: 1px solid #c9a86a;
+}
+
+/* Sign in button */
+.home-rewards-signin {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+}
+
+/* ====================
+     REWARDS BENEFITS
+   ==================== */
+
+.home-rewards-benefit {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.home-rewards-benefit:first-child {
+    padding-top: 0;
+}
+
+.home-rewards-number {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-style:italic;
+    font-weight: 400;
+    font-size: 28px;
+    color: #c9a86a;
+    line-height: 1;
+}
+
+.home-rewards-benefit-text {
+    flex: 1;
+    text-align: left;
+}
+
+.home-rewards-benefit-text h3 {
+    font-size: 21px;
+    font-weight: 400;
+    color: #ffffff;
+    margin: 0 0 10px;
+}
+
+.home-rewards-benefit-text p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #c5cbc6;
+    margin: 0;
+}
+
+/* ============================
+     REWARDS MEMBERSHIP TIERS
+   ============================ */
+
+.home-rewards-tiers {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 24px;
+    justify-content: space-between;
+}
+
+.home-rewards-tier {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.home-rewards-tier strong {
+    color: #C2A066;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.home-rewards-tier:not(:last-child)::after {
+    content: "";
+    display: block;
+    width: 85px;
+    height: 1px;
+    margin-left: 12px;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.home-rewards-tier span {
+    color: #c5cbc6;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+/* ======================================
+     CONSISTENT HOMEPAGE HEADING FONTS
+   ====================================== */
+
+.home h1,
+.home h2,
+.home h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 400;
+}
+
+.home-main-content h1 {
+    font-weight: 600;
+}
+
+.home .home-signature-heading h2 {
+    font-weight: 600;
+}
+
+/* =================================================
+     CURRENT OFFERS & UPCOMING GATHERINGS SECTION
+   ================================================= */
+
+.home-offers-events {
+    background-color: #faf7f1;
+    padding: 80px 48px;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    box-sizing: border-box;
+}
+
+.home-offers-events-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 430px minmax(0, 1fr);
+    gap: 46px;
+    align-items: start;
+}
+
+/* Section headings */
+.home-offers h2,
+.home-events h2 {
+    font-size: 34px;
+    font-weight: 500;
+    color: #1F3B2E;
+    margin: 0 0 26px;
+}
+
+/* ------- OFFERS ------- */
+
+.home-offers {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+}
+
+.home-offers h2 {
+    margin-bottom: 10px;
+}
+
+.home-offer-card {
+    background-color: #f8f0e1;
+    border: 1px solid #ead8b7;
+    border-radius: 16px;
+    padding: 24px;
+    text-align: left;
+}
+
+.home-offer-card h3 {
+    color: #1F3B2E;
+    font-size: 23px;
+    font-weight: 500;
+    margin: 0 0 8px;
+}
+
+.home-offer-card p {
+    color: #6d6d68;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0 0 12px;
+}
+
+.home-placeholder-link {
+    color: #1F3B2E;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: default;
+}
+
+/* ------- UPCOMING GATHERINGS ------- */
+
+.home-events {
+    text-align: left;
+}
+
+.home-events-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+}
+
+.home-events-heading span {
+    color: #1F3B2E;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: default;
+}
+
+.home-event {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0;
+    border-top: 1px solid #e5d9c8;
+}
+
+.home-event:last-child {
+    border-bottom: 1px solid #e5d9c8;
+}
+
+.home-event-date {
+    background-color: #f0ebdf;
+    border-radius: 12px;
+    width: 54px;
+    height: 54px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.home-event-date small {
+    color: #8A6A35;
+    font-size: 11px;
+}
+
+.home-event-date strong {
+    color: #1F3B2E;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 21px;
+    font-weight: 500;
+}
+
+.home-event-details {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+}
+
+.home-event-details p {
+    color: #6d6d68;
+    font-size: 12px;
+    margin: 0 0 4px;
+}
+
+.home-event-details h3 {
+    color: #1F3B2E;
+    font-size: 21px;
+    font-weight: 500;
+    margin: 0 0 4px;
+}
+
+.home-event-details span {
+    color: #6d6d68;
+    font-size: 12px;
+}
+
+.home-event-status {
+    color: #1F3B2E;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ------- RESPONSIVE LAYOUT ------- */
+
+@media (max-width: 900px) {
+    .home-offers-events-content {
+        grid-template-columns: 1fr;
+        gap: 48px;
+    }
+}
+
+@media (max-width: 600px) {
+    .home-offers-events {
+        padding: 56px 24px;
+    }
+
+    .home-event {
+        gap: 12px;
+    }
+
+    .home-event-status {
+        display: none;
+    }
+}
+
+/* ============================
+     CUSTOMER REVIEWS SECTION
+   ============================ */
+
+.home-reviews {
+    background-color: #f5efe5;
+    padding: 76px 48px;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    box-sizing: border-box;
+    border-top: 1px solid #e7d9c4;
+    border-bottom: 1px solid #e7d9c4;
+}
+
+.home-reviews-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+/* ------- FEATURED REVIEW ------- */
+
+.home-reviews-featured {
+    padding-right: 20px;
+    text-align: left;
+}
+
+.home-review-stars {
+    color: #c6a061;
+    font-size: 22px;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+}
+
+.home-reviews-featured h2 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 34px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #1F3B2E;
+    margin: 0 0 24px;
+}
+
+.home-reviews-featured p {
+    color: #77736c;
+    font-size: 14px;
+    margin: 0;
+}
+
+.home-reviews-featured p strong {
+    color: #30332e;
+    font-weight: 600;
+}
+
+/* ------- SECONDARY REVIEWS ------- */
+
+.home-reviews-secondary {
+    border-left: 1px solid #e5d9c8;
+    padding-left: 40px;
+    text-align: left;
+}
+
+.home-review-small {
+    margin-bottom: 24px;
+}
+
+.home-review-small .home-review-stars {
+    font-size: 16px;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.home-review-small p {
+    color: #333333;
+    font-size: 16px;
+    line-height: 1.45;
+    margin: 0 0 8px;
+}
+
+.home-review-small span {
+    color: #77736c;
+    font-size: 12px;
+}
+
+.home-reviews-summary {
+    color: #77736c;
+    font-size: 14px;
+    margin: 24px 0 0;
+}
+
+/* ------- RESPONSIVE LAYOUT ------- */
+
+@media (max-width: 768px) {
+    .home-reviews {
+        padding: 56px 24px;
+    }
+
+    .home-reviews-content {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .home-reviews-secondary {
+        border-left: none;
+        border-top: 1px solid #e5d9c8;
+        padding-left: 0;
+        padding-top: 24px;
+    }
+}
+
+/* ===========================
+     STORE LOCATION SECTION
+   =========================== */
+
+.home-location {
+    background-color: #faf7f1;
+    padding: 76px 48px;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    box-sizing: border-box;
+}
+
+.home-location-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+.home-location-image img {
+    width: 100%;
+    height: 350px;
+    object-fit: cover;
+    border-radius: 22px;
+    display: block;
+}
+
+.home-section-label {
+    color: #8A6A35;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0 0 10px;
+}
+
+.home-location-info {
+    text-align: left;
+}
+
+.home-location-info h2 {
+    color: #1F3B2E;
+    font-size: 36px;
+    font-weight: 500;
+    text-align: left;
+    margin: 0 0 14px;
+}
+
+.home-location-address {
+    color: #77736c;
+    font-size: 16px;
+    margin: 0 0 8px;
+}
+
+.home-location-hours {
+    color: #77736c;
+    font-size: 14px;
+    margin: 0 0 24px;
+}
+
+.home-location-hours strong {
+    color: #3b6552;
+}
+
+.home-location-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.home-location-actions button {
+    padding: 13px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: default;
+    opacity: 1;
+}
+
+.home-location-directions {
+    background-color: #1F3B2E;
+    color: white;
+    border: 1px solid #1F3B2E;
+}
+
+.home-location-call {
+    background-color: white;
+    color: #1F3B2E;
+    border: 1px solid #e5d9c8;
+}
+
+.home-location-all {
+    background: transparent;
+    color: #1F3B2E;
+    border: none;
+}
+
+/* =====================
+     OUR STORY SECTION
+   ===================== */
+
+.home-story-newsletter {
+    background-color: #faf7f1;
+    padding: 76px 48px;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    box-sizing: border-box;
+    border-top: 1px solid #e5d9c8;
+}
+
+.home-story-newsletter-content {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 90px;
+    align-items: center;
+}
+
+.home-story {
+    text-align: left;
+}
+
+.home-story h2 {
+    color: #1F3B2E;
+    font-size: 38px;
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.15;
+    text-align: left;
+    margin: 0 0 24px;
+}
+
+.home-story-description {
+    color: #77736c;
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: left;
+    margin: 0 0 24px;
+}
+
+.home-story-link {
+    display: inline-block;
+    color: #1F3B2E;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.home-story-link:hover {
+    text-decoration: underline;
+}
+
+/* ------- NEWSLETTER ------- */
+
+.home-newsletter {
+    background-color: #ffffff;
+    border: 1px solid #ead8b7;
+    border-radius: 20px;
+    padding: 32px;
+    min-height: 220px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.home-newsletter h3 {
+    color: #1F3B2E;
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 12px;
+}
+
+.home-newsletter > p {
+    color: #77736c;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0 0 24px;
+}
+
+.home-newsletter label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 8px;
+}
+
+.home-newsletter-form {
+    display: flex;
+    gap: 8px;
+}
+
+.home-newsletter-form input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 16px;
+    border: 1px solid #e5d9c8;
+    border-radius: 10px;
+    background-color: #ffffff;
+    font-size: 14px;
+    box-sizing: border-box;
+    opacity: 1;
+}
+
+.home-newsletter-form button {
+    padding: 14px 24px;
+    background-color: #1F3B2E;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: default;
+    opacity: 1;
+}
+
+/* ------- RESPONSIVE LAYOUT ------- */
+
+@media (max-width: 900px) {
+    .home-location-content,
+    .home-story-newsletter-content {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+}
+
+@media (max-width: 600px) {
+    .home-location,
+    .home-story-newsletter {
+        padding: 56px 24px;
+    }
+
+    .home-location-image img {
+        height: 260px;
+    }
+
+    .home-newsletter-form {
+        flex-direction: column;
+    }
+}
