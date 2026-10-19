@@ -57,7 +57,6 @@ const toppings = [
 ]
 
 /** @type {ProductOption[]} */
-/** @type {ProductOption[]} */
 const teaOptions = [
   ...sizes,
   ...temperatures,
