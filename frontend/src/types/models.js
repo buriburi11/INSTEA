@@ -3,6 +3,8 @@
  * @property {string} name
  * @property {string} value
  * @property {number} [additionalPrice]
+ * @property {boolean} [required]
+ * @property {"single"|"multiple"} [selectionType]
  */
 
 /**
@@ -21,6 +23,7 @@
  * @property {number} [calories]
  * @property {"none"|"low"|"medium"|"high"} [caffeineLevel]
  * @property {ProductOption[]} [options]
+ * @property {number} [rewardLeaves]
  */
 
 /**
