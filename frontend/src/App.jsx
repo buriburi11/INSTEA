@@ -3,15 +3,25 @@ import { useState } from 'react'
 /*import heroImg from './assets/hero.png'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'  */
+import { Routes, Route} from 'react-router';
+
 import './App.css'
 import PageLayout from './components/PageLayout'
 import Home from './components/Home'
+import About from './components/About'
 
 
 function App() {
   return (
     <PageLayout>
-      <Home />
+      <Routes>
+
+        <Route path="/" element={<Home />} />                                                                   {/* Homepage */}
+
+        <Route path="/about" element={<About />} />                                                             {/* About page */}
+
+      </Routes>
+
     </PageLayout>
   );
 }

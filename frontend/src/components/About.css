@@ -1,0 +1,180 @@
+/* ===========
+     IMPORTS
+   =========== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&display=swap');
+
+/* ==============
+     ABOUT PAGE
+   ============== */
+
+.about-page {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    background-color: #faf7f1;
+    box-sizing: border-box;
+}
+
+/* ======================
+     ABOUT MAIN SECTION
+   ====================== */
+
+.about-main {
+    background-color: #faf7f1;
+    padding: 80px 48px;
+}
+
+.about-main-content {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+}
+
+.about-main-text {
+    text-align: left;
+}
+
+.about-label {
+    color: #8A6A35;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 12px;
+}
+
+.about-main-text h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(44px, 5vw, 64px);
+    font-weight: 500;
+    line-height: 1.1;
+    color: #1F3B2E;
+    margin: 0 0 28px;
+}
+
+.about-main-text h1 em {
+    font-style: italic;
+}
+
+.about-description {
+    color: #77736c;
+    font-size: 16px;
+    line-height: 1.65;
+    max-width: 500px;
+    margin: 0 0 28px;
+}
+
+.about-main-text button {
+    background-color: #1F3B2E;
+    color: #ffffff;
+    border: none;
+    border-radius: 9px;
+    padding: 14px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: default;
+    opacity: 1;
+}
+
+.about-main-image img {
+    width: 100%;
+    height: 440px;
+    object-fit: cover;
+    border-radius: 20px;
+    display: block;
+}
+
+/* ========================
+     ABOUT VALUES SECTION
+   ======================== */
+
+.about-values {
+    background-color: #ffffff;
+    border-top: 1px solid #e5d9c8;
+    border-bottom: 1px solid #e5d9c8;
+    padding: 52px 48px;
+}
+
+.about-values-content {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 48px;
+}
+
+.about-value {
+    text-align: left;
+}
+
+.about-value h2 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: #1F3B2E;
+    font-size: 24px;
+    font-weight: 500;
+    font-style: italic;
+    margin: 0 0 12px;
+}
+
+.about-value p {
+    color: #77736c;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* =========================
+     ABOUT GALLERY SECTION
+   ========================= */
+
+.about-gallery {
+    background-color: #faf7f1;
+    padding: 60px 48px;
+}
+
+.about-gallery-content {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.about-gallery img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    border-radius: 20px;
+    display: block;
+}
+
+/* =====================
+     RESPONSIVE LAYOUT
+   ===================== */
+
+@media (max-width: 768px) {
+    .about-main,
+    .about-values,
+    .about-gallery {
+        padding: 48px 24px;
+    }
+
+    .about-main-content {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .about-main-image img {
+        height: 320px;
+    }
+
+    .about-values-content {
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .about-gallery img {
+        height: 280px;
+    }
+}
