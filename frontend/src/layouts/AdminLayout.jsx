@@ -1,22 +1,20 @@
+import { useState } from 'react'
 import { Outlet } from 'react-router'
+import AdminSidebar from '../components/admin/AdminSidebar.jsx'
 import './AdminLayout.css'
 
 export default function AdminLayout() {
-  return (
-    <div className="admin-shell">
-      <aside className="admin-shell__sidebar">
-        <div className="admin-shell__brand">
-          <strong>INSTEA</strong>
-          <span>Staff console</span>
-        </div>
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
-        <nav aria-label="Administrator navigation">
-          {/* Sidebar links will be added in the navigation subtask. */}
-          <p className="admin-shell__nav-placeholder">
-            Management navigation
-          </p>
-        </nav>
-      </aside>
+  return (
+    <div
+      className={`admin-shell${sidebarCollapsed ? ' admin-shell--collapsed' : ''}`}
+    >
+      {/* Shared navigation for all administrator pages. */}
+      <AdminSidebar
+        collapsed={sidebarCollapsed}
+        onToggle={() => setSidebarCollapsed((previous) => !previous)}
+      />
 
       <div className="admin-shell__workspace">
         <header className="admin-shell__header">

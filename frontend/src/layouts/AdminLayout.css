@@ -126,3 +126,6 @@
     padding: 24px;
   }
 }
+.admin-shell.admin-shell--collapsed {
+  grid-template-columns: 76px minmax(0, 1fr);
+}
