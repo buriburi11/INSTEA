@@ -9,6 +9,7 @@ import './App.css'
 import PageLayout from './components/PageLayout'
 import Home from './components/Home'
 import About from './components/About'
+import Locations from './components/Locations';
 
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
         <Route path="/" element={<Home />} />                                                                   {/* Homepage */}
 
         <Route path="/about" element={<About />} />                                                             {/* About page */}
+
+        <Route path="/locations" element={<Locations />} />                                                     {/* Location page */}
 
       </Routes>
 

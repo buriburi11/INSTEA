@@ -1,0 +1,237 @@
+
+/* =================
+     LOCATION PAGE
+   ================= */
+
+.locations-page {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    background-color: #faf7f1;
+    box-sizing: border-box;
+    padding: 48px 28px 64px;
+}
+
+.locations-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* =================
+     PAGE HEADING
+   ================= */
+
+.locations-heading {
+    text-align: left;
+    margin-bottom: 32px;
+}
+
+.locations-heading h1 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 38px;
+    font-weight: 500;
+    color: #1F3B2E;
+    margin: 0 0 8px;
+}
+
+.locations-heading h1 em {
+    font-style: italic;
+}
+
+.locations-heading p {
+    color: #77736c;
+    font-size: 15px;
+    margin: 0;
+}
+
+/* ------- TWO COLUMN LAYOUT ------- */
+
+.locations-layout {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* =================
+     LOCATION CARDS
+   ================= */
+
+.locations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.location-card {
+    background-color: #ffffff;
+    border: 1px solid #e5d9c8;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: left;
+}
+
+.location-card-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.location-card-heading h2 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #1F3B2E;
+    margin: 0 0 4px;
+}
+
+.location-card-heading span {
+    color: #77736c;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.location-address {
+    color: #77736c;
+    font-size: 13px;
+    margin: 0 0 16px;
+}
+
+.location-information p {
+    color: #77736c;
+    font-size: 13px;
+    line-height: 1.6;
+    margin: 0 0 5px;
+}
+
+.location-information strong {
+    color: #3b6552;
+    font-weight: 600;
+}
+
+/* =================
+     STORE FEATURES
+   ================= */
+
+.location-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 14px 0;
+}
+
+.location-features span {
+    background-color: #f1eadc;
+    color: #1F3B2E;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 11px;
+}
+
+/* ====================
+     LOCATION ACTIONS
+   ==================== */
+
+.location-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-top: 1px solid #e5d9c8;
+    padding-top: 14px;
+}
+
+.location-card-actions button {
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: default;
+    opacity: 1;
+}
+
+.location-card-actions button:first-child {
+    background-color: #1F3B2E;
+    color: #ffffff;
+    border: 1px solid #1F3B2E;
+}
+
+.location-card-actions button:last-child {
+    background-color: #ffffff;
+    color: #1F3B2E;
+    border: 1px solid #e5d9c8;
+}
+
+/* =================
+     MAP PLACEHOLDER
+   ================= */
+
+.locations-map {
+    min-height: 465px;
+    border-radius: 20px;
+    background-color: #eae6d9;
+    border: 1px solid #e5d9c8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+}
+
+.locations-map-content {
+    text-align: center;
+    max-width: 300px;
+}
+
+.locations-map-icon {
+    display: block;
+    color: #8A6A35;
+    font-size: 42px;
+    margin-bottom: 12px;
+}
+
+.locations-map-content h2 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: #1F3B2E;
+    margin: 0 0 10px;
+}
+
+.locations-map-content p {
+    color: #77736c;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* ==============
+     RESPONSIVE
+   ============== */
+
+@media (max-width: 900px) {
+    .locations-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .locations-map {
+        min-height: 300px;
+    }
+}
+
+@media (max-width: 600px) {
+    .locations-page {
+        padding: 36px 20px 48px;
+    }
+
+    .locations-heading h1 {
+        font-size: 32px;
+    }
+
+    .location-card-heading {
+        flex-wrap: wrap;
+    }
+
+    .location-card-actions {
+        flex-wrap: wrap;
+    }
+}
