@@ -97,7 +97,37 @@ npm ci
 
 This installs the exact dependency versions recorded in `package-lock.json`. Use `npm install` if the project does not yet have a `package-lock.json`.
 
-## 6. Start the website
+## 6. Set up environment variables
+
+The frontend reads its settings from environment variables. `frontend/.env.example` lists every variable the app uses. Copy it to create your own local file:
+
+```bash
+cp .env.example .env.local
+```
+
+Edit `.env.local` if your values differ, for example if your backend runs on a different port. Restart `npm run dev` after changing it.
+
+| Variable | Purpose | Default |
+| --- | --- | --- |
+| `VITE_APP_NAME` | Display name used in the UI | `INSTEA` |
+| `VITE_API_BASE_URL` | Base URL of the backend API | `http://localhost:8080/api` |
+| `VITE_APP_ENV` | Environment label (`development`, `staging`, `production`) | `development` |
+
+In code, read the values from `src/config/env.js` instead of using `import.meta.env` directly:
+
+```js
+import { env } from './config/env'
+
+fetch(`${env.apiBaseUrl}/products`)
+```
+
+Important rules:
+
+- `.env`, `.env.local`, and other `.env.*` files are ignored by Git. Only `.env.example` is committed, and it should hold safe placeholder values.
+- Vite only exposes variables that start with `VITE_`, and their values end up in the public JavaScript sent to browsers. **Never put API keys, passwords, or other secrets in a `VITE_` variable.** Secrets belong in the backend's environment.
+- When you add a new variable, add it to `.env.example` and `src/config/env.js` and the table above.
+
+## 7. Start the website
 
 ```bash
 npm run dev
@@ -111,7 +141,7 @@ http://localhost:5173
 
 Keep the terminal running while you use the site. Press `Ctrl+C` in that terminal to stop the development server.
 
-## 7. Run the linter
+## 8. Run the linter
 
 In a second terminal, go to the frontend folder and run:
 
@@ -120,6 +150,32 @@ npm run lint
 ```
 
 If the project’s `package.json` does not have a `lint` script, ask the team before adding or changing project configuration.
+
+## 9. Run the tests
+
+The frontend uses [Vitest](https://vitest.dev) with [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/) and jsdom.
+
+From the frontend folder, run the tests once:
+
+```bash
+npm run test:run
+```
+
+Or start watch mode, which reruns tests when you save a file:
+
+```bash
+npm test
+```
+
+Press `q` to quit watch mode.
+
+### Writing tests
+
+- Put test files next to the component they test and name them `ComponentName.test.jsx`, for example `src/components/Footer.test.jsx`.
+- `describe`, `it`, and `expect` are available globally, so you do not need to import them.
+- Matchers such as `toBeInTheDocument()` and `toHaveAttribute()` come from `@testing-library/jest-dom` and are loaded by `src/setupTests.js`.
+- Wrap components that use `NavLink` or other router features in a `MemoryRouter` from `react-router`. See `Footer.test.jsx` for an example.
+- Test settings live in the `test` section of `vite.config.js`.
 
 ## Troubleshooting
 
@@ -152,5 +208,6 @@ Use the alternate local address Vite prints, or stop the other development serve
 - Use the Node.js version selected by `nvm` in WSL.
 - Run frontend commands from the folder containing the frontend `package.json`.
 - Commit `package-lock.json` when dependencies change.
-- Do not commit `node_modules/`, `.env` files, API keys, or other secrets.
+- Run `npm run test:run` and `npm run lint` before opening a pull request.
+- Do not commit `node_modules/`, `.env` files, API keys, or other secrets. The root `.gitignore` excludes dependencies, build output, and `.env` files; use `.env.example` to share variable names without values.
 - Backend setup is separate; this guide covers the React frontend only.

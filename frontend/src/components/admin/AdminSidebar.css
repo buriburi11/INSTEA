@@ -1,0 +1,146 @@
+.admin-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  background: #1f3b2e;
+  color: #cbd5cc;
+}
+
+.admin-sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 100px;
+  padding: 24px 20px;
+  border-bottom: 1px solid rgb(255 255 255 / 10%);
+}
+
+.admin-sidebar__brand-mark {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #faf6ee;
+  color: #1f3b2e;
+}
+
+.admin-sidebar__brand-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.admin-sidebar__name {
+  color: #faf6ee;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 23px;
+}
+
+.admin-sidebar__subtitle {
+  color: #c2a066;
+  font-size: 12px;
+}
+
+.admin-sidebar__navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 16px 14px;
+}
+
+.admin-sidebar__link,
+.admin-sidebar__control {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  width: 100%;
+  min-height: 45px;
+  padding: 11px 13px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 15px;
+  line-height: 1.4;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.admin-sidebar__link svg,
+.admin-sidebar__control svg {
+  flex-shrink: 0;
+}
+
+.admin-sidebar__link:hover,
+.admin-sidebar__control:not(:disabled):hover {
+  background: rgb(255 255 255 / 8%);
+  color: #faf6ee;
+}
+
+.admin-sidebar__link--active,
+.admin-sidebar__link--active:hover {
+  background: #faf6ee;
+  color: #1f3b2e;
+  font-weight: 600;
+}
+
+.admin-sidebar__link:focus-visible,
+.admin-sidebar__control:focus-visible {
+  outline: 2px solid #c2a066;
+  outline-offset: 2px;
+}
+
+.admin-sidebar__bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: auto;
+  padding: 16px 14px;
+  border-top: 1px solid rgb(255 255 255 / 10%);
+}
+
+.admin-sidebar__control:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Keep icon links accessible when their visible labels are hidden. */
+.admin-shell--collapsed .admin-sidebar__brand-text,
+.admin-shell--collapsed .admin-sidebar__label {
+  display: none;
+}
+
+.admin-shell--collapsed .admin-sidebar__brand {
+  justify-content: center;
+  padding-inline: 10px;
+}
+
+.admin-shell--collapsed .admin-sidebar__navigation,
+.admin-shell--collapsed .admin-sidebar__bottom {
+  padding-inline: 10px;
+}
+
+.admin-shell--collapsed .admin-sidebar__link,
+.admin-shell--collapsed .admin-sidebar__control {
+  justify-content: center;
+  padding-inline: 0;
+}
+.admin-sidebar__logo {
+  display: block;
+  width: 160px;
+  max-width: 100%;
+  height: auto;
+  filter: brightness(0) invert(1);
+}
+
+.admin-sidebar__brand-text {
+  min-width: 0;
+}
