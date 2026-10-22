@@ -14,11 +14,19 @@ import AdminLayout from './layouts/AdminLayout.jsx';
 import AdminPlaceholder from './pages/admin/AdminPlaceholder.jsx';
 import StaffLogin from './pages/admin/StaffLogin.jsx';
 
+import LoginPage from './pages/customer/LoginPage.jsx'
+import RegisterPage from './pages/customer/RegisterPage.jsx'
+
+import ProtectedRoute from './auth/ProtectedRoute.jsx'
+import ProfilePage from './pages/customer/ProfilePage.jsx'
+
 import './App.css';
 
 function App() {
     return (
         <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
             {/* Staff login */}
             <Route path="/staff-portal" element={<StaffLogin />} />
 
@@ -48,6 +56,9 @@ function App() {
                 <Route path="/events" element={<Events />} />
                 <Route path="/menu" element={<MenuPage />} />
                 <Route path="/menu/:productId" element={<ProductDetailPage />} />
+                <Route element={<ProtectedRoute />}>
+                  <Route path="/profile" element={<ProfilePage />} />
+                </Route>
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
         </Routes>
