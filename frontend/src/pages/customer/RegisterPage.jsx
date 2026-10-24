@@ -3,16 +3,8 @@ import { Check, CheckCircle2, Eye, EyeOff, X } from 'lucide-react'
 import { Link } from 'react-router'
 import useAuth from '../../auth/useAuth.js'
 import AuthLayout from './AuthLayout.jsx'
+import { identifierIsValid } from '../../utils/validation.js'
 
-function identifierIsValid(identifier) {
-  const trimmedIdentifier = identifier.trim()
-
-  if (trimmedIdentifier.includes('@')) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedIdentifier)
-  }
-
-  return trimmedIdentifier.replace(/\D/g, '').length >= 10
-}
 
 export default function RegisterPage() {
   const { register } = useAuth()

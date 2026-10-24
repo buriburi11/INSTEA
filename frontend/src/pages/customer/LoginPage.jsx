@@ -3,6 +3,7 @@ import { Eye, EyeOff } from 'lucide-react'
 import { Link, useNavigate } from 'react-router'
 import useAuth from '../../auth/useAuth.js'
 import AuthLayout from './AuthLayout.jsx'
+import { identifierIsValid } from '../../utils/validation.js'
 
 export default function LoginPage() {
   const { login } = useAuth()
@@ -22,6 +23,8 @@ export default function LoginPage() {
 
     if (!identifier.trim()) {
       nextErrors.identifier = 'Email or phone number is required.'
+    } else if (!identifierIsValid(identifier)) {
+      nextErrors.identifier = 'Enter a valid email address or phone number.'
     }
 
     if (!password) {
