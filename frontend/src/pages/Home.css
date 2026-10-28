@@ -99,6 +99,7 @@
     flex-wrap: wrap;
 }
 
+/* Join INSTEA Rewards button */
 .home-main-actions button {
     padding: 14px 26px;
     border-radius: 6px;
@@ -106,17 +107,6 @@
     font-weight: 600;
     cursor: default;
     opacity: 1;
-}
-
-/* Order Now button */
-.home-main-actions button:first-child {
-    background-color: #234b3a;
-    color: #ffffff;
-    border: 1px solid #234b3a;
-}
-
-/* Join INSTEA Rewards button */
-.home-main-actions button:last-child {
     background-color: transparent;
     color: #234b3a;
     border: 1px solid #234b3a;

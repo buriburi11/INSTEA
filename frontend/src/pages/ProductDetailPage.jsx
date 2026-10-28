@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router'
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { categories } from '../data/categories'
 import { products, PRODUCT_IMAGE_PLACEHOLDER } from '../data/products'
 import './MenuPages.css'
@@ -12,13 +12,35 @@ const formatPrice = (price) =>
 
 function ProductDetailPage() {
   const { productId } = useParams()
+  const [searchParams] = useSearchParams()
 
-  // Remount the detail content when the selected product changes.
-  return <ProductDetailContent key={productId} productId={productId} />
+  return (                                                                                                                                // Ensures the form resets correctly when switching between editing and adding a new product
+    <ProductDetailContent
+      key={`${productId}-${searchParams.get('edit') ?? 'new'}`}
+      productId={productId}
+    />
+  )
 }
 
 function ProductDetailContent({ productId }) {
   const product = products.find((item) => item.id === productId)
+
+  const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
+  const editIndex = searchParams.get('edit')
+
+  const editingItem = (() => {                                                                                                            // Editing an item in cart makes sure the item belongs to the correct product
+    if (editIndex === null || !/^\d+$/.test(editIndex)) return null
+
+    try {
+      const cart = JSON.parse(localStorage.getItem('instea-cart') || '[]')
+      const item = Array.isArray(cart) ? cart[Number(editIndex)] : null
+
+      return item?.productId === productId ? item : null
+    } catch {
+      return null
+    }
+  })()
 
   const optionGroups = useMemo(
     () =>
@@ -32,6 +54,26 @@ function ProductDetailContent({ productId }) {
 
   const [selectedOptions, setSelectedOptions] = useState(() => {
     const initialOptions = {}
+
+      if (editingItem) {
+        Object.entries(optionGroups).forEach(([name, options]) => {
+          const isMultiple = options.some(
+            (option) => option.selectionType === 'multiple'
+          )
+
+          const savedValues = (editingItem.selectedOptions ?? [])
+            .filter((saved) =>
+              options.some((option) => option.value === saved.value)
+            )
+            .map((saved) => saved.value)
+
+          initialOptions[name] = isMultiple
+            ? savedValues
+            : savedValues[0] ?? ''
+        })
+
+        return initialOptions
+      }
 
     Object.entries(optionGroups).forEach(([name, options]) => {
       const isMultiple = options.some(
@@ -51,8 +93,14 @@ function ProductDetailContent({ productId }) {
     return initialOptions
   })
 
-  const [quantity, setQuantity] = useState(1)
-  const [specialInstructions, setSpecialInstructions] = useState('')
+  const [quantity, setQuantity] = useState(
+    () => editingItem?.quantity ?? 1
+  )
+
+  const [specialInstructions, setSpecialInstructions] = useState(
+    () => editingItem?.specialInstructions ?? ''
+  )
+
   const [cartMessage, setCartMessage] = useState('')
 
   if (!product) {
@@ -126,11 +174,27 @@ function ProductDetailContent({ productId }) {
       specialInstructions: specialInstructions.trim(),
     }
 
-    try {
+    try {                                                                                                                                 // Preserves the existing Add to Cart behavior for new products while replacing the original entry when editing from cart
       const savedCart = JSON.parse(localStorage.getItem('instea-cart') || '[]')
       const cart = Array.isArray(savedCart) ? savedCart : []
-      localStorage.setItem('instea-cart', JSON.stringify([...cart, cartItem]))
-      setCartMessage(`${quantity} × ${product.name} added to your demo cart.`)
+
+      if (editingItem && editIndex !== null) {
+        const index = Number(editIndex)
+
+        if (cart[index]?.productId !== productId) {
+          setCartMessage('This cart item could not be found. Please return to your cart.')
+          return
+        }
+
+        cart[index] = cartItem
+        localStorage.setItem('instea-cart', JSON.stringify(cart))
+        window.dispatchEvent(new Event('instea-cart-updated'))
+        navigate('/cart', { replace: true })
+      } else {
+        localStorage.setItem('instea-cart', JSON.stringify([...cart, cartItem]))
+        window.dispatchEvent(new Event('instea-cart-updated'))
+        setCartMessage(`${quantity} × ${product.name} added to your demo cart.`)
+      }
     } catch {
       setCartMessage('The demo cart could not be saved in this browser.')
     }
@@ -206,7 +270,8 @@ function ProductDetailContent({ productId }) {
                 <button
                     type="button"
                     aria-label="Increase quantity"
-                    onClick={() => setQuantity((current) => current + 1)}
+                    onClick={() => setQuantity((current) => Math.min(99, current + 1))}
+                    disabled={quantity >= 99}
                 >
                     +
                 </button>
@@ -218,7 +283,11 @@ function ProductDetailContent({ productId }) {
                 disabled={!isAvailable || !requiredChoicesComplete}
                 onClick={addToCart}
                 >
-                {isAvailable ? 'Add to cart' : 'Sold out'}
+                {!isAvailable
+                  ? 'Sold out'
+                  : editingItem
+                    ? 'Save changes'
+                    : 'Add to cart'}
                 </button>
             </div>
 

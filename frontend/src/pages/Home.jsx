@@ -2,10 +2,10 @@
 //    IMPORTS
 // =============
 
+import {Link} from 'react-router';
 import './Home.css';
-import DrinkCard from './DrinkCard';
+import DrinkCard from '../components/DrinkCard';
 import placeholderImg from '../assets/INSTEA HOME PLACEHOLDER.jpg';
-
 
 // ======================
 //    HOME PAGE CONTENT
@@ -28,9 +28,9 @@ function Home() {
                     </p>
 
                     <div className="home-main-actions">
-                        <button type="button" disabled>
+                        <Link to="/menu" className="order-button">
                             Order Now →
-                        </button>
+                        </Link>
 
                         <button type="button" disabled>
                             Join INSTEA Rewards

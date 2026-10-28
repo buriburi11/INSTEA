@@ -1,14 +1,16 @@
 
 import { Navigate, Outlet, Route, Routes } from 'react-router';
 
-import PageLayout from './components/PageLayout';
-import Home from './components/Home';
-import About from './components/About';
-import Locations from './components/Locations';
-import Events from './components/Events';
+import PageLayout from './layouts/PageLayout';
+
+import Home from './pages/Home';
+import About from './pages/About';
+import Locations from './pages/Locations';
+import Events from './pages/Events';
 
 import MenuPage from './pages/MenuPage';
 import ProductDetailPage from './pages/ProductDetailPage';
+import ShoppingCart from './pages/ShoppingCart';
 
 import AdminLayout from './layouts/AdminLayout.jsx';
 import AdminPlaceholder from './pages/admin/AdminPlaceholder.jsx';
@@ -56,6 +58,7 @@ function App() {
                 <Route path="/events" element={<Events />} />
                 <Route path="/menu" element={<MenuPage />} />
                 <Route path="/menu/:productId" element={<ProductDetailPage />} />
+                <Route path="/cart" element={<ShoppingCart />} />
                 <Route element={<ProtectedRoute />}>
                   <Route path="/profile" element={<ProfilePage />} />
                 </Route>
