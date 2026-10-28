@@ -14,58 +14,80 @@ import './ShoppingCart.css';
 // ===========================
 
 function ShoppingCart() {
-    const [cartItems, setCartItems] = useState(() => {
+
+    // ------- CART INITIALIZATION -------
+
+    const [cartItems, setCartItems] = useState(() => {                                                                 // Initialize cart using saved localStorage data.
         try {
-            const savedCart = JSON.parse(localStorage.getItem('instea-cart') || '[]');
-            return Array.isArray(savedCart) ? savedCart : [];
+            const savedCart = JSON.parse(localStorage.getItem('instea-cart') || '[]');                                 // Retrieve and parse the saved cart.
+            return Array.isArray(savedCart) ? savedCart : [];                                                          // Only accept an array of cart items.
         } catch {
-            return [];
+            return [];                                                                                                 // Start with an empty cart if saved data is invalid.
         }
     });
 
+    // ------- CART UPDATES -------
+
     function updateCart(updatedItems) {
-        setCartItems(updatedItems);
-        localStorage.setItem('instea-cart', JSON.stringify(updatedItems));
-        window.dispatchEvent(new Event('instea-cart-updated'));
+        setCartItems(updatedItems);                                                                                    // Update cart state to refresh the page.
+        localStorage.setItem('instea-cart', JSON.stringify(updatedItems));                                             // Save updated cart items for future visits.
+        window.dispatchEvent(new Event('instea-cart-updated'));                                                        // Notify the header to update its cart badge.
     }
 
+    // ------- QUANTITY SELECTION -------
+
     function changeQuantity(index, change) {
-        const updatedItems = cartItems.map((item, i) => {
+        const updatedItems = cartItems.map((item, i) => {                                                              // Find the selected item while preserving other items.
             if (i !== index) return item;
 
-            const newQuantity = Math.max(1, Math.min(99, item.quantity + change));
+            const newQuantity = Math.max(1, Math.min(99, item.quantity + change));                                     // Restrict item quantity to a minimum of 1 and maximum of 99.
 
             return {
                 ...item,
                 quantity: newQuantity,
-                totalPrice: calculateItemTotal(item.unitPrice, newQuantity)
+                totalPrice: calculateItemTotal(item.unitPrice, newQuantity)                                            // Recalculate the item total using its updated quantity.
             };
         });
 
-        updateCart(updatedItems);
+        updateCart(updatedItems);                                                                                      // Save the new quantity and pricing.
     }
+
+    // ------- REMOVE CART ITEM -------
 
     function removeItem(index) {
-        updateCart(cartItems.filter((_, i) => i !== index));
+        updateCart(cartItems.filter((_, i) => i !== index));                                                           // Remove only the item at the selected index.
     }
 
-    const { subtotal, estimatedTax, orderTotal } = calculateCartTotals(cartItems);
+    // ------- CART PRICING -------
 
-    const teaLeavesEarned = Math.floor(Math.round(subtotal * 100) / 10);                                                                            // Earn 1 Tea Leaf for every $0.10 spent, excluding tax.
+    const { subtotal, estimatedTax, orderTotal } = calculateCartTotals(cartItems);                                     // Calculate preliminary subtotal, tax, and total using shared pricing utilities.
 
-    const pickupLocation = locations[0];
+    const teaLeavesEarned = Math.floor(Math.round(subtotal * 100) / 10);                                               // Earn 1 Tea Leaf for every $0.10 spent, excluding tax.
+
+    // ------- MOCK PICKUP LOCATION -------
+
+    const pickupLocation = locations[0];                                                                               // Use the first location from the shared mock location data.
 
     const pickupDetails = {
-        location: pickupLocation?.name ?? 'Location unavailable',
-        readyTime: pickupLocation?.estimatedPickupTime ?? 'Time unavailable'
+        location: pickupLocation?.name ?? 'Location unavailable',                                                      // Display the mock store name or fallback text.
+        readyTime: pickupLocation?.estimatedPickupTime ?? 'Time unavailable'                                           // Display the mock pickup estimate or fallback text.
     };
 
+    // ------- CLEAR CART -------
+
     function clearCart() {
-        updateCart([]);
+        updateCart([]);                                                                                                // Remove all items and reset the saved cart.
     }
+
+    // ===========================
+    //    SHOPPING CART DISPLAY
+    // ===========================
 
     return (
         <main className="shopping-cart-page">
+
+            {/* ------- EMPTY CART ------- */}
+
             {cartItems.length === 0 ? (
                 <div>
                     <div className="cart-heading-row">
@@ -84,8 +106,13 @@ function ShoppingCart() {
                 </div>
             ) : (
 
+                // ------- CART ITEM LAYOUT -------
+
                 <div className="cart-layout">
                     <div className="cart-left-column">
+
+                        {/* ------- CART HEADING ------- */}
+
                         <div className="cart-heading-row">
                             <div>
                                 <h1>Your cart</h1>
@@ -105,25 +132,32 @@ function ShoppingCart() {
                             )}
                         </div>
 
+                        {/* ------- CART ITEMS ------- */}
+
                         <div className="cart-items">
                             {cartItems.map((item, index) => (
                                 <div className="cart-item" key={index}>
+
+                                    {/* ------- PRODUCT IMAGE ------- */}
+
                                     <img
                                         className="cart-item-image"
                                         src={item.imageUrl}
                                         alt={item.name}
                                         onError={(event) => {
-                                            event.currentTarget.onerror = null;
-                                            event.currentTarget.src = '/images/products/placeholder.svg';
+                                            event.currentTarget.onerror = null;                                        // Prevent repeated image loading errors.
+                                            event.currentTarget.src = '/images/products/placeholder.svg';              // Use a placeholder when the product image cannot load.
                                         }}
                                     />
+
+                                    {/* ------- PRODUCT INFORMATION ------- */}
 
                                     <div className="cart-item-details">
                                         <h2>{item.name}</h2>
 
                                         {item.selectedOptions?.length > 0 && (
                                             <p className="cart-item-options">
-                                                {item.selectedOptions.map(option => option.value).join(' · ')}
+                                                {item.selectedOptions.map(option => option.value).join(' · ')}         {/* Display selected product options separated by dots. */}
                                             </p>
                                         )}
 
@@ -133,7 +167,12 @@ function ShoppingCart() {
                                             </p>
                                         )}
 
+                                        {/* ------- ITEM ACTIONS ------- */}
+
                                         <div className="cart-item-actions">
+
+                                            {/* ------- QUANTITY CONTROLS ------- */}
+
                                             <div className="cart-quantity-control">
                                                 <button
                                                     type="button"
@@ -156,6 +195,8 @@ function ShoppingCart() {
                                                 </button>
                                             </div>
 
+                                            {/* ------- EDIT ITEM ------- */}
+
                                             <Link
                                                 to={`/menu/${item.productId}?edit=${index}`}
                                                 className="cart-edit-button"
@@ -164,6 +205,8 @@ function ShoppingCart() {
                                                 <Pencil size={15} aria-hidden="true" />
                                                 Edit
                                             </Link>
+
+                                            {/* ------- REMOVE ITEM ------- */}
 
                                             <button
                                                 type="button"
@@ -176,14 +219,23 @@ function ShoppingCart() {
                                         </div>
                                     </div>
 
+                                    {/* ------- ITEM PRICE ------- */}
+
                                     <strong className="cart-item-price">
-                                        {formatPrice(calculateItemTotal(item.unitPrice, item.quantity))}
+                                        {formatPrice(calculateItemTotal(item.unitPrice, item.quantity))}               {/* Format the calculated item total as USD. */}
                                     </strong>
                                 </div>
                             ))}
                         </div>
 
+                        {/* ===========================
+                             PROMOTIONS AND REWARDS
+                           =========================== */}
+
                         <div className="cart-benefits">
+
+                            {/* ------- PROMO CODE ------- */}
+
                             <div className="cart-promo">
                                 <h2>Promo code</h2>
 
@@ -200,18 +252,21 @@ function ShoppingCart() {
                                 </div>
                             </div>
 
+                            {/* ------- REWARDS PLACEHOLDER ------- */}
+
                             <div className="cart-rewards">
                                 <h2>
                                     <Gift size={20} strokeWidth={2.5} aria-hidden="true" />
                                     Rewards available
                                 </h2>
 
-                                {/* TODO: Replace with actual authentication status from backend */}                                                {/*REPLACE PLACEHOLDERS WITH BACKEND DATA */}
+                                {/* TODO: Replace with actual authentication status from backend. */}
                                 {/* When not signed in, display:
                                     "Reward details will appear here when connected to your account."
                                 */}
 
-                                {/* TODO: Replace placeholder reward with backend rewards data */}
+                                {/* TODO: Replace placeholder reward with backend rewards data. */}
+
                                 <p>Placeholder reward · up to placeholder $amount</p>
 
                                 <button type="button" disabled>
@@ -219,26 +274,37 @@ function ShoppingCart() {
                                 </button>
                             </div>
                         </div>
-
                     </div>
+
+                    {/* ===========================
+                           ORDER SUMMARY
+                       =========================== */}
 
                     <aside className="cart-order-summary">
                         <h2>Order summary</h2>
+
+                        {/* ------- CART SUBTOTAL ------- */}
 
                         <div className="cart-summary-row">
                             <span>Subtotal</span>
                             <span>{formatPrice(subtotal)}</span>
                         </div>
 
+                        {/* ------- ESTIMATED TAX ------- */}
+
                         <div className="cart-summary-row">
                             <span>Estimated tax</span>
                             <span>{formatPrice(estimatedTax)}</span>
                         </div>
 
+                        {/* ------- ESTIMATED TOTAL ------- */}
+
                         <div className="cart-summary-total">
                             <strong>Estimated total</strong>
                             <strong>{formatPrice(orderTotal)}</strong>
                         </div>
+
+                        {/* ------- TEA LEAVES REWARDS ------- */}
 
                         <div className="cart-rewards-banner">
                             <Leaf size={16} strokeWidth={3} aria-hidden="true" />
@@ -247,13 +313,19 @@ function ShoppingCart() {
                             </span>
                         </div>
 
+                        {/* ------- CHECKOUT PLACEHOLDER ------- */}
+
                         <button type="button" className="cart-checkout-button" disabled>
                             Continue to checkout
                         </button>
 
+                        {/* ------- CONTINUE SHOPPING ------- */}
+
                         <Link to="/menu" className="cart-continue-shopping">
                             Add more items
                         </Link>
+
+                        {/* ------- TAX DISCLAIMER ------- */}
 
                         <p className="cart-tax-note">
                             Tax is an estimate. Final taxes will be calculated at checkout.
