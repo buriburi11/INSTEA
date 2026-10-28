@@ -2,13 +2,8 @@ import { useState } from 'react'
 import { Link } from 'react-router'
 import { categories } from '../data/categories'
 import { products, PRODUCT_IMAGE_PLACEHOLDER } from '../data/products'
+import { formatPrice } from '../utils/cartPricing'
 import './MenuPages.css'
-
-const formatPrice = (price) =>
-  new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(price)
 
 function MenuPage() {
   const [selectedCategory, setSelectedCategory] = useState('all')

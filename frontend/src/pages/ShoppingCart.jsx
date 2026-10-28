@@ -5,6 +5,8 @@
 import {useState} from 'react';
 import {Link} from 'react-router';
 import { Pencil, Trash2, Leaf, Gift } from 'lucide-react';
+import {formatPrice, calculateCartTotals, calculateItemTotal, } from '../utils/cartPricing'
+import { locations } from '../data/locations';
 import './ShoppingCart.css';
 
 // ===========================
@@ -36,7 +38,7 @@ function ShoppingCart() {
             return {
                 ...item,
                 quantity: newQuantity,
-                totalPrice: item.unitPrice * newQuantity
+                totalPrice: calculateItemTotal(item.unitPrice, newQuantity)
             };
         });
 
@@ -47,24 +49,15 @@ function ShoppingCart() {
         updateCart(cartItems.filter((_, i) => i !== index));
     }
 
-    const ESTIMATED_TAX_RATE = 0.08;                                                                                                                // TEMPORARY ESTIMATED TAX RATE (REPLACE WITH BACKEND CALCULATION LATER)
-
-    const subtotal = cartItems.reduce((total, item) => total + item.unitPrice * item.quantity, 0);
-
-    const estimatedTax = subtotal * ESTIMATED_TAX_RATE;
-    const orderTotal = subtotal + estimatedTax;
+    const { subtotal, estimatedTax, orderTotal } = calculateCartTotals(cartItems);
 
     const teaLeavesEarned = Math.floor(Math.round(subtotal * 100) / 10);                                                                            // Earn 1 Tea Leaf for every $0.10 spent, excluding tax.
 
-    const formatPrice = (amount) =>
-        new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD'
-        }).format(amount);
+    const pickupLocation = locations[0];
 
-    const pickupDetails = {                                                                                                                         // REPLACE WITH PICKUP DETAILS FROM BACKEND
-        location: 'location placeholder',
-        readyTime: 'time placeholder'
+    const pickupDetails = {
+        location: pickupLocation?.name ?? 'Location unavailable',
+        readyTime: pickupLocation?.estimatedPickupTime ?? 'Time unavailable'
     };
 
     function clearCart() {
@@ -184,7 +177,7 @@ function ShoppingCart() {
                                     </div>
 
                                     <strong className="cart-item-price">
-                                        ${item.totalPrice.toFixed(2)}
+                                        {formatPrice(calculateItemTotal(item.unitPrice, item.quantity))}
                                     </strong>
                                 </div>
                             ))}

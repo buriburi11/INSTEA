@@ -2,41 +2,14 @@
 //    IMPORTS
 // =============
 
+import { locations } from '../data/locations';
 import './Locations.css';
 
 // ==================
 //    LOCATION LIST
 // ==================
 
-// ------- PLACEHOLDER STORE DATA -------
-// Replace these values when the client provides verified locations.
 
-const locations = [
-    {
-        id: 1,
-        name: 'Location 1 — Coming Soon',
-        address: 'Address to be announced',
-        hours: 'Hours to be confirmed',
-        phone: 'Contact number coming soon',
-        features: ['Pickup', 'Dine-in']
-    },
-    {
-        id: 2,
-        name: 'Location 2 — Coming Soon',
-        address: 'Address to be announced',
-        hours: 'Hours to be confirmed',
-        phone: 'Contact number coming soon',
-        features: ['Pickup', 'Dine-in']
-    },
-    {
-        id: 3,
-        name: 'Location 3 — Coming Soon',
-        address: 'Address to be announced',
-        hours: 'Hours to be confirmed',
-        phone: 'Contact number coming soon',
-        features: ['Pickup']
-    }
-];
 
 // ==========================
 //    LOCATION PAGE CONTENT
@@ -62,7 +35,7 @@ function Locations() {
                             >
                                 <div className="location-card-heading">
                                     <h2>{location.name}</h2>
-                                    <span>Details TBD</span>
+                                    <span>{location.isOpen ? 'Open' : 'Closed'}</span>
                                 </div>
 
                                 <p className="location-address">
@@ -72,20 +45,22 @@ function Locations() {
                                 <div className="location-information">
                                     <p>
                                         <strong>Business hours:</strong>{' '}
-                                        {location.hours}
+                                        {location.hours ?? 'Hours to be confirmed'}
                                     </p>
 
                                     <p>
                                         <strong>Contact:</strong>{' '}
-                                        {location.phone}
+                                        {location.phone ?? 'Contact number coming soon'}
                                     </p>
                                 </div>
 
                                 <div className="location-features">
-                                    {location.features.map((feature) => (
-                                        <span key={feature}>
-                                            {feature}
-                                        </span>
+                                    <span>
+                                        Estimated pickup: {location.estimatedPickupTime ?? 'TBD'}
+                                    </span>
+
+                                    {(location.features ?? []).map((feature) => (
+                                        <span key={feature}>{feature}</span>
                                     ))}
                                 </div>
 

@@ -1,14 +1,20 @@
+
+// =============
+//    IMPORTS
+// =============
+
 import { useMemo, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router'
 import { categories } from '../data/categories'
 import { products, PRODUCT_IMAGE_PLACEHOLDER } from '../data/products'
+
+import {formatPrice, calculateUnitPrice, calculateItemTotal, } from '../utils/cartPricing'
+
 import './MenuPages.css'
 
-const formatPrice = (price) =>
-  new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  }).format(price)
+// =============
+//    FUNCTIONS
+// =============
 
 function ProductDetailPage() {
   const { productId } = useParams()
@@ -135,12 +141,10 @@ function ProductDetailContent({ productId }) {
       ),
   )
 
-  const selectedUnitPrice =
-    product.price +
-    selectedOptionItems.reduce(
-      (total, option) => total + (option.additionalPrice ?? 0),
-      0,
-    )
+  const selectedUnitPrice = calculateUnitPrice(
+    product.price,
+    selectedOptionItems
+  )
 
   function chooseSingleOption(groupName, value) {
     setSelectedOptions((current) => ({
@@ -169,7 +173,7 @@ function ProductDetailContent({ productId }) {
       imageUrl: product.imageUrl,
       quantity,
       unitPrice: selectedUnitPrice,
-      totalPrice: selectedUnitPrice * quantity,
+      totalPrice: calculateItemTotal(selectedUnitPrice, quantity),
       selectedOptions: selectedOptionItems,
       specialInstructions: specialInstructions.trim(),
     }
@@ -293,7 +297,7 @@ function ProductDetailContent({ productId }) {
 
             <div className="current-item-total" aria-live="polite">
                 <span>Current total</span>
-                <strong>{formatPrice(selectedUnitPrice * quantity)}</strong>
+                <strong>{formatPrice(calculateItemTotal(selectedUnitPrice, quantity))}</strong>
                 <small>{formatPrice(selectedUnitPrice)} each</small>
             </div>
             </div>
