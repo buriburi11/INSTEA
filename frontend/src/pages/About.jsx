@@ -2,7 +2,6 @@
 //    IMPORTS
 // =============
 
-import React from "react";
 import aboutImage from "../assets/INSTEA HOME PLACEHOLDER.jpg";
 import "./About.css";
 
