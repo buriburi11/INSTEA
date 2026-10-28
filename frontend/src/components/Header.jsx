@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import instealogo from '../assets/instea-logo.svg';
 import { Bell, ShoppingBag, Menu, X } from 'lucide-react';
 import { NavLink } from 'react-router';
@@ -9,7 +9,32 @@ function Header() {
     const userInitials = "CV";
 
     const [menuOpen, setMenuOpen] = useState(false);                                                                        // State variable to track whether the menu is open or closed. Initially set to false (closed).
+    const getCartCount = () => {                                                                                            // Track the number of items in cart
+        try {
+            const cart = JSON.parse(localStorage.getItem('instea-cart') || '[]');
+
+            return Array.isArray(cart)
+                ? cart.reduce((total, item) => total + (Number(item.quantity) || 0), 0)
+                : 0;
+        } catch {
+            return 0;
+        }
+    };
+
+    const [cartCount, setCartCount] = useState(getCartCount);
     const closeMenu = () => setMenuOpen(false);                                                                             // Function to close the menu by setting menuOpen to false.
+
+    useEffect(() => {
+        const updateCartCount = () => setCartCount(getCartCount());
+
+        window.addEventListener('storage', updateCartCount);
+        window.addEventListener('instea-cart-updated', updateCartCount);
+
+        return () => {
+            window.removeEventListener('storage', updateCartCount);
+            window.removeEventListener('instea-cart-updated', updateCartCount);
+        };
+    }, []);
 
     return (
         <header className="header">
@@ -32,8 +57,16 @@ function Header() {
                     <Bell className="header-side-icons" color="#1F3B2E" size={26} />
                 </NavLink>
 
-                <NavLink to="/cart" aria-label="Cart">
+                <NavLink
+                    to="/cart"
+                    className="header-cart-link"
+                    aria-label={`Cart with ${cartCount} items`}
+                >
                     <ShoppingBag className="header-side-icons" color="#1F3B2E" size={26} />
+
+                    {cartCount > 0 && (
+                        <span className="header-cart-count">{cartCount}</span>
+                    )}
                 </NavLink>
 
                 <NavLink to="/profile" className="user-initials-icon" aria-label="Profile"> {userInitials}

@@ -203,3 +203,33 @@
         font-weight: 600;
     }
 }
+
+/* ====================
+     HEADER CART ICON
+   ==================== */
+
+.header-cart-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-cart-count {
+    position: absolute;
+    top: -9px;
+    right: -10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 19px;
+    height: 19px;
+    padding: 0 4px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    background: #1F3B2E;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+}
