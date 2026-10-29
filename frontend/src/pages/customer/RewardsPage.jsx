@@ -11,6 +11,7 @@ import './RewardsPage.css'
 // ============
 
 // TODO: Replace mock rewards data with backend rewards data.
+// Leaves needed for the next complimentary drink; drives the pass card progress bar.
 const NEXT_MILESTONE = 1200
 
 // TODO(points balance): placeholder. Replace with the customer's real Tea Leaves balance
@@ -24,6 +25,8 @@ const PROMO_CODE = 'HARVEST15'
 const walletTabs = ['Rewards wallet', 'Leaves history', 'Stamp cards', 'Check-ins & streaks']
 const readyTabs = new Set(['Rewards wallet'])
 
+// TODO: Replace with the customer's real weekly visits. `status` is 'done', 'current'
+// (this week) or 'treat' (the reward week).
 const streakWeeks = [
   { label: 'Wk 1', date: 'Nov 3', status: 'done' },
   { label: 'Wk 2', date: 'Nov 11', status: 'done' },
@@ -55,6 +58,7 @@ export default function RewardsPage() {
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('Rewards wallet')
   const leaves = PLACEHOLDER_LEAVES_BALANCE
+  // Clamped so a balance past the milestone shows 100% and "reached" instead of going negative.
   const progress = Math.min(100, Math.round((leaves / NEXT_MILESTONE) * 100))
   const leavesToGo = Math.max(0, NEXT_MILESTONE - leaves)
   const fullName = [customer.firstName, customer.lastName].filter(Boolean).join(' ')
@@ -81,6 +85,7 @@ export default function RewardsPage() {
           Member {customer.memberNumber} · {tier} member
         </p>
 
+        {/* ------- REWARDS PASS + WEEKLY TEA STREAK ------- */}
         <div className="rewards-hero">
           <section className="rewards-pass" aria-label="INSTEA Rewards Pass">
             <div className="rewards-pass-top">
@@ -109,11 +114,14 @@ export default function RewardsPage() {
               <span>Milestone {NEXT_MILESTONE.toLocaleString()} leaves</span>
               <span>{progress}% complete</span>
             </div>
+            {/* TODO(member QR): placeholder button. Needs a QR library and a decision on what it encodes
+                (member number or a backend token), then show the code when clicked. */}
             <button type="button" className="rewards-qr-button">
               <QrCode size={16} aria-hidden="true" /> Show Member QR Code
             </button>
           </section>
 
+          {/* TODO: The streak badge and the "Week 4 complete" note below are hard-coded text. */}
           <section className="rewards-card rewards-streak" aria-labelledby="streak-heading">
             <div className="rewards-streak-top">
               <h2 id="streak-heading">Weekly Tea Streak</h2>
