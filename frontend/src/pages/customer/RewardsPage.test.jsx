@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { AuthContext } from '../../auth/AuthContext.js'
 import RewardsPage from './RewardsPage.jsx'
 
@@ -36,4 +36,9 @@ describe('RewardsPage', () => {
     expect(screen.getByText('75 leaves away from your next complimentary drink')).toBeInTheDocument()
   })
 
+  it('loads the customer leaves history from the service', async () => {
+    renderWithLeaves(820)
+    fireEvent.click(screen.getByRole('button', { name: 'Leaves history' }))
+    expect(await screen.findByText('Cloud Matcha Voucher')).toBeInTheDocument()
+  })
 })

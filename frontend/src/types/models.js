@@ -105,4 +105,19 @@
  * @property {string} createdAt
  */
 
+/**
+ * One change to a customer's Tea Leaves balance.
+ * `amount` is positive for leaves added and negative for leaves removed.
+ *
+ * @typedef {Object} LeavesTransaction
+ * @property {string} id
+ * @property {string} customerId
+ * @property {"earned"|"redeemed"|"adjusted"|"expired"} type
+ * @property {number} amount
+ * @property {string} reason e.g. "SoHo Tea House" or "Refund adjustment"
+ * @property {string} [detail] e.g. "Mobile order #4931"
+ * @property {boolean} [pending] true until the leaves post to the balance
+ * @property {string} createdAt
+ */
+
 export {}
