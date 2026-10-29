@@ -487,9 +487,113 @@
   font-weight: 500;
 }
 
+/* Stamp cards */
+.stamp-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.stamp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 20px;
+}
+
+.stamp-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.stamp-card-top .rewards-small {
+  margin: 2px 0 0;
+}
+
+.stamp-card-count {
+  color: #8a6a2c;
+  font-family: Georgia, serif;
+  font-size: 1.2rem;
+}
+
+.stamp-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(6px, 1.5vw, 10px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stamp {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.stamp.earned {
+  background: #1d4232;
+  color: #bc9141;
+}
+
+.stamp.empty {
+  border: 1px solid #d9c69e;
+  color: #d9c69e;
+}
+
+.stamp-card-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.stamp-card-footer strong {
+  color: #1d4232;
+}
+
+.stamp-card-earned {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.stamp-card.completed {
+  border-color: #bc9141;
+  background: #f5efe2;
+}
+
+.stamp-card.expired {
+  background: #faf6ee;
+}
+
+.stamp-card.expired h3,
+.stamp-card.expired .stamp-card-count,
+.stamp-card.expired .stamp-card-top .rewards-small {
+  opacity: 0.6;
+}
+
+.stamp-card.expired .stamp.earned {
+  background: #6f7d72;
+  color: #d9d4c7;
+}
+
+.stamp-card.expired .stamp.empty {
+  opacity: 0.6;
+}
+
+.stamp-card.expired .rewards-expired {
+  color: #a4442e;
+  font-weight: 600;
+}
+
 @media (max-width: 800px) {
   .rewards-hero,
-  .rewards-ready {
+  .rewards-ready,
+  .stamp-cards {
     grid-template-columns: 1fr;
   }
 

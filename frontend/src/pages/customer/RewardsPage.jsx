@@ -2,7 +2,12 @@ import { useEffect, useState } from 'react'
 import { Check, Copy, Flame, Gift, Lock, QrCode, Ticket } from 'lucide-react'
 import useAuth from '../../auth/useAuth.js'
 import LeavesHistory from '../../components/LeavesHistory.jsx'
-import { getLeavesTransactions } from '../../services/loyaltyService.js'
+import StampCard from '../../components/StampCard.jsx'
+import {
+  getLeavesTransactions,
+  getStampCards,
+  getStampHistory,
+} from '../../services/loyaltyService.js'
 import './RewardsPage.css'
 
 // Rewards page (/rewards). Logged-in customers only; see the ProtectedRoute in App.jsx.
@@ -25,7 +30,7 @@ const PROMO_CODE = 'HARVEST15'
 // Tabs not in `readyTabs` are shown but ignore clicks, so nobody lands on an empty view.
 // Add a tab's name here once its view is built.
 const walletTabs = ['Rewards wallet', 'Leaves history', 'Stamp cards', 'Check-ins & streaks']
-const readyTabs = new Set(['Rewards wallet', 'Leaves history'])
+const readyTabs = new Set(['Rewards wallet', 'Leaves history', 'Stamp cards'])
 
 // Not derivable from the transaction list yet: needs per-leaf earn dates from the backend.
 const expiringLeaves = { amount: 120, date: 'Jan 31' }
@@ -39,6 +44,8 @@ const streakWeeks = [
   { label: 'Wk 4', date: 'Nov 22', status: 'current' },
   { label: 'Wk 5', date: 'Free treat', status: 'treat' },
 ]
+
+const stampDateFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' })
 
 // `cost` is in Tea Leaves. A reward is locked while it costs more than the balance.
 const redeemOptions = [
@@ -64,6 +71,8 @@ export default function RewardsPage() {
   const [activeTab, setActiveTab] = useState('Rewards wallet')
   const [transactions, setTransactions] = useState(null)
   const [historyError, setHistoryError] = useState('')
+  const [stamps, setStamps] = useState(null)
+  const [stampsError, setStampsError] = useState('')
 
   // ------- LOAD LEAVES HISTORY -------
   // `ignore` stops a slow response from updating state after the page unmounts or the
@@ -74,6 +83,18 @@ export default function RewardsPage() {
     getLeavesTransactions(customer.id)
       .then((data) => !ignore && setTransactions(data))
       .catch(() => !ignore && setHistoryError('We couldn\'t load your leaves history. Please try again later.'))
+
+    return () => {
+      ignore = true
+    }
+  }, [customer.id])
+
+  useEffect(() => {
+    let ignore = false
+
+    Promise.all([getStampCards(customer.id), getStampHistory(customer.id)])
+      .then(([cards, history]) => !ignore && setStamps({ cards, history }))
+      .catch(() => !ignore && setStampsError('We couldn\'t load your stamp cards. Please try again later.'))
 
     return () => {
       ignore = true
@@ -192,6 +213,57 @@ export default function RewardsPage() {
             <LeavesHistory transactions={transactions} available={leaves} expiring={expiringLeaves} />
           ) : (
             <p className="rewards-section rewards-muted">Loading leaves history…</p>
+          ))}
+
+        {activeTab === 'Stamp cards' &&
+          (stampsError ? (
+            <p className="rewards-section" role="alert">{stampsError}</p>
+          ) : !stamps ? (
+            <p className="rewards-section rewards-muted">Loading stamp cards…</p>
+          ) : (
+            <>
+              <section className="rewards-section" aria-label="Stamp cards">
+                {stamps.cards.length === 0 ? (
+                  <div className="rewards-card rewards-ledger-empty">
+                    <p className="rewards-redeem-name">No stamp cards yet</p>
+                    <p className="rewards-muted rewards-small">
+                      Order a drink to start your first stamp card.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="stamp-cards">
+                    {stamps.cards.map((card) => (
+                      <StampCard key={card.id} card={card} />
+                    ))}
+                  </div>
+                )}
+              </section>
+
+              <section className="rewards-section" aria-labelledby="stamp-history-heading">
+                <h2 id="stamp-history-heading">
+                  Stamp <em>history</em>
+                </h2>
+                {stamps.history.length === 0 ? (
+                  <p className="rewards-muted rewards-small">No stamps yet.</p>
+                ) : (
+                  <ul className="rewards-card rewards-ledger">
+                    {stamps.history.map((entry) => (
+                      <li key={entry.id} className="rewards-ledger-item rewards-small">
+                        <span>
+                          <strong>+1 stamp</strong> · {entry.cardName}
+                        </span>
+                        <span className="rewards-muted">
+                          <time dateTime={entry.createdAt}>
+                            {stampDateFormat.format(new Date(entry.createdAt))}
+                          </time>
+                          {entry.detail && ` · ${entry.detail}`}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </section>
+            </>
           ))}
 
         {activeTab === 'Rewards wallet' && (
