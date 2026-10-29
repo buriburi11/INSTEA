@@ -15,6 +15,7 @@ function formatDate(iso) {
  * @param {{ card: StampCardData }} props
  */
 export default function StampCard({ card }) {
+  // Clamped in case the backend over-counts, so we never draw more stamps than slots.
   const earned = Math.min(card.stampsEarned, card.stampsRequired)
   const toGo = card.stampsRequired - earned
 
@@ -30,6 +31,9 @@ export default function StampCard({ card }) {
         </span>
       </div>
 
+      {/* ------- STAMP GRID -------
+          One circle per required stamp; the first `earned` are filled. The circles are decorative
+          (aria-hidden), and the list's aria-label gives screen readers the count instead. */}
       <ol className="stamp-grid" aria-label={`${earned} of ${card.stampsRequired} stamps earned`}>
         {Array.from({ length: card.stampsRequired }, (_, i) => (
           <li key={i} className={`stamp ${i < earned ? 'earned' : 'empty'}`} aria-hidden="true">
@@ -38,9 +42,11 @@ export default function StampCard({ card }) {
         ))}
       </ol>
 
+      {/* ------- FOOTER (changes by status) ------- */}
       <div className="stamp-card-footer rewards-small">
         {card.status === 'completed' && (
           <>
+            {/* Falls back to expiresAt if the backend leaves completedAt out. */}
             <span>Completed {formatDate(card.completedAt ?? card.expiresAt)}</span>
             <strong className="stamp-card-earned">
               <Check size={14} aria-hidden="true" /> Reward earned

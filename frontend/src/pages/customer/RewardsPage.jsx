@@ -89,6 +89,8 @@ export default function RewardsPage() {
     }
   }, [customer.id])
 
+  // ------- LOAD STAMP CARDS -------
+  // Cards and history load together, so the tab never shows one without the other.
   useEffect(() => {
     let ignore = false
 
@@ -215,6 +217,7 @@ export default function RewardsPage() {
             <p className="rewards-section rewards-muted">Loading leaves history…</p>
           ))}
 
+        {/* ------- STAMP CARDS TAB ------- */}
         {activeTab === 'Stamp cards' &&
           (stampsError ? (
             <p className="rewards-section" role="alert">{stampsError}</p>
