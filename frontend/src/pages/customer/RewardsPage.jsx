@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Copy, Lock, Ticket } from 'lucide-react'
+import { Check, Copy, Flame, Gift, Lock, QrCode, Ticket } from 'lucide-react'
 import useAuth from '../../auth/useAuth.js'
 import './RewardsPage.css'
 
@@ -11,6 +11,7 @@ import './RewardsPage.css'
 // ============
 
 // TODO: Replace mock rewards data with backend rewards data.
+const NEXT_MILESTONE = 1200
 
 // TODO(points balance): placeholder. Replace with the customer's real Tea Leaves balance
 // once the balance is implemented. Everything on this page that shows the balance
@@ -22,6 +23,14 @@ const PROMO_CODE = 'HARVEST15'
 // Add a tab's name here once its view is built.
 const walletTabs = ['Rewards wallet', 'Leaves history', 'Stamp cards', 'Check-ins & streaks']
 const readyTabs = new Set(['Rewards wallet'])
+
+const streakWeeks = [
+  { label: 'Wk 1', date: 'Nov 3', status: 'done' },
+  { label: 'Wk 2', date: 'Nov 11', status: 'done' },
+  { label: 'Wk 3', date: 'Nov 16', status: 'done' },
+  { label: 'Wk 4', date: 'Nov 22', status: 'current' },
+  { label: 'Wk 5', date: 'Free treat', status: 'treat' },
+]
 
 // `cost` is in Tea Leaves. A reward is locked while it costs more than the balance.
 const redeemOptions = [
@@ -46,6 +55,8 @@ export default function RewardsPage() {
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('Rewards wallet')
   const leaves = PLACEHOLDER_LEAVES_BALANCE
+  const progress = Math.min(100, Math.round((leaves / NEXT_MILESTONE) * 100))
+  const leavesToGo = Math.max(0, NEXT_MILESTONE - leaves)
   const fullName = [customer.firstName, customer.lastName].filter(Boolean).join(' ')
   const tier = customer.membershipTier
     ? customer.membershipTier[0].toUpperCase() + customer.membershipTier.slice(1)
@@ -69,6 +80,64 @@ export default function RewardsPage() {
         <p className="rewards-member">
           Member {customer.memberNumber} · {tier} member
         </p>
+
+        <div className="rewards-hero">
+          <section className="rewards-pass" aria-label="INSTEA Rewards Pass">
+            <div className="rewards-pass-top">
+              <span>INSTEA Rewards Pass</span>
+              <span className="rewards-tier-badge">{tier}</span>
+            </div>
+            <p className="rewards-balance">
+              {leaves.toLocaleString()} <span>Tea Leaves</span>
+            </p>
+            <p className="rewards-pass-note">
+              {leavesToGo > 0
+                ? `${leavesToGo.toLocaleString()} leaves away from your next complimentary drink`
+                : 'You have reached your next complimentary drink'}
+            </p>
+            <div
+              className="rewards-progress"
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={progress}
+              aria-label="Progress to next milestone"
+            >
+              <div style={{ width: `${progress}%` }} />
+            </div>
+            <div className="rewards-progress-labels">
+              <span>Milestone {NEXT_MILESTONE.toLocaleString()} leaves</span>
+              <span>{progress}% complete</span>
+            </div>
+            <button type="button" className="rewards-qr-button">
+              <QrCode size={16} aria-hidden="true" /> Show Member QR Code
+            </button>
+          </section>
+
+          <section className="rewards-card rewards-streak" aria-labelledby="streak-heading">
+            <div className="rewards-streak-top">
+              <h2 id="streak-heading">Weekly Tea Streak</h2>
+              <span className="rewards-streak-badge">
+                <Flame size={14} aria-hidden="true" /> 4-week streak
+              </span>
+            </div>
+            <p className="rewards-muted">Visit or order once a week to keep your ritual going.</p>
+            <ol className="rewards-weeks">
+              {streakWeeks.map((week) => (
+                <li key={week.label} className={`rewards-week ${week.status}`}>
+                  <span className="rewards-week-label">{week.label}</span>
+                  <span className="rewards-week-icon" aria-hidden="true">
+                    {week.status === 'treat' ? <Gift size={14} /> : <Check size={14} />}
+                  </span>
+                  <span className="rewards-week-date">{week.date}</span>
+                </li>
+              ))}
+            </ol>
+            <p className="rewards-muted rewards-small">
+              Week 4 complete · Next week's order earns a free treat
+            </p>
+          </section>
+        </div>
 
         <nav className="rewards-tabs" aria-label="Rewards sections">
           {walletTabs.map((tab) => (
