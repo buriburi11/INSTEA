@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 /** @typedef {import('../types/models').LeavesTransaction} LeavesTransaction */
 
+// Values match LeavesTransaction.type. 'all' is the UI-only "no filter" option.
 const filters = ['all', 'earned', 'redeemed', 'adjusted', 'expired']
 
 const dateFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
@@ -10,6 +11,7 @@ function capitalize(word) {
   return word[0].toUpperCase() + word.slice(1)
 }
 
+// Uses a real minus sign (−), not a hyphen, so negative amounts line up with the + ones.
 function formatAmount(amount) {
   return `${amount > 0 ? '+' : '−'}${Math.abs(amount).toLocaleString()}`
 }
@@ -27,6 +29,9 @@ function formatAmount(amount) {
 export default function LeavesHistory({ transactions, available, expiring }) {
   const [filter, setFilter] = useState('all')
 
+  // ------- SUMMARY STATS -------
+  // Worked out from the transactions so they always agree with the list. "Available" is passed
+  // in instead, because the stored balance can include activity older than this list.
   const thisYear = new Date().getFullYear()
   const pending = transactions
     .filter((t) => t.pending)
@@ -34,6 +39,7 @@ export default function LeavesHistory({ transactions, available, expiring }) {
   const redeemedThisYear = transactions
     .filter((t) => t.type === 'redeemed' && new Date(t.createdAt).getFullYear() === thisYear)
     .reduce((sum, t) => sum - t.amount, 0)
+  // ------- FILTER -------
   const shown = transactions.filter((t) => filter === 'all' || t.type === filter)
 
   return (
@@ -73,6 +79,7 @@ export default function LeavesHistory({ transactions, available, expiring }) {
         ))}
       </div>
 
+      {/* ------- TRANSACTION LIST (or empty state) ------- */}
       {shown.length === 0 ? (
         <div className="rewards-card rewards-ledger-empty">
           <p className="rewards-redeem-name">
@@ -99,6 +106,7 @@ export default function LeavesHistory({ transactions, available, expiring }) {
               </div>
               <span className={`rewards-ledger-amount ${t.amount < 0 ? 'negative' : 'positive'}`}>
                 {formatAmount(t.amount)}
+                {/* Color alone isn't enough for screen readers, so spell out added vs removed. */}
                 <span className="rewards-sr-only">{t.amount < 0 ? ' leaves removed' : ' leaves added'}</span>
               </span>
             </li>

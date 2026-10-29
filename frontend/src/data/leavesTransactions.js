@@ -2,6 +2,7 @@
  * Mock Tea Leaves history for the Rewards page.
  * Shape follows `LeavesTransaction` in ../types/models.js.
  *
+ * Dates are before "today" (Oct 2026) so "Redeemed this year" counts them.
  * Only Alex Rivera has history, so other demo customers show the empty state.
  */
 

@@ -65,6 +65,9 @@ export default function RewardsPage() {
   const [transactions, setTransactions] = useState(null)
   const [historyError, setHistoryError] = useState('')
 
+  // ------- LOAD LEAVES HISTORY -------
+  // `ignore` stops a slow response from updating state after the page unmounts or the
+  // customer changes, so an old customer's history can't flash on screen.
   useEffect(() => {
     let ignore = false
 
@@ -181,6 +184,7 @@ export default function RewardsPage() {
           ))}
         </nav>
 
+        {/* ------- LEAVES HISTORY TAB ------- */}
         {activeTab === 'Leaves history' &&
           (historyError ? (
             <p className="rewards-section" role="alert">{historyError}</p>
