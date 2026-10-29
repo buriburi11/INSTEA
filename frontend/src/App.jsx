@@ -62,6 +62,7 @@ function App() {
                 <Route path="/cart" element={<ShoppingCart />} />
                 <Route element={<ProtectedRoute />}>
                   <Route path="/profile" element={<ProfilePage />} />
+                  {/* Rewards shows the member's own balance, so it requires login like Profile. */}
                   <Route path="/rewards" element={<RewardsPage />} />
                 </Route>
                 <Route path="*" element={<Navigate to="/" replace />} />

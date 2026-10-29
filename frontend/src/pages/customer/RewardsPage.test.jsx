@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react'
 import { AuthContext } from '../../auth/AuthContext.js'
 import RewardsPage from './RewardsPage.jsx'
 
+// Renders the page with a fake logged-in customer instead of going through AuthProvider.
+// Note: the balance shown comes from PLACEHOLDER_LEAVES_BALANCE, not `rewardLeaves`.
 function renderWithLeaves(rewardLeaves) {
   const customer = {
     id: 'cust-alex-rivera',

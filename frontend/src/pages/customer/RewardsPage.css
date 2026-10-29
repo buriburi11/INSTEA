@@ -1,3 +1,6 @@
+/* Styles for the Rewards page and its tab views (RewardsPage.jsx and the components it renders).
+   Colors match ProfilePage.css: #faf6ee cream, #1d4232 green, #bc9141 gold. */
+
 .rewards-page {
   min-height: 70vh;
   padding: 45px 28px 50px;

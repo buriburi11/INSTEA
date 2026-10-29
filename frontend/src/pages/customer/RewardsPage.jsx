@@ -3,16 +3,27 @@ import { Copy, Lock, Ticket } from 'lucide-react'
 import useAuth from '../../auth/useAuth.js'
 import './RewardsPage.css'
 
+// Rewards page (/rewards). Logged-in customers only; see the ProtectedRoute in App.jsx.
+// The tab row switches between views. Everything above the tabs stays on screen for every tab.
+
+// ============
+//   MOCK DATA
+// ============
+
 // TODO: Replace mock rewards data with backend rewards data.
+
 // TODO(points balance): placeholder. Replace with the customer's real Tea Leaves balance
 // once the balance is implemented. Everything on this page that shows the balance
 // reads from `leaves`, so only this needs to change.
 const PLACEHOLDER_LEAVES_BALANCE = 1125
 const PROMO_CODE = 'HARVEST15'
 
+// Tabs not in `readyTabs` are shown but ignore clicks, so nobody lands on an empty view.
+// Add a tab's name here once its view is built.
 const walletTabs = ['Rewards wallet', 'Leaves history', 'Stamp cards', 'Check-ins & streaks']
 const readyTabs = new Set(['Rewards wallet'])
 
+// `cost` is in Tea Leaves. A reward is locked while it costs more than the balance.
 const redeemOptions = [
   { cost: 100, name: 'Plant Milk Upgrade', description: 'Oat or almond milk on any drink.' },
   { cost: 300, name: 'Hojicha Butter Madeleine', description: 'Baked fresh daily in our atelier kitchen.' },
@@ -26,6 +37,10 @@ const pastRewards = [
   { name: 'Summer Fruit Tea Upgrade', status: 'Expired Sep 30', expired: true },
 ]
 
+// =============
+//   COMPONENT
+// =============
+
 export default function RewardsPage() {
   const { customer } = useAuth()
   const [copied, setCopied] = useState(false)
@@ -36,6 +51,7 @@ export default function RewardsPage() {
     ? customer.membershipTier[0].toUpperCase() + customer.membershipTier.slice(1)
     : 'Regular'
 
+  // Clipboard access can be refused (non-HTTPS, browser permissions), so failure just leaves the label as "Copy".
   async function copyCode() {
     try {
       await navigator.clipboard.writeText(PROMO_CODE)
@@ -70,6 +86,8 @@ export default function RewardsPage() {
 
         {activeTab === 'Rewards wallet' && (
         <>
+        {/* ------- READY TO USE ------- */}
+        {/* TODO: "Apply at checkout" has no handler yet; it should attach the voucher to the cart. */}
         <section className="rewards-section" aria-labelledby="ready-heading">
           <h2 id="ready-heading">Ready to use</h2>
           <div className="rewards-ready">
@@ -102,6 +120,8 @@ export default function RewardsPage() {
           </div>
         </section>
 
+        {/* ------- REDEEM TEA LEAVES ------- */}
+        {/* TODO: Redeem buttons have no handler yet; redeeming needs a backend call that deducts leaves. */}
         <section className="rewards-section" aria-labelledby="redeem-heading">
           <div className="rewards-section-top">
             <h2 id="redeem-heading">Redeem Tea Leaves</h2>
@@ -138,6 +158,7 @@ export default function RewardsPage() {
           </ul>
         </section>
 
+        {/* ------- REDEEMED & EXPIRED ------- */}
         <section className="rewards-section" aria-labelledby="past-heading">
           <h2 id="past-heading">Redeemed &amp; expired</h2>
           <div className="rewards-ready">
