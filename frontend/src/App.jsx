@@ -22,6 +22,7 @@ import RegisterPage from './pages/customer/RegisterPage.jsx'
 
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import ProfilePage from './pages/customer/ProfilePage.jsx'
+import RewardsPage from './pages/customer/RewardsPage.jsx'
 
 import './App.css';
 
@@ -63,6 +64,8 @@ function App() {
                 <Route path="/cart" element={<ShoppingCart />} />
                 <Route element={<ProtectedRoute />}>
                   <Route path="/profile" element={<ProfilePage />} />
+                  {/* Rewards shows the member's own balance, so it requires login like Profile. */}
+                  <Route path="/rewards" element={<RewardsPage />} />
                 </Route>
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Route>

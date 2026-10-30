@@ -105,4 +105,47 @@
  * @property {string} createdAt
  */
 
+/**
+ * One change to a customer's Tea Leaves balance.
+ * `amount` is positive for leaves added and negative for leaves removed.
+ *
+ * @typedef {Object} LeavesTransaction
+ * @property {string} id
+ * @property {string} customerId
+ * @property {"earned"|"redeemed"|"adjusted"|"expired"} type
+ * @property {number} amount
+ * @property {string} reason e.g. "SoHo Tea House" or "Refund adjustment"
+ * @property {string} [detail] e.g. "Mobile order #4931"
+ * @property {boolean} [pending] true until the leaves post to the balance
+ * @property {string} createdAt
+ */
+
+/**
+ * A "buy N, get one free" stamp card. The backend decides `status`, including
+ * when a card expires.
+ *
+ * @typedef {Object} StampCard
+ * @property {string} id
+ * @property {string} customerId
+ * @property {string} name e.g. "Milk Tea Ritual"
+ * @property {string} reward e.g. "Free Regular Milk Tea"
+ * @property {number} stampsRequired
+ * @property {number} stampsEarned
+ * @property {"active"|"completed"|"expired"} status
+ * @property {string} expiresAt
+ * @property {string} [completedAt] set when status is "completed"
+ */
+
+/**
+ * One stamp added to a stamp card.
+ *
+ * @typedef {Object} StampHistoryEntry
+ * @property {string} id
+ * @property {string} customerId
+ * @property {string} stampCardId
+ * @property {string} cardName
+ * @property {string} [detail] e.g. "Mobile order #4931"
+ * @property {string} createdAt
+ */
+
 export {}
