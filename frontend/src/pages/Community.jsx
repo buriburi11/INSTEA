@@ -4,7 +4,13 @@ import "./Community.css";
 import { Clock, Leaf, ThumbsUp, ThumbsDown } from "lucide-react";
 import { Link } from "react-router";
 import useAuth from "../auth/useAuth.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import {
+    mockTriviaQuestions,
+    mockTriviaLeaderboard,
+    TRIVIA_POINTS_PER_CORRECT_ANSWER
+} from "../data/communityTrivia";
 
 
 function Community() {
@@ -15,6 +21,18 @@ function Community() {
     const [keepRetireChoice, setKeepRetireChoice] = useState(null);
     const [hasVotedKeepRetire, setHasVotedKeepRetire] = useState(false);
 
+    const [timeLeft, setTimeLeft] = useState(30);
+    const [hasFinishedTrivia, setHasFinishedTrivia] = useState(false);
+
+    //Triva part
+    const [hasStartedTrivia, setHasStartedTrivia] = useState(false);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [selectedTriviaAnswer, setSelectedTriviaAnswer] = useState(null);
+    const [triviaScore, setTriviaScore] = useState(0);
+    const currentTriviaQuestion = mockTriviaQuestions[currentQuestionIndex];
+    const [hasSubmittedTriviaAnswer, setHasSubmittedTriviaAnswer] = useState(false);
+
+    //Polls
     const poll = mockPolls[0];
     const keepOrRetirePoll = mockPolls[1];
     const now = new Date();
@@ -31,6 +49,24 @@ function Community() {
     const isKeepRetireOpen =
         keepOrRetirePoll.status === "active" &&
         new Date(keepOrRetirePoll.endsAt) > now;
+
+    useEffect(() => {
+        if (!hasStartedTrivia || hasSubmittedTriviaAnswer || hasFinishedTrivia) {
+            return;
+        }
+
+        if (timeLeft === 0) {
+            setHasSubmittedTriviaAnswer(true);
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setTimeLeft((previousTime) => previousTime - 1);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [hasStartedTrivia, hasSubmittedTriviaAnswer, hasFinishedTrivia, timeLeft]);
+
     return (
         <main className="community-page">
             <div className="community-banner">
@@ -201,6 +237,209 @@ function Community() {
                     ))}
                 </aside>
             </div>
+
+
+
+
+
+            <section className="community-trivia">
+                <div className="trivia-game">
+                    <div className="trivia-header">
+                        <p className="trivia-label">Daily mastery trivia</p>
+
+                        {hasStartedTrivia && !hasFinishedTrivia && (
+                            <span className="trivia-timer">
+                                <Clock size={18} />
+                                0:{String(timeLeft).padStart(2, "0")}
+                            </span>
+                        )}
+                    </div>
+                    {hasStartedTrivia && (
+                        <div className="trivia-progress">
+                            {mockTriviaQuestions.map((question, index) => (
+                                <div
+                                    key={question.id}
+                                    className={`trivia-progress-line ${index <= currentQuestionIndex ? "active" : ""
+                                        }`}
+                                />
+                            ))}
+                        </div>
+                    )}
+
+                    {hasFinishedTrivia ? (
+                        <div className="trivia-results">
+                            <h2 className="trivia-title">Trivia Complete!</h2>
+
+                            <p className="trivia-description">
+                                You've completed today's tea mastery challenge!
+                            </p>
+
+                            <div className="trivia-results-stats">
+                                <div className="trivia-result-stat">
+                                    <span className="trivia-result-number">
+                                        {triviaScore} / {mockTriviaQuestions.length}
+                                    </span>
+                                    <span className="trivia-result-label">
+                                        Correct answers
+                                    </span>
+                                </div>
+
+                                <div className="trivia-result-stat">
+                                    <span className="trivia-result-number">
+                                        {triviaScore * TRIVIA_POINTS_PER_CORRECT_ANSWER}
+                                    </span>
+                                    <span className="trivia-result-label">
+                                        Leaves earned
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+
+
+                            <h2 className="trivia-title">
+                                {hasStartedTrivia
+                                    ? currentTriviaQuestion.question
+                                    : "Test your tea knowledge"}
+
+                            </h2>
+
+                            {hasStartedTrivia && (
+                                <div className="trivia-options">
+                                    {currentTriviaQuestion.options.map((option) => (
+                                        <button
+                                            key={option.id}
+                                            type="button"
+                                            className={`trivia-option ${selectedTriviaAnswer === option.id ? "selected" : ""
+                                                }`}
+                                            onClick={() => setSelectedTriviaAnswer(option.id)}
+                                            disabled={hasSubmittedTriviaAnswer}
+                                        >
+                                            <span className="trivia-option-letter">
+                                                {option.id}
+                                            </span>
+
+                                            <span className="trivia-option-text">
+                                                {option.text}
+                                            </span>
+                                        </button>
+                                    ))}
+
+                                    <button
+                                        type="button"
+                                        className="trivia-start-button"
+                                        disabled={
+                                            selectedTriviaAnswer === null ||
+                                            hasSubmittedTriviaAnswer ||
+                                            timeLeft === 0
+                                        }
+                                        onClick={() => {
+                                            if (selectedTriviaAnswer === currentTriviaQuestion.correctAnswer) {
+                                                setTriviaScore((previousScore) => previousScore + 1);
+                                            }
+
+                                            setHasSubmittedTriviaAnswer(true);
+                                        }}
+                                    >
+                                        Submit Answer
+                                    </button>
+
+                                    {hasSubmittedTriviaAnswer && (
+                                        <p className="trivia-feedback">
+                                            {timeLeft === 0
+                                                ? "Time's up!"
+                                                : selectedTriviaAnswer === currentTriviaQuestion.correctAnswer
+                                                    ? "Correct! You earned 2 leaves!"
+                                                    : "Not quite! Better luck on the next question."}
+                                        </p>
+                                    )}
+
+
+                                    {/* Next Question — Questions 1 and 2 */}
+                                    {hasSubmittedTriviaAnswer &&
+                                        currentQuestionIndex < mockTriviaQuestions.length - 1 && (
+                                            <button
+                                                type="button"
+                                                className="trivia-start-button"
+                                                onClick={() => {
+                                                    setCurrentQuestionIndex((previousIndex) => previousIndex + 1);
+                                                    setSelectedTriviaAnswer(null);
+                                                    setHasSubmittedTriviaAnswer(false);
+                                                    setTimeLeft(30);
+                                                }}
+                                            >
+                                                Next Question
+                                            </button>
+                                        )}
+
+                                    {/* ADD THIS PART — Finish Trivia on Question 3 */}
+                                    {hasSubmittedTriviaAnswer &&
+                                        currentQuestionIndex === mockTriviaQuestions.length - 1 && (
+                                            <button
+                                                type="button"
+                                                className="trivia-start-button"
+                                                onClick={() => setHasFinishedTrivia(true)}
+                                            >
+                                                Finish Trivia
+                                            </button>
+                                        )}
+                                </div>
+
+                            )}
+
+                            {!hasStartedTrivia && (
+                                <>
+                                    <p className="trivia-description">
+                                        Answer three questions and discover how much
+                                        you know about tea.
+                                    </p>
+
+                                    {isAuthenticated ? (
+                                        <button
+                                            type="button"
+                                            className="trivia-start-button"
+                                            onClick={() => setHasStartedTrivia(true)}
+                                        >
+                                            Start Trivia
+                                        </button>
+                                    ) : (
+                                        <Link to="/login" className="trivia-start-button">
+                                            Join INSTEA Rewards to Play
+                                        </Link>
+                                    )}
+                                </>
+                            )}
+                        </>
+                    )}
+                </div>
+
+                <aside className="trivia-leaderboard">
+                    <h2 className="trivia-leaderboard-title">
+                        This month's leaderboard
+                    </h2>
+
+                    {mockTriviaLeaderboard.map((player, index) => (
+                        <div
+                            key={player.id}
+                            className={`trivia-leaderboard-row ${isAuthenticated && player.isCurrentUser ? "current-user" : ""
+                                }`}
+                        >
+                            <span className="trivia-rank">{index + 1}</span>
+
+                            <span className="trivia-player-name">
+                                {player.name}
+                                {isAuthenticated && player.isCurrentUser && " (you)"}
+                            </span>
+
+                            <span className="trivia-player-points">
+                                {player.points.toLocaleString()}
+                            </span>
+                        </div>
+                    ))}
+                </aside>
+            </section>
+
         </main>
     );
 }
