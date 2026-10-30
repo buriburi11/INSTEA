@@ -367,10 +367,142 @@
   color: #a4442e !important;
 }
 
+/* Leaves history */
+.rewards-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 0 20px;
+}
+
+.rewards-stats > div {
+  padding: 14px 16px;
+}
+
+.rewards-stats > div + div {
+  border-left: 1px solid #eee5d4;
+}
+
+.rewards-stats dt {
+  color: #5f5b54;
+  font-size: 0.75rem;
+}
+
+.rewards-stats dd {
+  margin: 8px 0 0;
+  color: #1d4232;
+  font-family: Georgia, serif;
+  font-size: 1.1rem;
+}
+
+.rewards-stats .rewards-stat-main {
+  font-size: 1.7rem;
+}
+
+.rewards-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.rewards-chips button {
+  padding: 6px 14px;
+  border: 1px solid #dfd2bd;
+  border-radius: 999px;
+  background: #fff;
+  color: #2b2b27;
+  font-size: 0.8rem;
+}
+
+.rewards-chips button.active {
+  border-color: #1d4232;
+  background: #1d4232;
+  color: #fff;
+}
+
+.rewards-ledger {
+  margin: 0 0 10px;
+  padding: 0;
+  list-style: none;
+}
+
+.rewards-ledger-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 18px;
+}
+
+.rewards-ledger-item + .rewards-ledger-item {
+  border-top: 1px solid #eee5d4;
+}
+
+.rewards-ledger-amount {
+  color: #1d4232;
+  font-family: Georgia, serif;
+  font-size: 1rem;
+}
+
+.rewards-ledger-amount.positive {
+  color: #25563b;
+}
+
+.rewards-ledger-amount.negative {
+  color: #a4442e;
+}
+
+.rewards-ledger-empty {
+  margin-bottom: 10px;
+  padding: 28px 18px;
+  text-align: center;
+}
+
+.rewards-type-tag {
+  margin-left: 8px;
+  padding: 1px 8px;
+  border: 1px solid #dfd2bd;
+  border-radius: 4px;
+  color: #5f5b54;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.rewards-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.rewards-pending-badge {
+  margin-left: 8px;
+  padding: 1px 8px;
+  border-radius: 4px;
+  background: #f2ead9;
+  color: #8a6a2c;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
 @media (max-width: 800px) {
   .rewards-hero,
   .rewards-ready {
     grid-template-columns: 1fr;
+  }
+
+  .rewards-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .rewards-stats > div:nth-child(3) {
+    border-left: 0;
+  }
+
+  .rewards-stats > div:nth-child(n + 3) {
+    border-top: 1px solid #eee5d4;
   }
 
   .rewards-redeem-item {

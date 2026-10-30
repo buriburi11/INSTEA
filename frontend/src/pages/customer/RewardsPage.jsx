@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Check, Copy, Flame, Gift, Lock, QrCode, Ticket } from 'lucide-react'
 import useAuth from '../../auth/useAuth.js'
+import LeavesHistory from '../../components/LeavesHistory.jsx'
+import { getLeavesTransactions } from '../../services/loyaltyService.js'
 import './RewardsPage.css'
 
 // Rewards page (/rewards). Logged-in customers only; see the ProtectedRoute in App.jsx.
@@ -23,7 +25,10 @@ const PROMO_CODE = 'HARVEST15'
 // Tabs not in `readyTabs` are shown but ignore clicks, so nobody lands on an empty view.
 // Add a tab's name here once its view is built.
 const walletTabs = ['Rewards wallet', 'Leaves history', 'Stamp cards', 'Check-ins & streaks']
-const readyTabs = new Set(['Rewards wallet'])
+const readyTabs = new Set(['Rewards wallet', 'Leaves history'])
+
+// Not derivable from the transaction list yet: needs per-leaf earn dates from the backend.
+const expiringLeaves = { amount: 120, date: 'Jan 31' }
 
 // TODO: Replace with the customer's real weekly visits. `status` is 'done', 'current'
 // (this week) or 'treat' (the reward week).
@@ -57,6 +62,24 @@ export default function RewardsPage() {
   const { customer } = useAuth()
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('Rewards wallet')
+  const [transactions, setTransactions] = useState(null)
+  const [historyError, setHistoryError] = useState('')
+
+  // ------- LOAD LEAVES HISTORY -------
+  // `ignore` stops a slow response from updating state after the page unmounts or the
+  // customer changes, so an old customer's history can't flash on screen.
+  useEffect(() => {
+    let ignore = false
+
+    getLeavesTransactions(customer.id)
+      .then((data) => !ignore && setTransactions(data))
+      .catch(() => !ignore && setHistoryError('We couldn\'t load your leaves history. Please try again later.'))
+
+    return () => {
+      ignore = true
+    }
+  }, [customer.id])
+
   const leaves = PLACEHOLDER_LEAVES_BALANCE
   // Clamped so a balance past the milestone shows 100% and "reached" instead of going negative.
   const progress = Math.min(100, Math.round((leaves / NEXT_MILESTONE) * 100))
@@ -160,6 +183,16 @@ export default function RewardsPage() {
             </button>
           ))}
         </nav>
+
+        {/* ------- LEAVES HISTORY TAB ------- */}
+        {activeTab === 'Leaves history' &&
+          (historyError ? (
+            <p className="rewards-section" role="alert">{historyError}</p>
+          ) : transactions ? (
+            <LeavesHistory transactions={transactions} available={leaves} expiring={expiringLeaves} />
+          ) : (
+            <p className="rewards-section rewards-muted">Loading leaves history…</p>
+          ))}
 
         {activeTab === 'Rewards wallet' && (
         <>
