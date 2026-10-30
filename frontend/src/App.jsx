@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Locations from './pages/Locations';
 import Events from './pages/Events';
+import Community from './pages/Community';
 
 import MenuPage from './pages/MenuPage';
 import ProductDetailPage from './pages/ProductDetailPage';
@@ -56,6 +57,7 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/locations" element={<Locations />} />
                 <Route path="/events" element={<Events />} />
+                <Route path="/community" element={<Community />} />
                 <Route path="/menu" element={<MenuPage />} />
                 <Route path="/menu/:productId" element={<ProductDetailPage />} />
                 <Route path="/cart" element={<ShoppingCart />} />
