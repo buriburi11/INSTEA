@@ -201,7 +201,7 @@
 }
 
 /*Members only*/
- .poll-option-card {
+.poll-option-card {
     text-align: left;
     cursor: pointer;
     font: inherit;
@@ -223,10 +223,194 @@ button.poll-login-button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
+
 .poll-confirmation {
     font-family: "Inter", sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: #1F3B2E;
     margin-top: 16px;
+}
+
+.keep-retire-hint {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin-top: 16px;
+}
+
+/*layout for the second poll */
+.community-secondary-polls {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 28px;
+    margin-top: 40px;
+}
+
+.keep-retire-poll {
+    display: flex;
+    background-color: white;
+    border: 1px solid #e2d8c7;
+    border-radius: 16px;
+    overflow: hidden;
+
+    text-align: left;
+    color: #1F3B2E;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.keep-retire-label {
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #8A6A35;
+    margin: 0 0 8px;
+}
+
+.keep-retire-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 32px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin: 0 0 8px;
+}
+
+.keep-retire-description {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #66655E;
+    margin: 0;
+}
+
+.keep-retire-image {
+    width: 192px;
+    height: auto;
+    align-self: stretch;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.keep-retire-content {
+    flex: 1;
+    min-width: 0;
+    padding: 28px;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.keep-retire-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 70px;
+}
+
+.keep-retire-button {
+    padding: 14px 16px;
+    border: 1px solid #e2d8c7;
+    border-radius: 12px;
+    background-color: white;
+    color: #1F3B2E;
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.keep-retire-button.selected {
+    background-color: #1F3B2E;
+    color: white;
+    border-color: #1F3B2E;
+}
+
+.keep-retire-button:disabled {
+    cursor: not-allowed;
+}
+
+.keep-retire-expired {
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #B23A2B;
+    margin-top: 12px;
+}
+
+@media (max-width: 768px) {
+
+    /* Replace .poll-options with your actual container class */
+    .poll-options {
+        grid-template-columns: 1fr;
+    }
+
+    .community-secondary-polls {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .keep-retire-poll {
+        flex-direction: column;
+    }
+
+    .keep-retire-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+}
+
+
+/* Past Results */
+.poll-history {
+    text-align: left;
+    padding: 0;
+}
+
+.poll-history-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 36px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin: 0 0 24px;
+}
+
+.poll-history-item {
+    border-top: 2px solid #e2d8c7;
+    padding: 24px 0;
+}
+
+.poll-history-item:last-child {
+    border-bottom: 1px solid #DED6C7;
+}
+
+.poll-history-label {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #66655E;
+    margin: 0 0 6px;
+}
+
+.poll-history-winner {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.poll-history-stats {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #66655E;
+    margin: 4px 0 0;
 }

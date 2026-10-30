@@ -1,17 +1,22 @@
 import background_Banner from "../assets/Green_Banner.svg";
-import { mockPolls } from "../data/communityPolls";
+import { mockPolls, mockPollHistory } from "../data/communityPolls";
 import "./Community.css";
-import { Clock, Leaf } from 'lucide-react';
+import { Clock, Leaf, ThumbsUp, ThumbsDown } from "lucide-react";
 import { Link } from "react-router";
 import useAuth from "../auth/useAuth.js";
 import { useState } from "react";
+
 
 function Community() {
     const { isAuthenticated } = useAuth();
     const [selectedOptionId, setSelectedOptionId] = useState(null);
     const [hasVoted, setHasVoted] = useState(false);
 
+    const [keepRetireChoice, setKeepRetireChoice] = useState(null);
+    const [hasVotedKeepRetire, setHasVotedKeepRetire] = useState(false);
+
     const poll = mockPolls[0];
+    const keepOrRetirePoll = mockPolls[1];
     const now = new Date();
     const endDate = new Date(poll.endsAt);
 
@@ -19,8 +24,13 @@ function Community() {
         (endDate - now) / (1000 * 60 * 60 * 24)
     );
 
-    const isPollOpen = poll.status === "active" && endDate > now;
+    const isPollOpen =
+        poll.status === "active" &&
+        endDate > now;
 
+    const isKeepRetireOpen =
+        keepOrRetirePoll.status === "active" &&
+        new Date(keepOrRetirePoll.endsAt) > now;
     return (
         <main className="community-page">
             <div className="community-banner">
@@ -104,6 +114,93 @@ function Community() {
                     </p>
                 )}
             </section>
+
+            <div className="community-secondary-polls">
+                <section className="keep-retire-poll">
+                    <img
+                        src={keepOrRetirePoll.image}
+                        alt="Golden Phoenix Oolong tea"
+                        className="keep-retire-image"
+                    />
+
+                    <div className="keep-retire-content">
+                        <p className="keep-retire-label">
+                            {keepOrRetirePoll.label}
+                        </p>
+
+                        <h2 className="keep-retire-title">
+                            {keepOrRetirePoll.title}
+                        </h2>
+
+                        <p className="keep-retire-description">
+                            {keepOrRetirePoll.description}
+                        </p>
+
+                        {!isKeepRetireOpen && (
+                            <p className="keep-retire-expired">
+                                Poll Expired
+                            </p>
+                        )}
+
+                        <div className="keep-retire-options">
+                            {keepOrRetirePoll.options.map((option) => (
+                                <button
+                                    key={option.id}
+                                    type="button"
+                                    className={`keep-retire-button ${keepRetireChoice === option.id ? "selected" : ""
+                                        }`}
+                                    onClick={() => {
+                                        if (keepRetireChoice === option.id) {
+                                            setHasVotedKeepRetire(true);
+                                        } else {
+                                            setKeepRetireChoice(option.id);
+                                        }
+                                    }}
+                                    disabled={!isAuthenticated || hasVotedKeepRetire || !isKeepRetireOpen}
+                                    aria-pressed={keepRetireChoice === option.id}
+                                >
+                                    {option.name === "Keep it" ? (
+                                        <ThumbsUp size={18} />
+                                    ) : (
+                                        <ThumbsDown size={18} />
+                                    )}
+
+                                    {option.name}
+                                </button>
+                            ))}
+                        </div>
+                        {hasVotedKeepRetire ? (
+                            <p className="poll-confirmation">
+                                Your vote has been submitted!
+                            </p>
+                        ) : keepRetireChoice !== null ? (
+                            <p className="keep-retire-hint">
+                                Click your selected answer again to confirm your vote.
+                            </p>
+                        ) : null}
+                    </div>
+                </section>
+
+                <aside className="poll-history">
+                    <h2 className="poll-history-title">Past results</h2>
+
+                    {mockPollHistory.map((result) => (
+                        <div className="poll-history-item" key={result.id}>
+                            <p className="poll-history-label">
+                                {result.label}
+                            </p>
+
+                            <h3 className="poll-history-winner">
+                                {result.winner}
+                            </h3>
+
+                            <p className="poll-history-stats">
+                                Won with {result.percentage}% · {result.totalVotes.toLocaleString()} votes
+                            </p>
+                        </div>
+                    ))}
+                </aside>
+            </div>
         </main>
     );
 }

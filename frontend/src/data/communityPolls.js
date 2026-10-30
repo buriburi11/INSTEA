@@ -28,5 +28,42 @@ export const mockPolls = [
                 image: "/images/products/placeholder.svg"
             }
         ]
+    },
+    {
+        id: 2,
+        label: "Keep or Retire?",
+        title: "Golden Phoenix Oolong",
+        description: "Our autumn specialty. Keep it on the menu year-round?",
+        image: "/images/products/placeholder.svg",
+        status: "active",
+        endsAt: "2026-12-15T23:59:59",
+        options: [
+            {
+                id: 1,
+                name: "Keep it"
+            },
+            {
+                id: 2,
+                name: "Retire"
+            }
+        ]
+    }
+];   
+
+
+export const mockPollHistory = [
+    {
+        id: 1,
+        label: "Autumn ratified blend",
+        winner: "Spiced Honey Osmanthus Oolong",
+        percentage: 54,
+        totalVotes: 2104
+    },
+    {
+        id: 2,
+        label: "Summer fruit tea",
+        winner: "White Peach Oolong",
+        percentage: 61,
+        totalVotes: 1876
     }
 ];
