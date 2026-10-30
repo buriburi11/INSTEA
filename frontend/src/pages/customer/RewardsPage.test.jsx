@@ -41,4 +41,11 @@ describe('RewardsPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Leaves history' }))
     expect(await screen.findByText('Cloud Matcha Voucher')).toBeInTheDocument()
   })
+
+  it('loads the customer stamp cards and stamp history', async () => {
+    renderWithLeaves(820)
+    fireEvent.click(screen.getByRole('button', { name: 'Stamp cards' }))
+    expect(await screen.findByText('Milk Tea Ritual')).toBeInTheDocument()
+    expect(screen.getAllByText('+1 stamp')).toHaveLength(3)
+  })
 })
