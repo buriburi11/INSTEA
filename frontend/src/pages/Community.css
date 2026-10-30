@@ -176,6 +176,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 8px;
 
     background-color: #C2A066;
     color: #152A20;
@@ -187,10 +188,45 @@
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
+
+    border: none;
+    appearance: none;
+    cursor: pointer;
 }
 
 .poll-login-button:hover {
     background-color: #C2A066;
     opacity: 90%;
     border: 1px solid #1F3B2E;
+}
+
+/*Members only*/
+ .poll-option-card {
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+}
+
+.poll-option-card.selected {
+    border: 3px solid #1F3B2E;
+    background-color: #C2A066;
+    opacity: 95%;
+}
+
+.poll-option-card:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* vote confirmation */
+button.poll-login-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.poll-confirmation {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin-top: 16px;
 }
