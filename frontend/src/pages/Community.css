@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&display=swap');
+
+.community-page {
+    width: 100%;
+}
+
+.community-banner {
+    position: relative;
+    width: 100vw;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: -32px;
+}
+
+.community-banner-image {
+    display: block;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.community-subtitle {
+    position: absolute;
+    top: 55px;
+    left: 10%;
+    color: #C2A066;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.community-title {
+    position: absolute;
+    top: 130px;
+    left: 10%;
+    transform: translateY(-50%);
+
+    color: #FAF6EE;
+    font-family: "Cormorant Garamond", serif;
+    font-size: 90px;
+    font-weight: 600;
+    font-style: italic;
+    margin: 0;
+}
+
+.community-description {
+    position: absolute;
+    top: 200px;
+    left: 10%;
+    text-align: left;
+
+    color: #FAF6EE;
+    opacity: 75%;
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 1.6;
+    max-width: 550px;
+}
+
+/*just makes sure the description does not escape the banner*/
+@media (max-width: 480px) {
+    .community-description {
+        top: 190px;
+        left: 20px;
+        right: 20px;
+        max-width: none;
+        text-align: left;
+        font-size: 12px;
+        line-height: 1.4;
+    }
+}
+
+.community-poll {
+    background-color: white;
+    border: 2.25px solid #E4DACA;
+    border-radius: 16px;
+    padding: 28px;
+    margin-top: 40px;
+    text-align: left;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.poll-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.poll-label {
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #8A6A35;
+    margin: 0 0 8px;
+}
+
+.poll-deadline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #66655E;
+    margin: 0;
+}
+
+.poll-title {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 32px;
+    font-weight: 600;
+    font-style: italic;
+    color: #1F3B2E;
+    margin: 0 0 8px;
+}
+
+.poll-description {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #66655E;
+    line-height: 1.5;
+    margin: 0;
+}
+
+
+/*poll cards*/
+.poll-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.poll-option-card {
+    border: 2px solid #E4DACA;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: white;
+    padding: 0px;
+}
+
+.poll-option-name {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin: 6px 0 4px;
+}
+
+.poll-option-description {
+    font-family: "Inter", sans-serif;
+    font-style: normal;
+    font-size: 14px;
+    color: #66655E;
+    margin: 0;
+}
+
+.poll-option-image {
+    display: block;
+    width: 100%;
+    height: 215px;
+    object-fit: cover;
+}
+
+.poll-option-content {
+    padding: 12px 16px;
+}
+
+/*button in poll*/
+.poll-login-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #C2A066;
+    color: #152A20;
+    border-radius: 8px;
+    padding: 12px 24px;
+    margin-top: 24px;
+
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.poll-login-button:hover {
+    background-color: #C2A066;
+    opacity: 90%;
+    border: 1px solid #1F3B2E;
+}
