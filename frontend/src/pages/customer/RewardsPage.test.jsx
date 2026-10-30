@@ -30,4 +30,10 @@ describe('RewardsPage', () => {
     expect(screen.getByText('875 more leaves to unlock')).toBeInTheDocument()
   })
 
+  it('shows progress toward the next milestone', () => {
+    renderWithLeaves(820)
+    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuenow', '94')
+    expect(screen.getByText('75 leaves away from your next complimentary drink')).toBeInTheDocument()
+  })
+
 })
