@@ -131,7 +131,7 @@ export default function EventDetails() {
                                 id="rsvp-guests"
                                 type="number"
                                 min="1"
-                                max="10"
+                                max={event.spotsRemaining}
                                 defaultValue="1"
                                 required
                             />
