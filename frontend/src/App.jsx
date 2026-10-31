@@ -18,6 +18,7 @@ import StaffLogin from './pages/admin/StaffLogin.jsx';
 
 import LoginPage from './pages/customer/LoginPage.jsx'
 import RegisterPage from './pages/customer/RegisterPage.jsx'
+import VerifyPage from './pages/customer/VerifyPage.jsx'
 
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import ProfilePage from './pages/customer/ProfilePage.jsx'
@@ -30,6 +31,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/verify" element={<VerifyPage />} />
             {/* Staff login */}
             <Route path="/staff-portal" element={<StaffLogin />} />
 
