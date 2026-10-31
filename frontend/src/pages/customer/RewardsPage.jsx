@@ -3,6 +3,8 @@ import { Check, Copy, Flame, Gift, Lock, QrCode, Ticket } from 'lucide-react'
 import useAuth from '../../auth/useAuth.js'
 import LeavesHistory from '../../components/LeavesHistory.jsx'
 import StampCard from '../../components/StampCard.jsx'
+import CheckInCalendar from '../../components/CheckInCalendar.jsx'
+import CheckInStreaks from '../../components/CheckInStreaks.jsx'
 import {
   getLeavesTransactions,
   getStampCards,
@@ -30,7 +32,7 @@ const PROMO_CODE = 'HARVEST15'
 // Tabs not in `readyTabs` are shown but ignore clicks, so nobody lands on an empty view.
 // Add a tab's name here once its view is built.
 const walletTabs = ['Rewards wallet', 'Leaves history', 'Stamp cards', 'Check-ins & streaks']
-const readyTabs = new Set(['Rewards wallet', 'Leaves history', 'Stamp cards'])
+const readyTabs = new Set(['Rewards wallet', 'Leaves history', 'Stamp cards', 'Check-ins & streaks'])
 
 // Not derivable from the transaction list yet: needs per-leaf earn dates from the backend.
 const expiringLeaves = { amount: 120, date: 'Jan 31' }
@@ -207,6 +209,16 @@ export default function RewardsPage() {
           ))}
         </nav>
 
+        {/* ------- CHECK-INS & STREAKS TAB ------- */}
+        {activeTab === 'Check-ins & streaks' && (
+          <div className="checkin-layout">
+            <CheckInCalendar />
+            <CheckInStreaks
+              onViewRewards={() => setActiveTab('Rewards wallet')}
+            />
+          </div>
+        )}
+
         {/* ------- LEAVES HISTORY TAB ------- */}
         {activeTab === 'Leaves history' &&
           (historyError ? (
@@ -270,92 +282,92 @@ export default function RewardsPage() {
           ))}
 
         {activeTab === 'Rewards wallet' && (
-        <>
-        {/* ------- READY TO USE ------- */}
-        {/* TODO: "Apply at checkout" has no handler yet; it should attach the voucher to the cart. */}
-        <section className="rewards-section" aria-labelledby="ready-heading">
-          <h2 id="ready-heading">Ready to use</h2>
-          <div className="rewards-ready">
-            <article className="rewards-card rewards-offer">
-              <p className="rewards-eyebrow">Reward milestone</p>
-              <h3>Complimentary Drink Voucher</h3>
-              <p className="rewards-muted">
-                Valid for any size Botanical Cold Brew, Cloud Matcha, or Classic Milk Tea.
-              </p>
-              <button type="button" className="rewards-dark-button">
-                <Ticket size={16} aria-hidden="true" /> Apply at checkout
-              </button>
-              <p className="rewards-small">Expires Dec 31</p>
-            </article>
-
-            <article className="rewards-card rewards-offer">
-              <p className="rewards-eyebrow">Member privilege</p>
-              <h3>
-                15% off <em>whole</em> leaf tins
-              </h3>
-              <p className="rewards-muted">Valid on all first-flush tins in-store and online.</p>
-              <div className="rewards-code">
-                <span>{PROMO_CODE}</span>
-                <button type="button" onClick={copyCode}>
-                  <Copy size={14} aria-hidden="true" /> {copied ? 'Copied' : 'Copy'}
-                </button>
-              </div>
-              <p className="rewards-small">Expires Dec 15</p>
-            </article>
-          </div>
-        </section>
-
-        {/* ------- REDEEM TEA LEAVES ------- */}
-        {/* TODO: Redeem buttons have no handler yet; redeeming needs a backend call that deducts leaves. */}
-        <section className="rewards-section" aria-labelledby="redeem-heading">
-          <div className="rewards-section-top">
-            <h2 id="redeem-heading">Redeem Tea Leaves</h2>
-            <span className="rewards-small">
-              Balance <strong>{leaves.toLocaleString()}</strong>
-            </span>
-          </div>
-          <ul className="rewards-card rewards-redeem-list">
-            {redeemOptions.map((option) => {
-              const locked = option.cost > leaves
-
-              return (
-                <li key={option.name} className="rewards-redeem-item">
-                  <span className="rewards-cost">{option.cost.toLocaleString()}</span>
-                  <div>
-                    <p className="rewards-redeem-name">{option.name}</p>
-                    <p className="rewards-muted rewards-small">
-                      {locked
-                        ? `${(option.cost - leaves).toLocaleString()} more leaves to unlock`
-                        : option.description}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    className={locked ? 'rewards-redeem-locked' : 'rewards-dark-button'}
-                    disabled={locked}
-                    aria-label={`Redeem ${option.name}`}
-                  >
-                    {locked && <Lock size={13} aria-hidden="true" />} Redeem
+          <>
+            {/* ------- READY TO USE ------- */}
+            {/* TODO: "Apply at checkout" has no handler yet; it should attach the voucher to the cart. */}
+            <section className="rewards-section" aria-labelledby="ready-heading">
+              <h2 id="ready-heading">Ready to use</h2>
+              <div className="rewards-ready">
+                <article className="rewards-card rewards-offer">
+                  <p className="rewards-eyebrow">Reward milestone</p>
+                  <h3>Complimentary Drink Voucher</h3>
+                  <p className="rewards-muted">
+                    Valid for any size Botanical Cold Brew, Cloud Matcha, or Classic Milk Tea.
+                  </p>
+                  <button type="button" className="rewards-dark-button">
+                    <Ticket size={16} aria-hidden="true" /> Apply at checkout
                   </button>
-                </li>
-              )
-            })}
-          </ul>
-        </section>
+                  <p className="rewards-small">Expires Dec 31</p>
+                </article>
 
-        {/* ------- REDEEMED & EXPIRED ------- */}
-        <section className="rewards-section" aria-labelledby="past-heading">
-          <h2 id="past-heading">Redeemed &amp; expired</h2>
-          <div className="rewards-ready">
-            {pastRewards.map((reward) => (
-              <div key={reward.name} className="rewards-card rewards-past">
-                <span>{reward.name}</span>
-                <span className={reward.expired ? 'rewards-expired' : ''}>{reward.status}</span>
+                <article className="rewards-card rewards-offer">
+                  <p className="rewards-eyebrow">Member privilege</p>
+                  <h3>
+                    15% off <em>whole</em> leaf tins
+                  </h3>
+                  <p className="rewards-muted">Valid on all first-flush tins in-store and online.</p>
+                  <div className="rewards-code">
+                    <span>{PROMO_CODE}</span>
+                    <button type="button" onClick={copyCode}>
+                      <Copy size={14} aria-hidden="true" /> {copied ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                  <p className="rewards-small">Expires Dec 15</p>
+                </article>
               </div>
-            ))}
-          </div>
-        </section>
-        </>
+            </section>
+
+            {/* ------- REDEEM TEA LEAVES ------- */}
+            {/* TODO: Redeem buttons have no handler yet; redeeming needs a backend call that deducts leaves. */}
+            <section className="rewards-section" aria-labelledby="redeem-heading">
+              <div className="rewards-section-top">
+                <h2 id="redeem-heading">Redeem Tea Leaves</h2>
+                <span className="rewards-small">
+                  Balance <strong>{leaves.toLocaleString()}</strong>
+                </span>
+              </div>
+              <ul className="rewards-card rewards-redeem-list">
+                {redeemOptions.map((option) => {
+                  const locked = option.cost > leaves
+
+                  return (
+                    <li key={option.name} className="rewards-redeem-item">
+                      <span className="rewards-cost">{option.cost.toLocaleString()}</span>
+                      <div>
+                        <p className="rewards-redeem-name">{option.name}</p>
+                        <p className="rewards-muted rewards-small">
+                          {locked
+                            ? `${(option.cost - leaves).toLocaleString()} more leaves to unlock`
+                            : option.description}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        className={locked ? 'rewards-redeem-locked' : 'rewards-dark-button'}
+                        disabled={locked}
+                        aria-label={`Redeem ${option.name}`}
+                      >
+                        {locked && <Lock size={13} aria-hidden="true" />} Redeem
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            </section>
+
+            {/* ------- REDEEMED & EXPIRED ------- */}
+            <section className="rewards-section" aria-labelledby="past-heading">
+              <h2 id="past-heading">Redeemed &amp; expired</h2>
+              <div className="rewards-ready">
+                {pastRewards.map((reward) => (
+                  <div key={reward.name} className="rewards-card rewards-past">
+                    <span>{reward.name}</span>
+                    <span className={reward.expired ? 'rewards-expired' : ''}>{reward.status}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
         )}
       </div>
     </main>
