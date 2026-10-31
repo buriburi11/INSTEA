@@ -351,6 +351,52 @@
   font-size: 0.9rem;
 }
 
+/* ----- Verification code (INST-37) ----- */
+
+.customer-code-fieldset {
+  margin: 0 0 22px;
+  padding: 0;
+  border: 0;
+}
+
+.customer-code-boxes {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 10px;
+}
+
+.customer-code-boxes input {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1 / 1.1;
+  padding: 0;
+  border: 1px solid #ddcfb9;
+  border-radius: 10px;
+  background: #fff;
+  color: #1f3b2e;
+  font: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.customer-code-boxes input:focus {
+  border-color: #1f3b2e;
+  outline: 3px solid rgba(31, 59, 46, 0.12);
+}
+
+.customer-code-boxes input[aria-invalid='true'] {
+  border-color: #a83a2f;
+}
+
+.customer-code-hint {
+  margin-top: 10px;
+  color: #9a948b;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
 @media (max-width: 850px) {
   .customer-auth-shell {
     grid-template-columns: 1fr;

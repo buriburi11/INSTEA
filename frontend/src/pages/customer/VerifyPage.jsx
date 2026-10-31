@@ -6,7 +6,7 @@ import AuthLayout from './AuthLayout.jsx'
 import { identifierIsValid } from '../../utils/validation.js'
 
 // INST-36: lets a customer choose email or text (SMS) for account verification.
-// Mock only: nothing is actually sent. The code-entry screen is INST-37.
+// Mock only: nothing is actually sent. "Continue" leads to the code screen (INST-37).
 
 const METHODS = {
   email: {
@@ -120,8 +120,11 @@ export default function VerifyPage() {
             We sent a 6-digit code to <strong>{sentTo.display}</strong>.
           </p>
 
-          {/* TODO(INST-37): link to the verification code screen instead. */}
-          <Link to="/menu" className="customer-auth-submit">
+          <Link
+            to="/verify/code"
+            state={{ sentTo }}
+            className="customer-auth-submit"
+          >
             Continue
           </Link>
 
