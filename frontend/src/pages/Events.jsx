@@ -4,57 +4,10 @@
 
 import { useState } from 'react';
 import './Events.css';
-import eventImage from '../assets/INSTEA HOME PLACEHOLDER.jpg';
+import { events } from '../data/events.js';
 
-// =============
-//  EVENT LIST
-// =============
+import { Link } from 'react-router';
 
-// ------- MOCK EVENT DATA -------
-// Replace with real events when confirmed by the client.
-
-const events = [
-    {
-        id: 1,
-        title: 'Tea Tasting — Example Event',
-        category: 'Drink tasting',
-        date: '2026-12-06',
-        time: 'Time to be announced',
-        location: 'Location to be announced',
-        description: 'Example tea tasting event. Details coming soon.',
-        image: eventImage
-    },
-    {
-        id: 2,
-        title: 'Tea Book Club — Example Event',
-        category: 'Book club',
-        date: '2026-12-10',
-        time: 'Time to be announced',
-        location: 'Location to be announced',
-        description: 'Example community book club. Details coming soon.',
-        image: eventImage
-    },
-    {
-        id: 3,
-        title: 'Game Night — Example Event',
-        category: 'Game night',
-        date: '2026-12-12',
-        time: 'Time to be announced',
-        location: 'Location to be announced',
-        description: 'Example community game night. Details coming soon.',
-        image: eventImage
-    },
-    {
-        id: 4,
-        title: 'Seasonal Menu — Example Event',
-        category: 'Seasonal event',
-        date: '2026-12-15',
-        time: 'Time to be announced',
-        location: 'Location to be announced',
-        description: 'Example seasonal offering announcement. Details coming soon.',
-        image: eventImage
-    }
-];
 
 // =============
 //  CATEGORIES
@@ -72,32 +25,41 @@ const categories = [
 //  REUSABLE EVENT CARD
 // =======================
 
+
 function EventCard({ event, featured = false }) {
     return (
-        <article className={`event-card ${featured ? 'event-card-featured' : ''}`}>
-            <img src={event.image} alt="Event placeholder" />
+        <Link
+            to={`/events/${event.id}`}
+            className="event-card-link"
+        >
+            <article className={`event-card ${featured ? 'event-card-featured' : ''}`}>
+                <img src={event.image} alt={event.title} />
 
-            <div className="event-card-content">
-                <span className="event-category">{event.category} · Example</span>
+                <div className="event-card-content">
+                    <span className="event-category">
+                        {event.category} · Example
+                    </span>
 
-                <h2>{event.title}</h2>
+                    <h2>{event.title}</h2>
 
-                <p className="event-date">
-                    Date: {event.date} · {event.time}
-                </p>
+                    <p className="event-date">
+                        Date: {event.date} · {event.time}
+                    </p>
 
-                <p className="event-description">
-                    {event.description}
-                </p>
+                    <p className="event-description">
+                        {event.description}
+                    </p>
 
-                <div className="event-card-footer">
-                    <span>⌖ {event.location}</span>
-                    <span>Registration coming soon</span>
+                    <div className="event-card-footer">
+                        <span>⌖ {event.location}</span>
+                        <span>View event details</span>
+                    </div>
                 </div>
-            </div>
-        </article>
+            </article>
+        </Link>
     );
 }
+
 
 // ===============
 //  CALENDAR VIEW
