@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Check, CheckCircle2, Eye, EyeOff, X } from 'lucide-react'
-import { Link } from 'react-router'
+import { Check, Eye, EyeOff, X } from 'lucide-react'
+import { Link, useNavigate } from 'react-router'
 import useAuth from '../../auth/useAuth.js'
 import AuthLayout from './AuthLayout.jsx'
 import { identifierIsValid } from '../../utils/validation.js'
@@ -8,6 +8,7 @@ import { identifierIsValid } from '../../utils/validation.js'
 
 export default function RegisterPage() {
   const { register } = useAuth()
+  const navigate = useNavigate()
 
   const [fullName, setFullName] = useState('')
   const [identifier, setIdentifier] = useState('')
@@ -15,7 +16,6 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [errors, setErrors] = useState({})
   const [feedback, setFeedback] = useState('')
-  const [registrationComplete, setRegistrationComplete] = useState(false)
 
   const passwordRules = {
     length: password.length >= 8,
@@ -60,30 +60,8 @@ export default function RegisterPage() {
       return
     }
 
-    setRegistrationComplete(true)
-  }
-
-  if (registrationComplete) {
-    return (
-      <AuthLayout>
-        <div className="customer-auth-success">
-          <CheckCircle2 size={48} aria-hidden="true" />
-          <h1>Welcome to the society</h1>
-          <p>
-            Your mock account is ready, and 100 welcome leaves have been
-            added to your wallet.
-          </p>
-
-          <Link to="/menu" className="customer-auth-submit">
-            Continue to the menu
-          </Link>
-
-          <Link to="/" className="customer-auth-secondary">
-            Return home
-          </Link>
-        </div>
-      </AuthLayout>
-    )
+    // INST-36: new accounts go straight to choosing a verification method.
+    navigate('/verify', { state: { justRegistered: true } })
   }
 
   return (
