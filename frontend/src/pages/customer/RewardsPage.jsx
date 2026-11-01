@@ -64,8 +64,7 @@ const pastRewards = [
 // =============
 
 export default function RewardsPage() {
-  const { customer: signedInCustomer } = useAuth()
-const customer = { ...signedInCustomer, rewardLeaves: 0 }
+  const { customer } = useAuth()
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('Rewards wallet')
   const [transactions, setTransactions] = useState(null)
