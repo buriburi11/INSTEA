@@ -6,6 +6,7 @@ import { identifierIsValid } from '../../utils/validation.js'
 import { maskContact } from '../../utils/maskContact.js'
 
 // INST-38: customer starts account recovery with their email or phone.
+// "Reset password" on the confirmation leads to /reset-password (INST-39).
 // Mock only: nothing is sent, and the message is the same whether or not an
 // account exists, so the page doesn't reveal who has an account.
 
@@ -41,8 +42,12 @@ export default function ForgotPasswordPage() {
             to reset your password.
           </p>
 
-          <Link to="/login" className="customer-auth-submit">
-            Back to sign in
+          <Link
+            to="/reset-password"
+            state={{ sentTo }}
+            className="customer-auth-submit"
+          >
+            Reset password
           </Link>
 
           <button
@@ -52,6 +57,10 @@ export default function ForgotPasswordPage() {
           >
             Try a different email or phone
           </button>
+
+          <div className="customer-auth-switch">
+            <Link to="/login">Back to sign in</Link>
+          </div>
         </div>
       </AuthLayout>
     )
