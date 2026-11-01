@@ -94,9 +94,14 @@ export default function LoginPage() {
           </div>
 
           <div className="customer-auth-field">
-            <label htmlFor="login-password">
-              Password <span aria-hidden="true">*</span>
-            </label>
+            <div className="customer-auth-label-row">
+              <label htmlFor="login-password">
+                Password <span aria-hidden="true">*</span>
+              </label>
+              <Link to="/forgot-password" className="customer-auth-forgot">
+                Forgot password?
+              </Link>
+            </div>
 
             <div className="customer-auth-password">
               <input

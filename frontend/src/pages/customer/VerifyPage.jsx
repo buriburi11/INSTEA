@@ -4,6 +4,7 @@ import { Link, Navigate, useLocation } from 'react-router'
 import useAuth from '../../auth/useAuth.js'
 import AuthLayout from './AuthLayout.jsx'
 import { identifierIsValid } from '../../utils/validation.js'
+import { maskEmail, maskPhone } from '../../utils/maskContact.js'
 
 // INST-36: lets a customer choose email or text (SMS) for account verification.
 // Mock only: nothing is actually sent. "Continue" leads to the code screen (INST-37).
@@ -29,18 +30,6 @@ const METHODS = {
     placeholder: '(916) 555-0100',
     invalidMessage: 'Enter a valid phone number.',
   },
-}
-
-// Shows enough of the contact to recognize it without exposing all of it,
-// e.g. "a***@example.com" or "(***) ***-0101".
-function maskEmail(email) {
-  const [name, domain] = email.split('@')
-  return `${name.charAt(0)}***@${domain}`
-}
-
-function maskPhone(phone) {
-  const lastFour = phone.replace(/\D/g, '').slice(-4)
-  return `(***) ***-${lastFour}`
 }
 
 function contactIsValid(method, value) {
