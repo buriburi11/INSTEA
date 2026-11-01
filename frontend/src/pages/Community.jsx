@@ -56,12 +56,14 @@ function Community() {
         }
 
         if (timeLeft === 0) {
-            setHasSubmittedTriviaAnswer(true);
             return;
         }
 
         const timer = setTimeout(() => {
             setTimeLeft((previousTime) => previousTime - 1);
+            if (timeLeft === 1) {
+                setHasSubmittedTriviaAnswer(true);
+            }
         }, 1000);
 
         return () => clearTimeout(timer);

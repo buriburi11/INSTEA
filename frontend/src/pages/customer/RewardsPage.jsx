@@ -162,11 +162,35 @@ export default function RewardsPage() {
               <span>Milestone {NEXT_MILESTONE.toLocaleString()} leaves</span>
               <span>{progress}% complete</span>
             </div>
-            {/* TODO(member QR): placeholder button. Needs a QR library and a decision on what it encodes
-                (member number or a backend token), then show the code when clicked. */}
-            <button type="button" className="rewards-qr-button">
-              <QrCode size={16} aria-hidden="true" /> Show Member QR Code
-            </button>
+            <section className="rewards-member-qr" aria-labelledby="member-qr-heading">
+              <div className="rewards-member-qr-heading">
+                <QrCode size={18} aria-hidden="true" />
+                <h2 id="member-qr-heading">In-store membership QR</h2>
+              </div>
+              {customer.memberNumber ? (
+                <div className="rewards-member-qr-content">
+                  <div
+                    className="rewards-qr-placeholder"
+                    role="img"
+                    aria-label={`Temporary QR placeholder for member ${customer.memberNumber}`}
+                  >
+                    <QrCode size={54} strokeWidth={1.5} aria-hidden="true" />
+                    <span>QR preview</span>
+                  </div>
+                  <div className="rewards-member-qr-details">
+                    <p className="rewards-member-qr-label">Membership number</p>
+                    <p className="rewards-member-qr-number">{customer.memberNumber}</p>
+                    <p className="rewards-member-qr-note">
+                      Show this membership card to staff when ordering in store.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <p className="rewards-member-qr-empty" role="status">
+                  Membership information is unavailable. Please try again later.
+                </p>
+              )}
+            </section>
           </section>
 
           {/* TODO: The streak badge and the "Week 4 complete" note below are hard-coded text. */}
