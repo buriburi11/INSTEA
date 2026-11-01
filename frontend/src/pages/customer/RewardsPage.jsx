@@ -23,10 +23,6 @@ import './RewardsPage.css'
 // Leaves needed for the next complimentary drink; drives the pass card progress bar.
 const NEXT_MILESTONE = 1200
 
-// TODO(points balance): placeholder. Replace with the customer's real Tea Leaves balance
-// once the balance is implemented. Everything on this page that shows the balance
-// reads from `leaves`, so only this needs to change.
-const PLACEHOLDER_LEAVES_BALANCE = 1125
 const PROMO_CODE = 'HARVEST15'
 
 // Tabs not in `readyTabs` are shown but ignore clicks, so nobody lands on an empty view.
@@ -68,7 +64,8 @@ const pastRewards = [
 // =============
 
 export default function RewardsPage() {
-  const { customer } = useAuth()
+  const { customer: signedInCustomer } = useAuth()
+const customer = { ...signedInCustomer, rewardLeaves: 0 }
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('Rewards wallet')
   const [transactions, setTransactions] = useState(null)
@@ -105,10 +102,14 @@ export default function RewardsPage() {
     }
   }, [customer.id])
 
-  const leaves = PLACEHOLDER_LEAVES_BALANCE
+  // Auth supplies mock customer data today. Keep missing/invalid balances distinct
+  // from zero so progress and redemption never imply a balance we don't know.
+  const leaves = Number.isFinite(customer.rewardLeaves) && customer.rewardLeaves >= 0
+    ? customer.rewardLeaves
+    : null
   // Clamped so a balance past the milestone shows 100% and "reached" instead of going negative.
-  const progress = Math.min(100, Math.round((leaves / NEXT_MILESTONE) * 100))
-  const leavesToGo = Math.max(0, NEXT_MILESTONE - leaves)
+  const progress = leaves === null ? null : Math.min(100, Math.round((leaves / NEXT_MILESTONE) * 100))
+  const leavesToGo = leaves === null ? null : Math.max(0, NEXT_MILESTONE - leaves)
   const fullName = [customer.firstName, customer.lastName].filter(Boolean).join(' ')
   const tier = customer.membershipTier
     ? customer.membershipTier[0].toUpperCase() + customer.membershipTier.slice(1)
@@ -140,28 +141,34 @@ export default function RewardsPage() {
               <span>INSTEA Rewards Pass</span>
               <span className="rewards-tier-badge">{tier}</span>
             </div>
-            <p className="rewards-balance">
-              {leaves.toLocaleString()} <span>Tea Leaves</span>
+            <p className="rewards-balance" role="status" aria-label="Current Tea Leaves balance">
+              {leaves === null ? 'Unavailable' : leaves.toLocaleString()} <span>Tea Leaves</span>
             </p>
             <p className="rewards-pass-note">
-              {leavesToGo > 0
-                ? `${leavesToGo.toLocaleString()} leaves away from your next complimentary drink`
-                : 'You have reached your next complimentary drink'}
+              {leaves === null
+                ? 'Your point balance is unavailable. Please try again later.'
+                : leavesToGo > 0
+                  ? `${leavesToGo.toLocaleString()} leaves away from your next complimentary drink`
+                  : 'You have reached your next complimentary drink'}
             </p>
-            <div
-              className="rewards-progress"
-              role="progressbar"
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={progress}
-              aria-label="Progress to next milestone"
-            >
-              <div style={{ width: `${progress}%` }} />
-            </div>
-            <div className="rewards-progress-labels">
-              <span>Milestone {NEXT_MILESTONE.toLocaleString()} leaves</span>
-              <span>{progress}% complete</span>
-            </div>
+            {leaves !== null && (
+              <>
+                <div
+                  className="rewards-progress"
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={progress}
+                  aria-label="Progress to next milestone"
+                >
+                  <div style={{ width: `${progress}%` }} />
+                </div>
+                <div className="rewards-progress-labels">
+                  <span>Milestone {NEXT_MILESTONE.toLocaleString()} leaves</span>
+                  <span>{progress}% complete</span>
+                </div>
+              </>
+            )}
             <section className="rewards-member-qr" aria-labelledby="member-qr-heading">
               <div className="rewards-member-qr-heading">
                 <QrCode size={18} aria-hidden="true" />
@@ -347,12 +354,12 @@ export default function RewardsPage() {
               <div className="rewards-section-top">
                 <h2 id="redeem-heading">Redeem Tea Leaves</h2>
                 <span className="rewards-small">
-                  Balance <strong>{leaves.toLocaleString()}</strong>
+                  Balance <strong>{leaves === null ? 'Unavailable' : leaves.toLocaleString()}</strong>
                 </span>
               </div>
               <ul className="rewards-card rewards-redeem-list">
                 {redeemOptions.map((option) => {
-                  const locked = option.cost > leaves
+                  const locked = leaves === null || option.cost > leaves
 
                   return (
                     <li key={option.name} className="rewards-redeem-item">
@@ -360,7 +367,9 @@ export default function RewardsPage() {
                       <div>
                         <p className="rewards-redeem-name">{option.name}</p>
                         <p className="rewards-muted rewards-small">
-                          {locked
+                          {leaves === null
+                            ? 'Balance unavailable'
+                            : locked
                             ? `${(option.cost - leaves).toLocaleString()} more leaves to unlock`
                             : option.description}
                         </p>
