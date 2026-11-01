@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Check, Copy, Flame, Gift, Lock, QrCode, Ticket } from 'lucide-react'
+import { Check, Copy, Flame, Lock, QrCode, Ticket } from 'lucide-react'
 import useAuth from '../../auth/useAuth.js'
 import LeavesHistory from '../../components/LeavesHistory.jsx'
 import StampCard from '../../components/StampCard.jsx'
 import CheckInCalendar from '../../components/CheckInCalendar.jsx'
 import CheckInStreaks from '../../components/CheckInStreaks.jsx'
+import { mockStreakSummary } from '../../data/checkIns.js'
 import {
   getLeavesTransactions,
   getStampCards,
@@ -33,16 +34,6 @@ const readyTabs = new Set(['Rewards wallet', 'Leaves history', 'Stamp cards', 'C
 // Not derivable from the transaction list yet: needs per-leaf earn dates from the backend.
 const expiringLeaves = { amount: 120, date: 'Jan 31' }
 
-// TODO: Replace with the customer's real weekly visits. `status` is 'done', 'current'
-// (this week) or 'treat' (the reward week).
-const streakWeeks = [
-  { label: 'Wk 1', date: 'Nov 3', status: 'done' },
-  { label: 'Wk 2', date: 'Nov 11', status: 'done' },
-  { label: 'Wk 3', date: 'Nov 16', status: 'done' },
-  { label: 'Wk 4', date: 'Nov 22', status: 'current' },
-  { label: 'Wk 5', date: 'Free treat', status: 'treat' },
-]
-
 const stampDateFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' })
 
 // `cost` is in Tea Leaves. A reward is locked while it costs more than the balance.
@@ -65,6 +56,16 @@ const pastRewards = [
 
 export default function RewardsPage() {
   const { customer } = useAuth()
+  // Shared prototype data; replace with customer-specific service data when available.
+  const currentStreak = mockStreakSummary.currentStreak
+  const streakWeeks = Array.from({ length: mockStreakSummary.nextMilestone }, (_, index) => {
+    const week = index + 1
+    return {
+      label: `Wk ${week}`,
+      date: week <= currentStreak ? 'Complete' : 'Upcoming',
+      status: week <= currentStreak ? (week === currentStreak ? 'current' : 'done') : 'pending',
+    }
+  })
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('Rewards wallet')
   const [transactions, setTransactions] = useState(null)
@@ -199,28 +200,31 @@ export default function RewardsPage() {
             </section>
           </section>
 
-          {/* TODO: The streak badge and the "Week 4 complete" note below are hard-coded text. */}
           <section className="rewards-card rewards-streak" aria-labelledby="streak-heading">
             <div className="rewards-streak-top">
               <h2 id="streak-heading">Weekly Tea Streak</h2>
               <span className="rewards-streak-badge">
-                <Flame size={14} aria-hidden="true" /> 4-week streak
+                <Flame size={14} aria-hidden="true" /> {currentStreak}-week streak
               </span>
             </div>
-            <p className="rewards-muted">Visit or order once a week to keep your ritual going.</p>
+            <p className="rewards-muted">
+              Consecutive calendar weeks with a qualifying purchase or check-in.
+            </p>
             <ol className="rewards-weeks">
               {streakWeeks.map((week) => (
                 <li key={week.label} className={`rewards-week ${week.status}`}>
                   <span className="rewards-week-label">{week.label}</span>
                   <span className="rewards-week-icon" aria-hidden="true">
-                    {week.status === 'treat' ? <Gift size={14} /> : <Check size={14} />}
+                    {week.status !== 'pending' && <Check size={14} />}
                   </span>
                   <span className="rewards-week-date">{week.date}</span>
                 </li>
               ))}
             </ol>
             <p className="rewards-muted rewards-small">
-              Week 4 complete · Next week's order earns a free treat
+              {currentStreak === 0
+                ? 'No current streak. Make a qualifying purchase or check-in to start your first week.'
+                : `${currentStreak} ${currentStreak === 1 ? 'week' : 'weeks'} complete. Check in each week to keep your streak going.`}
             </p>
           </section>
         </div>
@@ -244,6 +248,7 @@ export default function RewardsPage() {
           <div className="checkin-layout">
             <CheckInCalendar />
             <CheckInStreaks
+              currentStreak={currentStreak}
               onViewRewards={() => setActiveTab('Rewards wallet')}
             />
           </div>
