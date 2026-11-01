@@ -102,9 +102,13 @@ function EventCalendar({ filteredEvents }) {
                             {day && <span className="events-day-number">{day}</span>}
 
                             {dayEvents.map(event => (
-                                <div className="events-calendar-event" key={event.id}>
+                                <Link
+                                    key={event.id}
+                                    to={`/events/${event.id}`}
+                                    className="events-calendar-event"
+                                >
                                     {event.title}
-                                </div>
+                                </Link>
                             ))}
                         </div>
                     );
@@ -169,7 +173,7 @@ function Events() {
                         </button>
                     ))}
                 </div>
-                                                                                                                                {/* ------- LIST OR CALENDAR ------- */}
+                {/* ------- LIST OR CALENDAR ------- */}
                 {view === 'list' ? (
                     <div className="events-list">
                         {filteredEvents.map((event, index) => (

@@ -16,7 +16,7 @@ export const events = [
 
         time: '6:30 PM – 8:00 PM',
 
-        location: 'Location to be announced',
+        location: 'SoHo Tea',
         description: 'Example tea tasting event. Details coming soon.',
         image: eventImage,
 

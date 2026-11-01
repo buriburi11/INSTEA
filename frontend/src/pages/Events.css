@@ -313,8 +313,7 @@
 /* =====================
      Clickable event cards
    ===================== */
-   
-/* Clickable event cards */
+
 .event-card-link {
   display: contents;
   color: inherit;
@@ -330,3 +329,20 @@
   outline-offset: 4px;
 }
 
+/* =====================
+     Clickable event on calendar
+   ===================== */
+.events-calendar-event {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #203b2f;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 12px;
+    line-height: 1.4;
+    cursor: pointer;
+    overflow-wrap: anywhere;
+}
