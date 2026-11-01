@@ -22,7 +22,7 @@ function formatAmount(amount) {
  *
  * @param {{
  *   transactions: LeavesTransaction[],
- *   available: number,
+ *   available: number | null,
  *   expiring?: { amount: number, date: string },
  * }} props
  */
@@ -47,7 +47,7 @@ export default function LeavesHistory({ transactions, available, expiring }) {
       <dl className="rewards-card rewards-stats">
         <div>
           <dt>Available</dt>
-          <dd className="rewards-stat-main">{available.toLocaleString()}</dd>
+          <dd className="rewards-stat-main">{available === null ? 'Unavailable' : available.toLocaleString()}</dd>
         </div>
         <div>
           <dt>Pending</dt>
