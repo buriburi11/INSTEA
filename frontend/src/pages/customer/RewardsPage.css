@@ -289,6 +289,11 @@
   background: #bc9141;
 }
 
+.rewards-week.pending .rewards-week-icon {
+  border: 1px solid #d9c69e;
+  background: transparent;
+}
+
 .rewards-week.treat .rewards-week-icon {
   background: #f2ead9;
   color: #8a6a2c;

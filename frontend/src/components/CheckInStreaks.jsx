@@ -6,7 +6,8 @@ import {
   mockMissedWeekSummary,
 } from '../data/checkIns.js'
 
-export default function CheckInStreaks({ onViewRewards }) {
+/** @param {{ currentStreak: number, onViewRewards?: () => void }} props */
+export default function CheckInStreaks({ currentStreak, onViewRewards }) {
   {/*for the mock missed week info*/ }
   const formatDate = (date) => {
     const [year, month, day] = date.split('-').map(Number)
@@ -24,7 +25,7 @@ export default function CheckInStreaks({ onViewRewards }) {
       <div className="checkin-stats">
         <div className="checkin-stat">
           <span>Current</span>
-          <strong>{mockStreakSummary.currentStreak} wk</strong>
+          <strong>{currentStreak} {currentStreak === 1 ? 'week' : 'weeks'}</strong>
         </div>
 
         <div className="checkin-stat">
@@ -38,6 +39,11 @@ export default function CheckInStreaks({ onViewRewards }) {
         </div>
       </div>
 
+      <p className="rewards-muted">
+        {currentStreak === 0 ? 'No current streak. ' : ''}
+        Your current streak counts consecutive calendar weeks with a qualifying purchase or check-in.
+      </p>
+
       {/* Next milestone */}
       <div className="checkin-milestone">
         <h3>
@@ -45,7 +51,7 @@ export default function CheckInStreaks({ onViewRewards }) {
           Next milestone: {mockStreakSummary.nextMilestone} weeks
         </h3>
         <p>
-          Check in any day next week to unlock a free pastry or snack.
+          Check in each week to work toward your next milestone reward.
         </p>
 
         {/* button that send to reward data*/}
@@ -64,8 +70,10 @@ export default function CheckInStreaks({ onViewRewards }) {
 
         <p>
           Your previous {mockMissedWeekSummary.previousStreak}-week
-          streak ended here. Your current streak started{' '}
-          {formatDate(mockMissedWeekSummary.restartedDate)}.
+          streak ended here.
+          {currentStreak > 0 && (
+            <> Your current streak started {formatDate(mockMissedWeekSummary.restartedDate)}.</>
+          )}
         </p>
       </div>
 

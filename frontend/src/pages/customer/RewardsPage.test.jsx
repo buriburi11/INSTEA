@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { AuthContext } from '../../auth/AuthContext.js'
 import RewardsPage from './RewardsPage.jsx'
+import { mockStreakSummary } from '../../data/checkIns.js'
 
 // Renders the page with a fake logged-in customer instead of going through AuthProvider.
 function renderWithLeaves(rewardLeaves) {
@@ -21,6 +22,30 @@ function renderWithLeaves(rewardLeaves) {
 }
 
 describe('RewardsPage', () => {
+  it.each([0, 1, 4])('displays the mock streak of %s weeks consistently across the dashboard', (streak) => {
+    const originalStreak = mockStreakSummary.currentStreak
+    mockStreakSummary.currentStreak = streak
+
+    try {
+      renderWithLeaves(820)
+      expect(screen.getByText(`${streak}-week streak`)).toBeInTheDocument()
+      expect(screen.getByText('Consecutive calendar weeks with a qualifying purchase or check-in.')).toBeInTheDocument()
+      if (streak === 0) {
+        expect(screen.getByText('No current streak. Make a qualifying purchase or check-in to start your first week.')).toBeInTheDocument()
+        expect(screen.queryByText('Complete')).not.toBeInTheDocument()
+      }
+
+      fireEvent.click(screen.getByRole('button', { name: 'Check-ins & streaks' }))
+      expect(screen.getByText('Current').parentElement).toHaveTextContent(`${streak} ${streak === 1 ? 'week' : 'weeks'}`)
+      expect(screen.getByText(/Your current streak counts consecutive calendar weeks/)).toBeInTheDocument()
+      if (streak === 0) {
+        expect(screen.queryByText(/Your current streak started/)).not.toBeInTheDocument()
+      }
+    } finally {
+      mockStreakSummary.currentStreak = originalStreak
+    }
+  })
+
   it('locks rewards that cost more than the balance', () => {
     renderWithLeaves(820)
     expect(screen.getByRole('button', { name: 'Redeem Any Handcrafted Drink' })).toBeEnabled()
