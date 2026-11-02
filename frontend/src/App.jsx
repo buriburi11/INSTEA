@@ -19,6 +19,10 @@ import StaffLogin from './pages/admin/StaffLogin.jsx';
 
 import LoginPage from './pages/customer/LoginPage.jsx'
 import RegisterPage from './pages/customer/RegisterPage.jsx'
+import VerifyPage from './pages/customer/VerifyPage.jsx'
+import VerifyCodePage from './pages/customer/VerifyCodePage.jsx'
+import ForgotPasswordPage from './pages/customer/ForgotPasswordPage.jsx'
+import ResetPasswordPage from './pages/customer/ResetPasswordPage.jsx'
 
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import ProfilePage from './pages/customer/ProfilePage.jsx'
@@ -33,6 +37,10 @@ function App() {
         <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/verify" element={<VerifyPage />} />
+            <Route path="/verify/code" element={<VerifyCodePage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             {/* Staff login */}
             <Route path="/staff-portal" element={<StaffLogin />} />
 
