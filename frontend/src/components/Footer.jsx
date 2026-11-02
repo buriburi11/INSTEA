@@ -43,7 +43,7 @@ function Footer() {
                 <NavLink to="/instea_rewards">INSTEA Rewards</NavLink>
                 <NavLink to="/community">Community</NavLink>
                 <NavLink to="/profile">My Account</NavLink>
-                <NavLink to="/staff_portal">Staff Portal</NavLink>
+                <NavLink to="/staff-portal">Staff Portal</NavLink>
 
             </div>
 
