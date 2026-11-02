@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Check, Copy, Flame, Gift, Lock, QrCode, Ticket } from 'lucide-react'
+import { Check, Copy, Flame, Lock, QrCode, Ticket } from 'lucide-react'
 import useAuth from '../../auth/useAuth.js'
 import LeavesHistory from '../../components/LeavesHistory.jsx'
 import StampCard from '../../components/StampCard.jsx'
+import CheckInCalendar from '../../components/CheckInCalendar.jsx'
+import CheckInStreaks from '../../components/CheckInStreaks.jsx'
+import { mockStreakSummary } from '../../data/checkIns.js'
 import {
   getLeavesTransactions,
   getStampCards,
@@ -21,29 +24,15 @@ import './RewardsPage.css'
 // Leaves needed for the next complimentary drink; drives the pass card progress bar.
 const NEXT_MILESTONE = 1200
 
-// TODO(points balance): placeholder. Replace with the customer's real Tea Leaves balance
-// once the balance is implemented. Everything on this page that shows the balance
-// reads from `leaves`, so only this needs to change.
-const PLACEHOLDER_LEAVES_BALANCE = 1125
 const PROMO_CODE = 'HARVEST15'
 
 // Tabs not in `readyTabs` are shown but ignore clicks, so nobody lands on an empty view.
 // Add a tab's name here once its view is built.
 const walletTabs = ['Rewards wallet', 'Leaves history', 'Stamp cards', 'Check-ins & streaks']
-const readyTabs = new Set(['Rewards wallet', 'Leaves history', 'Stamp cards'])
+const readyTabs = new Set(['Rewards wallet', 'Leaves history', 'Stamp cards', 'Check-ins & streaks'])
 
 // Not derivable from the transaction list yet: needs per-leaf earn dates from the backend.
 const expiringLeaves = { amount: 120, date: 'Jan 31' }
-
-// TODO: Replace with the customer's real weekly visits. `status` is 'done', 'current'
-// (this week) or 'treat' (the reward week).
-const streakWeeks = [
-  { label: 'Wk 1', date: 'Nov 3', status: 'done' },
-  { label: 'Wk 2', date: 'Nov 11', status: 'done' },
-  { label: 'Wk 3', date: 'Nov 16', status: 'done' },
-  { label: 'Wk 4', date: 'Nov 22', status: 'current' },
-  { label: 'Wk 5', date: 'Free treat', status: 'treat' },
-]
 
 const stampDateFormat = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' })
 
@@ -67,6 +56,16 @@ const pastRewards = [
 
 export default function RewardsPage() {
   const { customer } = useAuth()
+  // Shared prototype data; replace with customer-specific service data when available.
+  const currentStreak = mockStreakSummary.currentStreak
+  const streakWeeks = Array.from({ length: mockStreakSummary.nextMilestone }, (_, index) => {
+    const week = index + 1
+    return {
+      label: `Wk ${week}`,
+      date: week <= currentStreak ? 'Complete' : 'Upcoming',
+      status: week <= currentStreak ? (week === currentStreak ? 'current' : 'done') : 'pending',
+    }
+  })
   const [copied, setCopied] = useState(false)
   const [activeTab, setActiveTab] = useState('Rewards wallet')
   const [transactions, setTransactions] = useState(null)
@@ -103,10 +102,14 @@ export default function RewardsPage() {
     }
   }, [customer.id])
 
-  const leaves = PLACEHOLDER_LEAVES_BALANCE
+  // Auth supplies mock customer data today. Keep missing/invalid balances distinct
+  // from zero so progress and redemption never imply a balance we don't know.
+  const leaves = Number.isFinite(customer.rewardLeaves) && customer.rewardLeaves >= 0
+    ? customer.rewardLeaves
+    : null
   // Clamped so a balance past the milestone shows 100% and "reached" instead of going negative.
-  const progress = Math.min(100, Math.round((leaves / NEXT_MILESTONE) * 100))
-  const leavesToGo = Math.max(0, NEXT_MILESTONE - leaves)
+  const progress = leaves === null ? null : Math.min(100, Math.round((leaves / NEXT_MILESTONE) * 100))
+  const leavesToGo = leaves === null ? null : Math.max(0, NEXT_MILESTONE - leaves)
   const fullName = [customer.firstName, customer.lastName].filter(Boolean).join(' ')
   const tier = customer.membershipTier
     ? customer.membershipTier[0].toUpperCase() + customer.membershipTier.slice(1)
@@ -138,57 +141,90 @@ export default function RewardsPage() {
               <span>INSTEA Rewards Pass</span>
               <span className="rewards-tier-badge">{tier}</span>
             </div>
-            <p className="rewards-balance">
-              {leaves.toLocaleString()} <span>Tea Leaves</span>
+            <p className="rewards-balance" role="status" aria-label="Current Tea Leaves balance">
+              {leaves === null ? 'Unavailable' : leaves.toLocaleString()} <span>Tea Leaves</span>
             </p>
             <p className="rewards-pass-note">
-              {leavesToGo > 0
-                ? `${leavesToGo.toLocaleString()} leaves away from your next complimentary drink`
-                : 'You have reached your next complimentary drink'}
+              {leaves === null
+                ? 'Your point balance is unavailable. Please try again later.'
+                : leavesToGo > 0
+                  ? `${leavesToGo.toLocaleString()} leaves away from your next complimentary drink`
+                  : 'You have reached your next complimentary drink'}
             </p>
-            <div
-              className="rewards-progress"
-              role="progressbar"
-              aria-valuemin={0}
-              aria-valuemax={100}
-              aria-valuenow={progress}
-              aria-label="Progress to next milestone"
-            >
-              <div style={{ width: `${progress}%` }} />
-            </div>
-            <div className="rewards-progress-labels">
-              <span>Milestone {NEXT_MILESTONE.toLocaleString()} leaves</span>
-              <span>{progress}% complete</span>
-            </div>
-            {/* TODO(member QR): placeholder button. Needs a QR library and a decision on what it encodes
-                (member number or a backend token), then show the code when clicked. */}
-            <button type="button" className="rewards-qr-button">
-              <QrCode size={16} aria-hidden="true" /> Show Member QR Code
-            </button>
+            {leaves !== null && (
+              <>
+                <div
+                  className="rewards-progress"
+                  role="progressbar"
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-valuenow={progress}
+                  aria-label="Progress to next milestone"
+                >
+                  <div style={{ width: `${progress}%` }} />
+                </div>
+                <div className="rewards-progress-labels">
+                  <span>Milestone {NEXT_MILESTONE.toLocaleString()} leaves</span>
+                  <span>{progress}% complete</span>
+                </div>
+              </>
+            )}
+            <section className="rewards-member-qr" aria-labelledby="member-qr-heading">
+              <div className="rewards-member-qr-heading">
+                <QrCode size={18} aria-hidden="true" />
+                <h2 id="member-qr-heading">In-store membership QR</h2>
+              </div>
+              {customer.memberNumber ? (
+                <div className="rewards-member-qr-content">
+                  <div
+                    className="rewards-qr-placeholder"
+                    role="img"
+                    aria-label={`Temporary QR placeholder for member ${customer.memberNumber}`}
+                  >
+                    <QrCode size={54} strokeWidth={1.5} aria-hidden="true" />
+                    <span>QR preview</span>
+                  </div>
+                  <div className="rewards-member-qr-details">
+                    <p className="rewards-member-qr-label">Membership number</p>
+                    <p className="rewards-member-qr-number">{customer.memberNumber}</p>
+                    <p className="rewards-member-qr-note">
+                      Show this membership card to staff when ordering in store.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <p className="rewards-member-qr-empty" role="status">
+                  Membership information is unavailable. Please try again later.
+                </p>
+              )}
+            </section>
           </section>
 
-          {/* TODO: The streak badge and the "Week 4 complete" note below are hard-coded text. */}
           <section className="rewards-card rewards-streak" aria-labelledby="streak-heading">
             <div className="rewards-streak-top">
               <h2 id="streak-heading">Weekly Tea Streak</h2>
               <span className="rewards-streak-badge">
-                <Flame size={14} aria-hidden="true" /> 4-week streak
+                <Flame size={14} aria-hidden="true" /> {currentStreak}-week streak
               </span>
             </div>
-            <p className="rewards-muted">Visit or order once a week to keep your ritual going.</p>
+            <p className="rewards-muted">
+              Consecutive calendar weeks with a qualifying purchase or check-in.
+            </p>
             <ol className="rewards-weeks">
               {streakWeeks.map((week) => (
                 <li key={week.label} className={`rewards-week ${week.status}`}>
                   <span className="rewards-week-label">{week.label}</span>
                   <span className="rewards-week-icon" aria-hidden="true">
-                    {week.status === 'treat' ? <Gift size={14} /> : <Check size={14} />}
+                    {week.status !== 'pending' && <Check size={14} />}
                   </span>
                   <span className="rewards-week-date">{week.date}</span>
                 </li>
               ))}
             </ol>
             <p className="rewards-muted rewards-small">
-              Week 4 complete · Next week's order earns a free treat
+              {currentStreak === 0
+                ? 'No current streak. Make a qualifying purchase or check-in to start your first week.'
+                : `${currentStreak} ${currentStreak === 1 ? 'week' : 'weeks'} complete. Check in each week to keep your streak going.`}
             </p>
           </section>
         </div>
@@ -206,6 +242,17 @@ export default function RewardsPage() {
             </button>
           ))}
         </nav>
+
+        {/* ------- CHECK-INS & STREAKS TAB ------- */}
+        {activeTab === 'Check-ins & streaks' && (
+          <div className="checkin-layout">
+            <CheckInCalendar />
+            <CheckInStreaks
+              currentStreak={currentStreak}
+              onViewRewards={() => setActiveTab('Rewards wallet')}
+            />
+          </div>
+        )}
 
         {/* ------- LEAVES HISTORY TAB ------- */}
         {activeTab === 'Leaves history' &&
@@ -270,92 +317,94 @@ export default function RewardsPage() {
           ))}
 
         {activeTab === 'Rewards wallet' && (
-        <>
-        {/* ------- READY TO USE ------- */}
-        {/* TODO: "Apply at checkout" has no handler yet; it should attach the voucher to the cart. */}
-        <section className="rewards-section" aria-labelledby="ready-heading">
-          <h2 id="ready-heading">Ready to use</h2>
-          <div className="rewards-ready">
-            <article className="rewards-card rewards-offer">
-              <p className="rewards-eyebrow">Reward milestone</p>
-              <h3>Complimentary Drink Voucher</h3>
-              <p className="rewards-muted">
-                Valid for any size Botanical Cold Brew, Cloud Matcha, or Classic Milk Tea.
-              </p>
-              <button type="button" className="rewards-dark-button">
-                <Ticket size={16} aria-hidden="true" /> Apply at checkout
-              </button>
-              <p className="rewards-small">Expires Dec 31</p>
-            </article>
-
-            <article className="rewards-card rewards-offer">
-              <p className="rewards-eyebrow">Member privilege</p>
-              <h3>
-                15% off <em>whole</em> leaf tins
-              </h3>
-              <p className="rewards-muted">Valid on all first-flush tins in-store and online.</p>
-              <div className="rewards-code">
-                <span>{PROMO_CODE}</span>
-                <button type="button" onClick={copyCode}>
-                  <Copy size={14} aria-hidden="true" /> {copied ? 'Copied' : 'Copy'}
-                </button>
-              </div>
-              <p className="rewards-small">Expires Dec 15</p>
-            </article>
-          </div>
-        </section>
-
-        {/* ------- REDEEM TEA LEAVES ------- */}
-        {/* TODO: Redeem buttons have no handler yet; redeeming needs a backend call that deducts leaves. */}
-        <section className="rewards-section" aria-labelledby="redeem-heading">
-          <div className="rewards-section-top">
-            <h2 id="redeem-heading">Redeem Tea Leaves</h2>
-            <span className="rewards-small">
-              Balance <strong>{leaves.toLocaleString()}</strong>
-            </span>
-          </div>
-          <ul className="rewards-card rewards-redeem-list">
-            {redeemOptions.map((option) => {
-              const locked = option.cost > leaves
-
-              return (
-                <li key={option.name} className="rewards-redeem-item">
-                  <span className="rewards-cost">{option.cost.toLocaleString()}</span>
-                  <div>
-                    <p className="rewards-redeem-name">{option.name}</p>
-                    <p className="rewards-muted rewards-small">
-                      {locked
-                        ? `${(option.cost - leaves).toLocaleString()} more leaves to unlock`
-                        : option.description}
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    className={locked ? 'rewards-redeem-locked' : 'rewards-dark-button'}
-                    disabled={locked}
-                    aria-label={`Redeem ${option.name}`}
-                  >
-                    {locked && <Lock size={13} aria-hidden="true" />} Redeem
+          <>
+            {/* ------- READY TO USE ------- */}
+            {/* TODO: "Apply at checkout" has no handler yet; it should attach the voucher to the cart. */}
+            <section className="rewards-section" aria-labelledby="ready-heading">
+              <h2 id="ready-heading">Ready to use</h2>
+              <div className="rewards-ready">
+                <article className="rewards-card rewards-offer">
+                  <p className="rewards-eyebrow">Reward milestone</p>
+                  <h3>Complimentary Drink Voucher</h3>
+                  <p className="rewards-muted">
+                    Valid for any size Botanical Cold Brew, Cloud Matcha, or Classic Milk Tea.
+                  </p>
+                  <button type="button" className="rewards-dark-button">
+                    <Ticket size={16} aria-hidden="true" /> Apply at checkout
                   </button>
-                </li>
-              )
-            })}
-          </ul>
-        </section>
+                  <p className="rewards-small">Expires Dec 31</p>
+                </article>
 
-        {/* ------- REDEEMED & EXPIRED ------- */}
-        <section className="rewards-section" aria-labelledby="past-heading">
-          <h2 id="past-heading">Redeemed &amp; expired</h2>
-          <div className="rewards-ready">
-            {pastRewards.map((reward) => (
-              <div key={reward.name} className="rewards-card rewards-past">
-                <span>{reward.name}</span>
-                <span className={reward.expired ? 'rewards-expired' : ''}>{reward.status}</span>
+                <article className="rewards-card rewards-offer">
+                  <p className="rewards-eyebrow">Member privilege</p>
+                  <h3>
+                    15% off <em>whole</em> leaf tins
+                  </h3>
+                  <p className="rewards-muted">Valid on all first-flush tins in-store and online.</p>
+                  <div className="rewards-code">
+                    <span>{PROMO_CODE}</span>
+                    <button type="button" onClick={copyCode}>
+                      <Copy size={14} aria-hidden="true" /> {copied ? 'Copied' : 'Copy'}
+                    </button>
+                  </div>
+                  <p className="rewards-small">Expires Dec 15</p>
+                </article>
               </div>
-            ))}
-          </div>
-        </section>
-        </>
+            </section>
+
+            {/* ------- REDEEM TEA LEAVES ------- */}
+            {/* TODO: Redeem buttons have no handler yet; redeeming needs a backend call that deducts leaves. */}
+            <section className="rewards-section" aria-labelledby="redeem-heading">
+              <div className="rewards-section-top">
+                <h2 id="redeem-heading">Redeem Tea Leaves</h2>
+                <span className="rewards-small">
+                  Balance <strong>{leaves === null ? 'Unavailable' : leaves.toLocaleString()}</strong>
+                </span>
+              </div>
+              <ul className="rewards-card rewards-redeem-list">
+                {redeemOptions.map((option) => {
+                  const locked = leaves === null || option.cost > leaves
+
+                  return (
+                    <li key={option.name} className="rewards-redeem-item">
+                      <span className="rewards-cost">{option.cost.toLocaleString()}</span>
+                      <div>
+                        <p className="rewards-redeem-name">{option.name}</p>
+                        <p className="rewards-muted rewards-small">
+                          {leaves === null
+                            ? 'Balance unavailable'
+                            : locked
+                            ? `${(option.cost - leaves).toLocaleString()} more leaves to unlock`
+                            : option.description}
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        className={locked ? 'rewards-redeem-locked' : 'rewards-dark-button'}
+                        disabled={locked}
+                        aria-label={`Redeem ${option.name}`}
+                      >
+                        {locked && <Lock size={13} aria-hidden="true" />} Redeem
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            </section>
+
+            {/* ------- REDEEMED & EXPIRED ------- */}
+            <section className="rewards-section" aria-labelledby="past-heading">
+              <h2 id="past-heading">Redeemed &amp; expired</h2>
+              <div className="rewards-ready">
+                {pastRewards.map((reward) => (
+                  <div key={reward.name} className="rewards-card rewards-past">
+                    <span>{reward.name}</span>
+                    <span className={reward.expired ? 'rewards-expired' : ''}>{reward.status}</span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </>
         )}
       </div>
     </main>

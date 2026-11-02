@@ -7,6 +7,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Locations from './pages/Locations';
 import Events from './pages/Events';
+import Community from './pages/Community';
 
 import MenuPage from './pages/MenuPage';
 import ProductDetailPage from './pages/ProductDetailPage';
@@ -27,17 +28,19 @@ import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import ProfilePage from './pages/customer/ProfilePage.jsx'
 import RewardsPage from './pages/customer/RewardsPage.jsx'
 
+import EventDetails from './pages/EventDetails.jsx';
+
 import './App.css';
 
 function App() {
     return (
         <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
-          <Route path="/verify" element={<VerifyPage />} />
-          <Route path="/verify/code" element={<VerifyCodePage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/verify" element={<VerifyPage />} />
+            <Route path="/verify/code" element={<VerifyCodePage />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
             {/* Staff login */}
             <Route path="/staff-portal" element={<StaffLogin />} />
 
@@ -65,13 +68,15 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/locations" element={<Locations />} />
                 <Route path="/events" element={<Events />} />
+                <Route path="/events/:eventId" element={<EventDetails />} />
+                <Route path="/community" element={<Community />} />
                 <Route path="/menu" element={<MenuPage />} />
                 <Route path="/menu/:productId" element={<ProductDetailPage />} />
                 <Route path="/cart" element={<ShoppingCart />} />
                 <Route element={<ProtectedRoute />}>
-                  <Route path="/profile" element={<ProfilePage />} />
-                  {/* Rewards shows the member's own balance, so it requires login like Profile. */}
-                  <Route path="/rewards" element={<RewardsPage />} />
+                    <Route path="/profile" element={<ProfilePage />} />
+                    {/* Rewards shows the member's own balance, so it requires login like Profile. */}
+                    <Route path="/rewards" element={<RewardsPage />} />
                 </Route>
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
