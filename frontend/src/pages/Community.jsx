@@ -14,6 +14,7 @@ import {
 } from "../data/communityTrivia";
 import { communityAnnouncements } from "../data/communityAnnouncements";
 import { events } from "../data/events";
+import { communityMilestone } from "../data/communityMilestone";
 
 function Community() {
     const { isAuthenticated } = useAuth();
@@ -110,6 +111,15 @@ function Community() {
         .sort((a, b) => new Date(a.date) - new Date(b.date))
         .slice(0, 2);
 
+    {/*========================*/ }
+    {/*Community Milestone Part*/ }
+    {/*=======================*/ }
+    {/*get the current precentage*/ }
+    const milestonePercentage = Math.min(
+        (communityMilestone.currentPlays / communityMilestone.goalPlays) * 100,
+        100
+    );
+
 
     return (
         <main className="community-page">
@@ -128,6 +138,41 @@ function Community() {
                 <p className="community-description">
                     Cast seasonal ballots, prove your tea mastery daily, and unlock collective privileges with members across every tea house.
                 </p>
+
+                {/* Members-only Community Milestone */}
+                {isAuthenticated && (
+                    <div className="community-milestone">
+
+                        <div className="milestone-header">
+                            <span className="milestone-current">
+                                {communityMilestone.currentPlays.toLocaleString()}
+                            </span>
+                            
+                            <span className="milestone-goal">
+                                of {communityMilestone.goalPlays.toLocaleString()} plays
+                            </span>
+                        </div>
+
+                        {/*accessibility for the progress bar*/}
+                        <div 
+                            className="milestone-progress"
+                            role="progressbar"
+                            aria-valuenow={communityMilestone.currentPlays}
+                            aria-valuemin={0}
+                            aria-valuemax={communityMilestone.goalPlays}
+                        >
+                            <div
+                                className="milestone-progress-fill"
+                                style={{ width: `${milestonePercentage}%` }}
+                            />
+                        </div>
+
+                        <p className="milestone-description">
+                            {communityMilestone.description}
+                        </p>                      
+                    </div>
+                )}
+
             </div>
 
             {/*===================*/}
@@ -201,6 +246,8 @@ function Community() {
                     </p>
                 )}
             </section>
+
+
 
             {/*========================*/}
             {/*Keep or Retire Poll Part*/}
