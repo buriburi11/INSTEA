@@ -13,6 +13,7 @@ import {
     TRIVIA_POINTS_PER_CORRECT_ANSWER
 } from "../data/communityTrivia";
 import { communityAnnouncements } from "../data/communityAnnouncements";
+import { events } from "../data/events";
 
 function Community() {
     const { isAuthenticated } = useAuth();
@@ -98,6 +99,17 @@ function Community() {
             );
         })
         .slice(0, 2);
+
+    {/*====================*/ }
+    {/*Social Calendar Part*/ }
+    {/*====================*/ }
+    {/*gets todays date and filters to get the next two upcoming events*/ }
+    const today = new Date().toLocaleDateString("en-CA");
+    const upcomingEvents = events
+        .filter((event) => event.date >= today)
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(0, 2);
+
 
     return (
         <main className="community-page">
@@ -504,8 +516,8 @@ function Community() {
                         {activeAnnouncements.length === 0 ? (
                             <div className="announcement-card">
                                 <Megaphone className="announcement-icon" size={28} color="#8A6A35" />
-                                
-                                <p className="announcement-empty">  
+
+                                <p className="announcement-empty">
                                     No announcements at the moment. Check back soon!
                                 </p>
                             </div>
@@ -529,6 +541,63 @@ function Community() {
                                     </div>
                                 </article>
                             )))}
+                    </div>
+                </section>
+
+                {/*========================*/}
+                {/*Social Calendar Part    */}
+                {/*========================*/}
+                <section className="Social-calendar">
+                    <div className="social-calendar-header">
+                        <h2 className="social-calendar-heading">Social Calendar</h2>
+
+                        <Link to="/events" className="social-calendar-link">
+                            All Events
+                        </Link>
+                    </div>
+
+                    {/*two upcoming events*/}
+                    <div className="social-calendar-list">
+                        {upcomingEvents.length === 0 ? (
+                            <div className="social-calendar-card">
+                                <p className="social-calendar-empty">
+                                    No upcoming events at the moment. Check back soon!
+                                </p>
+                            </div>
+                        ) : (
+                            upcomingEvents.map((event) => (
+                                <article
+                                    key={event.id} className="social-calendar-card" >
+
+                                    {/* Event date need to break it from the data*/}
+                                    <div className="social-calendar-date">
+                                        <span className="social-calendar-month">
+                                            {new Date(
+                                                Number(event.date.split("-")[0]),
+                                                Number(event.date.split("-")[1]) - 1,
+                                                Number(event.date.split("-")[2])
+                                            ).toLocaleDateString("en-US", { month: "short" })}
+                                        </span>
+
+                                        <span className="social-calendar-day">
+                                            {Number(event.date.split("-")[2])}
+                                        </span>
+                                    </div>
+
+                                    {/* Event details */}
+                                    <div className="social-calendar-content">
+                                        <h3 className="social-calendar-title">
+                                            {event.title}
+                                        </h3>
+
+                                        <p className="social-calendar-details">
+                                            {event.time} · {event.location}
+                                        </p>
+                                    </div>
+
+                                </article>
+                            ))
+                        )}
                     </div>
                 </section>
             </div>

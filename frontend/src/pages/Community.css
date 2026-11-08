@@ -651,8 +651,9 @@ button.poll-login-button:disabled {
     text-align: left;
 }
 
-/* Heading */
-.announcements-heading {
+/* announcement and social calendar heading */
+.announcements-heading,
+.social-calendar-heading {
     font-family: "Cormorant Garamond", serif;
     font-size: 30px;
     font-weight: 600;
@@ -673,24 +674,26 @@ button.poll-login-button:disabled {
     align-items: center;
     gap: 12px;
     background-color: #FFFFFF;
-    border: 1px solid #E4DACA;
+    border: 1.5px solid #E4DACA;
     border-radius: 14px;
-    padding: 14px 16px;
+    padding: 16.5px 16px;
     text-align: left;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-/* Announcement title */
-.announcement-title {
+/* Announcement and social calendar title */
+.announcement-title, 
+.social-calendar-title {
     font-family: "Inter", sans-serif;
     font-size: 20px;
     font-weight: 550;
     color: #2A2A27;
-    margin: 0 0 0px;
+    margin: 0px 0 0px;
 }
 
-/* Announcement description */
-.announcement-description {
+/* Announcement and social calendar description */
+.announcement-description,
+.social-calendar-details {
     font-family: "Inter", sans-serif;
     font-size: 16px;
     font-weight: 400;
@@ -706,4 +709,90 @@ button.poll-login-button:disabled {
     color: #2A2A27;
     opacity: 0.80;
     margin: 0;
+}
+
+/* Social Calendar Section */
+.Social-calendar {
+    text-align: left;
+    min-width: 0;
+}
+
+/* Heading and All Events link */
+.social-calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+.social-calendar-link {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F3B2E;
+    text-decoration: none;
+}
+.social-calendar-link:hover {
+    opacity: 0.8;
+}
+
+/* Stack events vertically */
+.social-calendar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Individual event card */
+.social-calendar-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background-color: #FFFFFF;
+    border: 1.5px solid #E4DACA;
+    border-radius: 14px;
+    padding: 12px 16px;
+    text-align: left;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Event date badge */
+.social-calendar-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 66px;
+    min-height: 62px;
+    background-color: #F1EADC;
+    border-radius: 10px;
+}
+
+/* Month */
+.social-calendar-month {
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #8A6A35;
+}
+/*  Day  */
+.social-calendar-day {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 0.8;
+    color: #1F3B2E;
+}
+
+/* Empty calendar message */
+.social-calendar-empty {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 450;
+    color: #2A2A27;
+    opacity: 0.80;
+    margin: 0;
+    line-height: 1.5;
 }
