@@ -468,7 +468,7 @@ button.poll-login-button:disabled {
 .trivia-leaderboard-title {
     font-family: "Cormorant Garamond", serif;
     font-style: italic;
-    font-size: 20x;
+    font-size: 20px;
     font-weight: 600;
     color: #1F3B2E;
     margin: 0 0 24px;

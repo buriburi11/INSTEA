@@ -1,11 +1,12 @@
-import background_Banner from "../assets/Green_Banner.svg";
-import { mockPolls, mockPollHistory } from "../data/communityPolls";
+import { useState, useEffect } from "react";
 import "./Community.css";
 import { Clock, Leaf, ThumbsUp, ThumbsDown } from "lucide-react";
-import { Link } from "react-router";
+import background_Banner from "../assets/Green_Banner.svg";
+//Authentication and routing
 import useAuth from "../auth/useAuth.js";
-import { useState, useEffect } from "react";
-
+import { Link } from "react-router";
+//Mock data
+import { mockPolls, mockPollHistory } from "../data/communityPolls";
 import {
     mockTriviaQuestions,
     mockTriviaLeaderboard,
@@ -15,16 +16,24 @@ import {
 
 function Community() {
     const { isAuthenticated } = useAuth();
+
+    {/*===================*/}
+    {/*Seasonal Poll Part */}
+    {/*===================*/}
     const [selectedOptionId, setSelectedOptionId] = useState(null);
     const [hasVoted, setHasVoted] = useState(false);
 
+    {/*===================*/}
+    {/*Keep or Retire Part*/}
+    {/*===================*/}
     const [keepRetireChoice, setKeepRetireChoice] = useState(null);
     const [hasVotedKeepRetire, setHasVotedKeepRetire] = useState(false);
 
+    {/*==============*/}
+    {/*  Triva Part  */}
+    {/*==============*/}
     const [timeLeft, setTimeLeft] = useState(30);
     const [hasFinishedTrivia, setHasFinishedTrivia] = useState(false);
-
-    //Triva part
     const [hasStartedTrivia, setHasStartedTrivia] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedTriviaAnswer, setSelectedTriviaAnswer] = useState(null);
@@ -32,24 +41,32 @@ function Community() {
     const currentTriviaQuestion = mockTriviaQuestions[currentQuestionIndex];
     const [hasSubmittedTriviaAnswer, setHasSubmittedTriviaAnswer] = useState(false);
 
-    //Polls
+    {/*======================*/}
+    {/*Poll Data and Deadline */}
+    {/*======================*/}
     const poll = mockPolls[0];
     const keepOrRetirePoll = mockPolls[1];
+
+    //gets the current date and the poll deadline
     const now = new Date();
     const endDate = new Date(poll.endsAt);
-
+    // how many day left
     const daysRemaining = Math.ceil(
         (endDate - now) / (1000 * 60 * 60 * 24)
     );
 
+    //checks if the poll is active (seasonal)
     const isPollOpen =
         poll.status === "active" &&
         endDate > now;
-
+    //checks if the poll is active (keep or retire)
     const isKeepRetireOpen =
         keepOrRetirePoll.status === "active" &&
         new Date(keepOrRetirePoll.endsAt) > now;
 
+    {/*============*/}
+    {/*Trivia Timer */}
+    {/*============*/}
     useEffect(() => {
         if (!hasStartedTrivia || hasSubmittedTriviaAnswer || hasFinishedTrivia) {
             return;
@@ -69,6 +86,8 @@ function Community() {
         return () => clearTimeout(timer);
     }, [hasStartedTrivia, hasSubmittedTriviaAnswer, hasFinishedTrivia, timeLeft]);
 
+
+
     return (
         <main className="community-page">
             <div className="community-banner">
@@ -87,6 +106,11 @@ function Community() {
                     Cast seasonal ballots, prove your tea mastery daily, and unlock collective privileges with members across every tea house.
                 </p>
             </div>
+
+            {/*===================*/}
+            {/*Seasonal Poll Part */}
+            {/*===================*/}
+
             <section className="community-poll">
                 <div className="poll-header">
                     <p className="poll-label">{poll.label}</p>
@@ -132,7 +156,9 @@ function Community() {
                 </div>
 
 
-
+                {/*===================================*/}
+                {/*Non-members disabled button "Join.."*/}
+                {/*===================================*/}
                 {isAuthenticated ? (
                     <button type="button" className="poll-login-button"
                         disabled={selectedOptionId === null || hasVoted || !isPollOpen}
@@ -145,14 +171,17 @@ function Community() {
                         Join INSTEA Rewards to Vote
                     </Link>
                 )}
-
+                
                 {hasVoted && (
                     <p className="poll-confirmation">
                         Your ballot has been submitted!
                     </p>
                 )}
             </section>
-
+            
+            {/*========================*/}
+            {/*Keep or Retire Poll Part*/}
+            {/*========================*/}
             <div className="community-secondary-polls">
                 <section className="keep-retire-poll">
                     <img
@@ -194,6 +223,7 @@ function Community() {
                                             setKeepRetireChoice(option.id);
                                         }
                                     }}
+                                    
                                     disabled={!isAuthenticated || hasVotedKeepRetire || !isKeepRetireOpen}
                                     aria-pressed={keepRetireChoice === option.id}
                                 >
@@ -207,6 +237,7 @@ function Community() {
                                 </button>
                             ))}
                         </div>
+                        
                         {hasVotedKeepRetire ? (
                             <p className="poll-confirmation">
                                 Your vote has been submitted!
@@ -219,6 +250,9 @@ function Community() {
                     </div>
                 </section>
 
+                {/*========================*/}
+                {/*Past Poll Results Part  */}
+                {/*========================*/}
                 <aside className="poll-history">
                     <h2 className="poll-history-title">Past results</h2>
 
@@ -240,10 +274,9 @@ function Community() {
                 </aside>
             </div>
 
-
-
-
-
+            {/*========================*/}
+            {/*Trivia Game Part*/}
+            {/*========================*/}
             <section className="community-trivia">
                 <div className="trivia-game">
                     <div className="trivia-header">
@@ -358,7 +391,7 @@ function Community() {
                                     )}
 
 
-                                    {/* Next Question — Questions 1 and 2 */}
+                                    {/* Next Question — Questions 1 and 28*/}
                                     {hasSubmittedTriviaAnswer &&
                                         currentQuestionIndex < mockTriviaQuestions.length - 1 && (
                                             <button
@@ -416,6 +449,9 @@ function Community() {
                     )}
                 </div>
 
+                {/*========================*/}
+                {/*Trivia Leaderboard Part */}
+                {/*========================*/}
                 <aside className="trivia-leaderboard">
                     <h2 className="trivia-leaderboard-title">
                         This month's leaderboard
