@@ -34,7 +34,6 @@
     top: 130px;
     left: 10%;
     transform: translateY(-50%);
-
     color: #FAF6EE;
     font-family: "Cormorant Garamond", serif;
     font-size: 90px;
@@ -48,7 +47,6 @@
     top: 200px;
     left: 10%;
     text-align: left;
-
     color: #FAF6EE;
     opacity: 75%;
     font-family: "Inter", sans-serif;
@@ -89,7 +87,8 @@
     margin-bottom: 8px;
 }
 
-.poll-label {
+.poll-label,
+.keep-retire-label {
     font-family: "Inter", sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -109,24 +108,31 @@
     margin: 0;
 }
 
-.poll-title {
+.poll-title,
+.keep-retire-title {
     font-family: "Cormorant Garamond", serif;
     font-size: 32px;
     font-weight: 600;
-    font-style: italic;
     color: #1F3B2E;
     margin: 0 0 8px;
 }
 
-.poll-description {
+.poll-title {
+    font-style: italic;
+}
+
+.poll-description,
+.keep-retire-description {
     font-family: "Inter", sans-serif;
     font-size: 16px;
     font-weight: 400;
     color: #66655E;
-    line-height: 1.5;
     margin: 0;
 }
 
+.poll-description {
+    line-height: 1.5;
+}
 
 /*poll cards*/
 .poll-options {
@@ -134,14 +140,6 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     margin-top: 24px;
-}
-
-.poll-option-card {
-    border: 2px solid #E4DACA;
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: white;
-    padding: 0px;
 }
 
 .poll-option-name {
@@ -177,18 +175,15 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-
     background-color: #C2A066;
     color: #152A20;
     border-radius: 8px;
     padding: 12px 24px;
     margin-top: 24px;
-
     font-family: "Inter", sans-serif;
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
-
     border: none;
     appearance: none;
     cursor: pointer;
@@ -205,6 +200,11 @@
     text-align: left;
     cursor: pointer;
     font: inherit;
+    border: 2px solid #E4DACA;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: white;
+    padding: 0px;
 }
 
 .poll-option-card.selected {
@@ -224,15 +224,9 @@ button.poll-login-button:disabled {
     cursor: not-allowed;
 }
 
-.poll-confirmation {
-    font-family: "Inter", sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: #1F3B2E;
-    margin-top: 16px;
-}
-
-.keep-retire-hint {
+/*Poll confirmation message and voting hint*/
+.poll-confirmation,
+.keep-retire-hint{
     font-family: "Inter", sans-serif;
     font-size: 14px;
     font-weight: 600;
@@ -258,30 +252,6 @@ button.poll-login-button:disabled {
     text-align: left;
     color: #1F3B2E;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-}
-
-.keep-retire-label {
-    font-family: "Inter", sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: #8A6A35;
-    margin: 0 0 8px;
-}
-
-.keep-retire-title {
-    font-family: "Cormorant Garamond", serif;
-    font-size: 32px;
-    font-weight: 600;
-    color: #1F3B2E;
-    margin: 0 0 8px;
-}
-
-.keep-retire-description {
-    font-family: "Inter", sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    color: #66655E;
-    margin: 0;
 }
 
 .keep-retire-image {
@@ -365,7 +335,6 @@ button.poll-login-button:disabled {
     }
 
 }
-
 
 /* Past Results */
 .poll-history {
@@ -513,39 +482,33 @@ button.poll-login-button:disabled {
     border-radius: 14px;
     font-weight: 600;
 }
+
 /* button for non-members*/
 .trivia-start-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-
     padding: 14px 24px;
     margin-top: 12px;
-
     background: #C2A066;
     color: #152A20;
     border-radius: 12px;
-
     border: none;
     appearance: none;
     cursor: pointer;
-
     font-family: "Inter", sans-serif;
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
-    cursor: pointer;
-
     transition: background 0.2s ease;
 }
 
 .trivia-start-button:hover {
-    background-color:  #C2A066;
+    background-color: #C2A066;
     opacity: 90%;
     border: 1px solid #1F3B2E;
 }
-
 
 /* Trivia Answer Options */
 .trivia-options {
@@ -561,11 +524,9 @@ button.poll-login-button:disabled {
     gap: 14px;
     width: 100%;
     padding: 16px 18px;
-
     background: #FFFFFF;
     border: 1px solid #E2D8C7;
     border-radius: 12px;
-
     color: #1F3B2E;
     font-family: "Inter", sans-serif;
     font-size: 15px;
@@ -577,11 +538,9 @@ button.poll-login-button:disabled {
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 28px;
     height: 28px;
     flex-shrink: 0;
-
     background: #F0EADF;
     border-radius: 50%;
     font-weight: 600;
@@ -600,7 +559,7 @@ button.poll-login-button:disabled {
     margin-top: 16px;
 }
 
-.trivia-option:disabled{
+.trivia-option:disabled {
     cursor: default;
     opacity: 0.76;
 }
@@ -623,7 +582,7 @@ button.poll-login-button:disabled {
     background: #1F3B2E;
 }
 
-/*Trivia header and timer */ 
+/*Trivia header and timer */
 .trivia-header {
     display: flex;
     align-items: center;
