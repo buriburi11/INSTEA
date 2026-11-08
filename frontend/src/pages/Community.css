@@ -631,3 +631,79 @@ button.poll-login-button:disabled {
     font-size: 15px;
     color: #66655E;
 }
+
+
+/* Announcements and Social Calendar layout */
+.community-announcements-calendar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.community-announcements {
+    margin-top: 0;
+    min-width: 0;
+}
+
+/* Announcements Section */
+.community-announcements {
+    text-align: left;
+}
+
+/* Heading */
+.announcements-heading {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin: 0 0 14px;
+}
+
+/* Stack announcements vertically */
+.announcements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Individual announcement card */
+.announcement-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #FFFFFF;
+    border: 1px solid #E4DACA;
+    border-radius: 14px;
+    padding: 14px 16px;
+    text-align: left;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Announcement title */
+.announcement-title {
+    font-family: "Inter", sans-serif;
+    font-size: 20px;
+    font-weight: 550;
+    color: #2A2A27;
+    margin: 0 0 0px;
+}
+
+/* Announcement description */
+.announcement-description {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #66655E;
+    margin: 0;
+}
+
+/* Message when no announcements are available */
+.announcement-empty {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 450;
+    color: #2A2A27;
+    opacity: 0.80;
+    margin: 0;
+}

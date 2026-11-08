@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Community.css";
-import { Clock, Leaf, ThumbsUp, ThumbsDown } from "lucide-react";
+import { Clock, Leaf, ThumbsUp, ThumbsDown, Megaphone } from "lucide-react";
 import background_Banner from "../assets/Green_Banner.svg";
 //Authentication and routing
 import useAuth from "../auth/useAuth.js";
@@ -12,26 +12,26 @@ import {
     mockTriviaLeaderboard,
     TRIVIA_POINTS_PER_CORRECT_ANSWER
 } from "../data/communityTrivia";
-
+import { communityAnnouncements } from "../data/communityAnnouncements";
 
 function Community() {
     const { isAuthenticated } = useAuth();
 
-    {/*===================*/}
-    {/*Seasonal Poll Part */}
-    {/*===================*/}
+    {/*===================*/ }
+    {/*Seasonal Poll Part */ }
+    {/*===================*/ }
     const [selectedOptionId, setSelectedOptionId] = useState(null);
     const [hasVoted, setHasVoted] = useState(false);
 
-    {/*===================*/}
-    {/*Keep or Retire Part*/}
-    {/*===================*/}
+    {/*===================*/ }
+    {/*Keep or Retire Part*/ }
+    {/*===================*/ }
     const [keepRetireChoice, setKeepRetireChoice] = useState(null);
     const [hasVotedKeepRetire, setHasVotedKeepRetire] = useState(false);
 
-    {/*==============*/}
-    {/*  Triva Part  */}
-    {/*==============*/}
+    {/*==============*/ }
+    {/*  Triva Part  */ }
+    {/*==============*/ }
     const [timeLeft, setTimeLeft] = useState(30);
     const [hasFinishedTrivia, setHasFinishedTrivia] = useState(false);
     const [hasStartedTrivia, setHasStartedTrivia] = useState(false);
@@ -41,9 +41,9 @@ function Community() {
     const currentTriviaQuestion = mockTriviaQuestions[currentQuestionIndex];
     const [hasSubmittedTriviaAnswer, setHasSubmittedTriviaAnswer] = useState(false);
 
-    {/*======================*/}
-    {/*Poll Data and Deadline */}
-    {/*======================*/}
+    {/*======================*/ }
+    {/*Poll Data and Deadline */ }
+    {/*======================*/ }
     const poll = mockPolls[0];
     const keepOrRetirePoll = mockPolls[1];
 
@@ -64,9 +64,9 @@ function Community() {
         keepOrRetirePoll.status === "active" &&
         new Date(keepOrRetirePoll.endsAt) > now;
 
-    {/*============*/}
-    {/*Trivia Timer */}
-    {/*============*/}
+    {/*============*/ }
+    {/*Trivia Timer */ }
+    {/*============*/ }
     useEffect(() => {
         if (!hasStartedTrivia || hasSubmittedTriviaAnswer || hasFinishedTrivia) {
             return;
@@ -86,7 +86,18 @@ function Community() {
         return () => clearTimeout(timer);
     }, [hasStartedTrivia, hasSubmittedTriviaAnswer, hasFinishedTrivia, timeLeft]);
 
-
+    {/*===================*/ }
+    {/*Announcements Part */ }
+    {/*===================*/ }
+    {/*checks if active and can only have max of two announcements*/ }
+    const activeAnnouncements = communityAnnouncements
+        .filter((announcement) => {
+            return (
+                announcement.status === "published" &&
+                new Date(announcement.endAt).getTime() > Date.now()
+            );
+        })
+        .slice(0, 2);
 
     return (
         <main className="community-page">
@@ -171,14 +182,14 @@ function Community() {
                         Join INSTEA Rewards to Vote
                     </Link>
                 )}
-                
+
                 {hasVoted && (
                     <p className="poll-confirmation">
                         Your ballot has been submitted!
                     </p>
                 )}
             </section>
-            
+
             {/*========================*/}
             {/*Keep or Retire Poll Part*/}
             {/*========================*/}
@@ -223,7 +234,7 @@ function Community() {
                                             setKeepRetireChoice(option.id);
                                         }
                                     }}
-                                    
+
                                     disabled={!isAuthenticated || hasVotedKeepRetire || !isKeepRetireOpen}
                                     aria-pressed={keepRetireChoice === option.id}
                                 >
@@ -237,7 +248,7 @@ function Community() {
                                 </button>
                             ))}
                         </div>
-                        
+
                         {hasVotedKeepRetire ? (
                             <p className="poll-confirmation">
                                 Your vote has been submitted!
@@ -478,6 +489,49 @@ function Community() {
                 </aside>
             </section>
 
+            {/*=======================================*/}
+            {/*Announcements and Social Calender Part */}
+            {/*=======================================*/}
+            <div className="community-announcements-calendar">
+
+                {/*========================*/}
+                {/*Announcements Part      */}
+                {/*========================*/}
+                <section className="community-announcements">
+                    <h2 className="announcements-heading">Announcements</h2>
+
+                    <div className="announcements-list">
+                        {activeAnnouncements.length === 0 ? (
+                            <div className="announcement-card">
+                                <Megaphone className="announcement-icon" size={28} color="#8A6A35" />
+                                
+                                <p className="announcement-empty">  
+                                    No announcements at the moment. Check back soon!
+                                </p>
+                            </div>
+                        ) : (
+                            activeAnnouncements.map((announcement) => (
+                                <article
+                                    key={announcement.id}
+                                    className="announcement-card"
+                                >
+                                    <Megaphone className="announcement-icon" size={28} color="#8A6A35" />
+
+                                    {/* Announcement content */}
+                                    <div className="announcement-content">
+                                        <h3 className="announcement-title">
+                                            {announcement.title}
+                                        </h3>
+
+                                        <p className="announcement-description">
+                                            {announcement.description}
+                                        </p>
+                                    </div>
+                                </article>
+                            )))}
+                    </div>
+                </section>
+            </div>
         </main>
     );
 }
