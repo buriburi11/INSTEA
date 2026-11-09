@@ -181,65 +181,16 @@
     text-decoration: none;
 }
 
-/* Order summary */
-
-.cart-order-summary {
-    width: 100%;
-    min-height: 385.75px;
-    box-sizing: border-box;
-    padding: 24px;
-    background: #FFFFFF;
-    border: 1.25px solid #E4DACA;
-    border-radius: 16px;
-    color: #1F3B2E;
-}
-
-.cart-order-summary h2 {
-    margin: 0 0 24px;
-    color: #1F3B2E;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 24px;
-    font-weight: 600;
-    text-align: left;
-}
-
-.cart-summary-row,
-.cart-summary-total {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.cart-summary-row {
-    color: #666666;
-    font-size: 15px;
-}
-
-.cart-summary-total {
-    margin-top: 18px;
-    padding-top: 22px;
-    border-top: 1px solid #E3D5BE;
-    font-size: 20px;
-}
-
-.cart-summary-total strong:first-child {
-    font-size: 16px;
-    font-weight: 600;
-}
-
-.cart-summary-total strong:last-child {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;    
-    font-weight: 400;
-    color: #1F3B2E;
-}
-
-/* Checkout actions */
+/* =========================== */
+/*    CHECKOUT ACTION BUTTON   */
+/* =========================== */
 
 .cart-checkout-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 100%;
+    box-sizing: border-box;
     padding: 14px;
     background: #C4A268;
     border: none;
@@ -247,7 +198,13 @@
     color: #1F3B2E;
     font-size: 16px;
     font-weight: 600;
-    cursor: not-allowed;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.cart-checkout-button:hover {
+    background: #B59359;
 }
 
 .cart-continue-shopping {
@@ -301,7 +258,7 @@
 }
 
 .shopping-cart-page h1,
-.shopping-cart-page .cart-order-summary h2 {
+.shopping-cart-page .cart-order-summary h2{
     color: #1F3B2E;
 }
 
@@ -443,20 +400,4 @@
     .cart-benefits {
         grid-template-columns: 1fr;
     }
-}
-
-.cart-rewards-banner {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 16px 0;
-    padding: 10px 12px;
-    background: #F7F0E2;
-    border-radius: 8px;
-    color: #8A672D;
-    font-size: 13px;
-}
-
-.cart-rewards-banner svg {
-    flex-shrink: 0;
 }
