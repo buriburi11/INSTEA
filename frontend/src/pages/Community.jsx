@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import "./Community.css";
-import { Clock, Leaf, ThumbsUp, ThumbsDown, Megaphone } from "lucide-react";
+import { Clock, Leaf, ThumbsUp, ThumbsDown, Megaphone, Star, Pencil, Trash2, Flag } from "lucide-react";
 import background_Banner from "../assets/Green_Banner.svg";
 //Authentication and routing
 import useAuth from "../auth/useAuth.js";
@@ -15,9 +15,17 @@ import {
 import { communityAnnouncements } from "../data/communityAnnouncements";
 import { events } from "../data/events";
 import { communityMilestone } from "../data/communityMilestone";
+import { communityReviews } from "../data/communityReviews";
+
+
 
 function Community() {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, customer } = useAuth();
+
+    {/*This will only display reviews that were aprroved by an admin*/ }
+    const publishedReviews = communityReviews.filter(
+        (review) => review.status === "published"
+    );
 
     {/*===================*/ }
     {/*Seasonal Poll Part */ }
@@ -113,13 +121,34 @@ function Community() {
 
     {/*========================*/ }
     {/*Community Milestone Part*/ }
-    {/*=======================*/ }
+    {/*========================*/ }
     {/*get the current precentage*/ }
     const milestonePercentage = Math.min(
         (communityMilestone.currentPlays / communityMilestone.goalPlays) * 100,
         100
     );
 
+    {/*===============*/ }
+    {/*For review form*/ }
+    {/*===============*/ }
+    const [reviewRating, setReviewRating] = useState(0);
+    const [reviewMessage, setReviewMessage] = useState("");
+    const [reviewMessageType, setReviewMessageType] = useState("");
+
+    // checks the review form and displays a confirmation message
+    const handleReviewSubmit = () => {
+        const product = document.getElementById("community-review-product").value.trim();
+        const comment = document.getElementById("community-review-comment").value.trim();
+
+        if (!product || reviewRating === 0 || !comment) {
+            setReviewMessage("Please complete all fields and select a star rating before submitting.");
+            setReviewMessageType("error");
+            return;
+        }
+
+        setReviewMessage("Your review has been submitted! Check back soon to see it published.");
+        setReviewMessageType("success");
+    };
 
     return (
         <main className="community-page">
@@ -147,14 +176,14 @@ function Community() {
                             <span className="milestone-current">
                                 {communityMilestone.currentPlays.toLocaleString()}
                             </span>
-                            
+
                             <span className="milestone-goal">
                                 of {communityMilestone.goalPlays.toLocaleString()} plays
                             </span>
                         </div>
 
                         {/*accessibility for the progress bar*/}
-                        <div 
+                        <div
                             className="milestone-progress"
                             role="progressbar"
                             aria-valuenow={communityMilestone.currentPlays}
@@ -169,7 +198,7 @@ function Community() {
 
                         <p className="milestone-description">
                             {communityMilestone.description}
-                        </p>                      
+                        </p>
                     </div>
                 )}
 
@@ -648,7 +677,210 @@ function Community() {
                     </div>
                 </section>
             </div>
-        </main>
+
+            {/*========================*/}
+            {/* Community Reviews Part */}
+            {/*========================*/}
+            <section className="community-reviews">
+                <h2 className="community-reviews-title">Reviews &amp; Feedback </h2>
+
+                <div className="community-reviews-layout">
+                    {/*================*/}
+                    {/*review submision*/}
+                    {/*================*/}
+                    <div className="community-review-form-container">
+                        <h3 className="community-review-form-title">
+                            Share your review
+                        </h3>
+
+                        {/*Product selection for review*/}
+                        <div className="community-review-form-field">
+                            <label
+                                htmlFor="community-review-product"
+                                className="community-review-form-label"
+                            >
+                                Drink or snack
+                            </label>
+
+                            <input
+                                type="text"
+                                id="community-review-product"
+                                className="community-review-form-input"
+                                placeholder="e.g. Amber Peach Oolong"
+                                maxLength={60}
+                                required
+                            />
+                        </div>
+                        {/* Star rating for the review */}
+                        <div className="community-review-form-field">
+                            <label className="community-review-form-label">
+                                Rating
+                            </label>
+
+                            <div className="community-review-rating">
+                                {Array.from({ length: 5 }, (_, index) => (
+                                    <button
+                                        key={index}
+                                        type="button"
+                                        className="community-review-star-button"
+                                        onClick={() => setReviewRating(index + 1)}
+                                        aria-label={`Rate ${index + 1} stars`}
+                                        aria-pressed={reviewRating === index + 1}
+                                    >
+                                        <Star
+                                            size={30}
+                                            color="#E4DACA"
+                                            fill={index < reviewRating ? "#E4DACA" : "none"}
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+
+                            {/* Written feedback for the review */}
+                            <div className="community-review-form-field">
+                                <label
+                                    htmlFor="community-review-comment"
+                                    className="community-review-form-label"
+                                >
+                                    Your review
+                                </label>
+
+                                <textarea
+                                    id="community-review-comment"
+                                    className="community-review-form-textarea"
+                                    placeholder="What did you love? What could be better?"
+                                    maxLength={500}
+                                    rows={5}
+                                    required
+                                />
+                            </div>
+                            {/*submit review button */}
+                            <button
+                                type="button"
+                                className="community-review-submit"
+                                onClick={handleReviewSubmit}
+                            >
+                                Submit review
+                            </button>
+                            {reviewMessage && (
+                                    <p
+                                        className={`community-review-message ${reviewMessageType}`}
+                                        role={reviewMessageType === "error" ? "alert" : "status"}
+                                    >
+                                        {reviewMessage}
+                                    </p>
+                                )}
+                        </div>
+                    </div>
+
+                    {/*====================*/}
+                    {/* the list of reviews*/}
+                    {/*====================*/}
+                    <div className="community-reviews-list">
+                        {/*checks if the user is logged in and if the review is their own*/}
+                        {publishedReviews.map((review) => {
+                            const isOwnReview =
+                                isAuthenticated &&
+                                customer?.id === review.authorId &&
+                                review.authorId !== null;
+
+                            return (
+                                <div
+                                    /*if it it their own review it will have a different .css look*/
+                                    className={`community-review-card ${isOwnReview ? "community-review-own" : ""}`}
+                                    key={review.id}
+                                >
+                                    {/*Review heading and approval status */}
+                                    <div className="community-review-header">
+                                        <p className="community-review-heading">
+                                            <span className="community-review-name">
+                                                {isOwnReview ? "Your review" : review.name}
+                                            </span>
+
+                                            <span className="community-review-product">
+                                                {" · "}{review.product}
+                                            </span>
+                                        </p>
+
+                                        {/* Displays the review date for other customers in their review*/}
+                                        {!isOwnReview && (
+                                            <span className="community-review-date">
+                                                {review.id === 2
+                                                    ? "2 days ago"
+                                                    : review.id === 3
+                                                        ? "1 week ago"
+                                                        : "2 weeks ago"}
+                                            </span>
+                                        )}
+
+                                        {/*Only show the Published badge on the member's own review */}
+                                        {isOwnReview && review.status === "published" && (
+                                            <span className="community-review-badge">
+                                                Published
+                                            </span>
+                                        )}
+                                    </div>
+
+                                    {/*Displays the rating as five stars. */}
+                                    <div
+                                        className="community-review-stars"
+                                        aria-label={`${review.rating} out of 5 stars`}
+                                    >
+                                        {Array.from({ length: 5 }, (_, index) => (
+                                            <Star
+                                                key={index}
+                                                size={18}
+                                                fill={index < review.rating ? "currentColor" : "none"}
+                                            />
+                                        ))}
+                                    </div>
+
+                                    <span className="community-review-comment">
+                                        {review.comment}
+                                    </span>
+
+                                    {/*Only the review owner can see Edit and Delete*/}
+                                    {isOwnReview && (
+                                        <div className="community-review-actions">
+                                            <button
+                                                type="button"
+                                                className="community-review-edit"
+                                            >
+                                                <Pencil size={15} />
+                                                Edit
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                className="community-review-delete"
+                                            >
+                                                <Trash2 size={15} />
+                                                Delete
+                                            </button>
+                                        </div>
+                                    )}
+                                    {/* Allow customer to report reviews*/}
+                                    {!isOwnReview && (
+                                        <div className="community-review-actions">
+                                            <button
+                                                type="button"
+                                                className="community-review-report"
+                                            >
+                                                <Flag size={16} />
+                                                Report
+                                            </button>
+                                        </div>
+                                    )}
+
+                                </div>
+                            );
+                        })}
+
+                    </div>
+                </div>
+            </section>
+
+        </main >
     );
 }
 
