@@ -34,7 +34,6 @@
     top: 130px;
     left: 10%;
     transform: translateY(-50%);
-
     color: #FAF6EE;
     font-family: "Cormorant Garamond", serif;
     font-size: 90px;
@@ -48,7 +47,6 @@
     top: 200px;
     left: 10%;
     text-align: left;
-
     color: #FAF6EE;
     opacity: 75%;
     font-family: "Inter", sans-serif;
@@ -57,6 +55,70 @@
     font-weight: 400;
     line-height: 1.6;
     max-width: 550px;
+}
+
+/* Community Milestone */
+.community-milestone {
+    position: absolute;
+    top: 65px;
+    right: 5%;
+    width: 600px;
+    height: 150px;
+    box-sizing: border-box;
+    padding: 24px 22px;
+
+    background-color: #2B493B;
+    border: 1px solid #4C6658;
+    border-radius: 14px;
+    text-align: left;
+}
+
+/* Current votes and goal */
+.milestone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.milestone-current {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 40px;
+    font-weight: 600;
+    color: #FAF6EE;
+}
+
+.milestone-goal {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    color: #C2A066;
+}
+
+/* Progress bar background */
+.milestone-progress {
+    width: 100%;
+    height: 6px;
+    background-color: #526B5C;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+/* Gold progress bar */
+.milestone-progress-fill {
+    height: 100%;
+    background-color: #C2A066;
+    border-radius: 20px;
+}
+
+/* Reward description */
+.milestone-description {
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: #D4DCD5;
+    margin: 12px 0 0;
 }
 
 /*just makes sure the description does not escape the banner*/
@@ -69,6 +131,33 @@
         text-align: left;
         font-size: 12px;
         line-height: 1.4;
+    }
+}
+
+/*for smaller screens the community milestone*/
+@media (max-width: 480px) {
+    .community-banner-image {
+        height: 440px;
+    }
+
+    .community-milestone {
+        top: 275px;
+        left: 20px;
+        right: 20px;
+        width: auto;
+        padding: 16px;
+    }
+
+    .milestone-current {
+        font-size: 26px;
+    }
+
+    .milestone-goal {
+        font-size: 11px;
+    }
+
+    .milestone-description {
+        font-size: 12px;
     }
 }
 
@@ -89,7 +178,8 @@
     margin-bottom: 8px;
 }
 
-.poll-label {
+.poll-label,
+.keep-retire-label {
     font-family: "Inter", sans-serif;
     font-size: 13px;
     font-weight: 600;
@@ -109,24 +199,31 @@
     margin: 0;
 }
 
-.poll-title {
+.poll-title,
+.keep-retire-title {
     font-family: "Cormorant Garamond", serif;
     font-size: 32px;
     font-weight: 600;
-    font-style: italic;
     color: #1F3B2E;
     margin: 0 0 8px;
 }
 
-.poll-description {
+.poll-title {
+    font-style: italic;
+}
+
+.poll-description,
+.keep-retire-description {
     font-family: "Inter", sans-serif;
     font-size: 16px;
     font-weight: 400;
     color: #66655E;
-    line-height: 1.5;
     margin: 0;
 }
 
+.poll-description {
+    line-height: 1.5;
+}
 
 /*poll cards*/
 .poll-options {
@@ -134,14 +231,6 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
     margin-top: 24px;
-}
-
-.poll-option-card {
-    border: 2px solid #E4DACA;
-    border-radius: 12px;
-    overflow: hidden;
-    background-color: white;
-    padding: 0px;
 }
 
 .poll-option-name {
@@ -177,18 +266,15 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
-
     background-color: #C2A066;
     color: #152A20;
     border-radius: 8px;
     padding: 12px 24px;
     margin-top: 24px;
-
     font-family: "Inter", sans-serif;
     font-size: 14px;
     font-weight: 600;
     text-decoration: none;
-
     border: none;
     appearance: none;
     cursor: pointer;
@@ -205,6 +291,11 @@
     text-align: left;
     cursor: pointer;
     font: inherit;
+    border: 2px solid #E4DACA;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: white;
+    padding: 0px;
 }
 
 .poll-option-card.selected {
@@ -224,15 +315,9 @@ button.poll-login-button:disabled {
     cursor: not-allowed;
 }
 
-.poll-confirmation {
-    font-family: "Inter", sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: #1F3B2E;
-    margin-top: 16px;
-}
-
-.keep-retire-hint {
+/*Poll confirmation message and voting hint*/
+.poll-confirmation,
+.keep-retire-hint{
     font-family: "Inter", sans-serif;
     font-size: 14px;
     font-weight: 600;
@@ -258,30 +343,6 @@ button.poll-login-button:disabled {
     text-align: left;
     color: #1F3B2E;
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-}
-
-.keep-retire-label {
-    font-family: "Inter", sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    color: #8A6A35;
-    margin: 0 0 8px;
-}
-
-.keep-retire-title {
-    font-family: "Cormorant Garamond", serif;
-    font-size: 32px;
-    font-weight: 600;
-    color: #1F3B2E;
-    margin: 0 0 8px;
-}
-
-.keep-retire-description {
-    font-family: "Inter", sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    color: #66655E;
-    margin: 0;
 }
 
 .keep-retire-image {
@@ -365,7 +426,6 @@ button.poll-login-button:disabled {
     }
 
 }
-
 
 /* Past Results */
 .poll-history {
@@ -468,7 +528,7 @@ button.poll-login-button:disabled {
 .trivia-leaderboard-title {
     font-family: "Cormorant Garamond", serif;
     font-style: italic;
-    font-size: 20x;
+    font-size: 20px;
     font-weight: 600;
     color: #1F3B2E;
     margin: 0 0 24px;
@@ -513,39 +573,33 @@ button.poll-login-button:disabled {
     border-radius: 14px;
     font-weight: 600;
 }
+
 /* button for non-members*/
 .trivia-start-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-
     padding: 14px 24px;
     margin-top: 12px;
-
     background: #C2A066;
     color: #152A20;
     border-radius: 12px;
-
     border: none;
     appearance: none;
     cursor: pointer;
-
     font-family: "Inter", sans-serif;
     font-size: 15px;
     font-weight: 600;
     text-decoration: none;
-    cursor: pointer;
-
     transition: background 0.2s ease;
 }
 
 .trivia-start-button:hover {
-    background-color:  #C2A066;
+    background-color: #C2A066;
     opacity: 90%;
     border: 1px solid #1F3B2E;
 }
-
 
 /* Trivia Answer Options */
 .trivia-options {
@@ -561,11 +615,9 @@ button.poll-login-button:disabled {
     gap: 14px;
     width: 100%;
     padding: 16px 18px;
-
     background: #FFFFFF;
     border: 1px solid #E2D8C7;
     border-radius: 12px;
-
     color: #1F3B2E;
     font-family: "Inter", sans-serif;
     font-size: 15px;
@@ -577,11 +629,9 @@ button.poll-login-button:disabled {
     display: flex;
     align-items: center;
     justify-content: center;
-
     width: 28px;
     height: 28px;
     flex-shrink: 0;
-
     background: #F0EADF;
     border-radius: 50%;
     font-weight: 600;
@@ -600,7 +650,7 @@ button.poll-login-button:disabled {
     margin-top: 16px;
 }
 
-.trivia-option:disabled{
+.trivia-option:disabled {
     cursor: default;
     opacity: 0.76;
 }
@@ -623,7 +673,7 @@ button.poll-login-button:disabled {
     background: #1F3B2E;
 }
 
-/*Trivia header and timer */ 
+/*Trivia header and timer */
 .trivia-header {
     display: flex;
     align-items: center;
@@ -671,4 +721,189 @@ button.poll-login-button:disabled {
     font-family: "Inter", sans-serif;
     font-size: 15px;
     color: #66655E;
+}
+
+
+/* Announcements and Social Calendar layout */
+.community-announcements-calendar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+}
+
+.community-announcements {
+    margin-top: 0;
+    min-width: 0;
+}
+
+/* Announcements Section */
+.community-announcements {
+    text-align: left;
+}
+
+/* announcement and social calendar heading */
+.announcements-heading,
+.social-calendar-heading {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin: 0 0 14px;
+}
+
+/* Stack announcements vertically */
+.announcements-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Individual announcement card */
+.announcement-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: #FFFFFF;
+    border: 1.5px solid #E4DACA;
+    border-radius: 14px;
+    padding: 16.5px 16px;
+    text-align: left;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Announcement and social calendar title */
+.announcement-title, 
+.social-calendar-title {
+    font-family: "Inter", sans-serif;
+    font-size: 20px;
+    font-weight: 550;
+    color: #2A2A27;
+    margin: 0px 0 0px;
+}
+
+/* Announcement and social calendar description */
+.announcement-description,
+.social-calendar-details {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: #66655E;
+    margin: 0;
+}
+
+/* Message when no announcements are available */
+.announcement-empty {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 450;
+    color: #2A2A27;
+    opacity: 0.80;
+    margin: 0;
+}
+
+/* Social Calendar Section */
+.Social-calendar {
+    text-align: left;
+    min-width: 0;
+}
+
+/* Heading and All Events link */
+.social-calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0px;
+}
+
+.social-calendar-link {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F3B2E;
+    text-decoration: none;
+}
+.social-calendar-link:hover {
+    opacity: 0.8;
+}
+
+/* Stack events vertically */
+.social-calendar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Individual event card */
+.social-calendar-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background-color: #FFFFFF;
+    border: 1.5px solid #E4DACA;
+    border-radius: 14px;
+    padding: 12px 16px;
+    text-align: left;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Event date badge */
+.social-calendar-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 66px;
+    min-height: 62px;
+    background-color: #F1EADC;
+    border-radius: 10px;
+}
+
+/* Month */
+.social-calendar-month {
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: #8A6A35;
+}
+/*  Day  */
+.social-calendar-day {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 0.8;
+    color: #1F3B2E;
+}
+
+/* Empty calendar message */
+.social-calendar-empty {
+    font-family: "Inter", sans-serif;
+    font-size: 16px;
+    font-weight: 450;
+    color: #2A2A27;
+    opacity: 0.80;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/*for the smaller screens*/
+@media (max-width: 768px) {
+    .community-announcements-calendar {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 32px;
+    }
+
+    .community-announcements,
+    .Social-calendar {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .announcement-card,
+    .social-calendar-card {
+        box-sizing: border-box;
+        width: 100%;
+    }
 }

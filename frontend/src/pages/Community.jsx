@@ -1,30 +1,41 @@
-import background_Banner from "../assets/Green_Banner.svg";
-import { mockPolls, mockPollHistory } from "../data/communityPolls";
-import "./Community.css";
-import { Clock, Leaf, ThumbsUp, ThumbsDown } from "lucide-react";
-import { Link } from "react-router";
-import useAuth from "../auth/useAuth.js";
 import { useState, useEffect } from "react";
-
+import "./Community.css";
+import { Clock, Leaf, ThumbsUp, ThumbsDown, Megaphone } from "lucide-react";
+import background_Banner from "../assets/Green_Banner.svg";
+//Authentication and routing
+import useAuth from "../auth/useAuth.js";
+import { Link } from "react-router";
+//Mock data
+import { mockPolls, mockPollHistory } from "../data/communityPolls";
 import {
     mockTriviaQuestions,
     mockTriviaLeaderboard,
     TRIVIA_POINTS_PER_CORRECT_ANSWER
 } from "../data/communityTrivia";
-
+import { communityAnnouncements } from "../data/communityAnnouncements";
+import { events } from "../data/events";
+import { communityMilestone } from "../data/communityMilestone";
 
 function Community() {
     const { isAuthenticated } = useAuth();
+
+    {/*===================*/ }
+    {/*Seasonal Poll Part */ }
+    {/*===================*/ }
     const [selectedOptionId, setSelectedOptionId] = useState(null);
     const [hasVoted, setHasVoted] = useState(false);
 
+    {/*===================*/ }
+    {/*Keep or Retire Part*/ }
+    {/*===================*/ }
     const [keepRetireChoice, setKeepRetireChoice] = useState(null);
     const [hasVotedKeepRetire, setHasVotedKeepRetire] = useState(false);
 
+    {/*==============*/ }
+    {/*  Triva Part  */ }
+    {/*==============*/ }
     const [timeLeft, setTimeLeft] = useState(30);
     const [hasFinishedTrivia, setHasFinishedTrivia] = useState(false);
-
-    //Triva part
     const [hasStartedTrivia, setHasStartedTrivia] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedTriviaAnswer, setSelectedTriviaAnswer] = useState(null);
@@ -32,24 +43,32 @@ function Community() {
     const currentTriviaQuestion = mockTriviaQuestions[currentQuestionIndex];
     const [hasSubmittedTriviaAnswer, setHasSubmittedTriviaAnswer] = useState(false);
 
-    //Polls
+    {/*======================*/ }
+    {/*Poll Data and Deadline */ }
+    {/*======================*/ }
     const poll = mockPolls[0];
     const keepOrRetirePoll = mockPolls[1];
+
+    //gets the current date and the poll deadline
     const now = new Date();
     const endDate = new Date(poll.endsAt);
-
+    // how many day left
     const daysRemaining = Math.ceil(
         (endDate - now) / (1000 * 60 * 60 * 24)
     );
 
+    //checks if the poll is active (seasonal)
     const isPollOpen =
         poll.status === "active" &&
         endDate > now;
-
+    //checks if the poll is active (keep or retire)
     const isKeepRetireOpen =
         keepOrRetirePoll.status === "active" &&
         new Date(keepOrRetirePoll.endsAt) > now;
 
+    {/*============*/ }
+    {/*Trivia Timer */ }
+    {/*============*/ }
     useEffect(() => {
         if (!hasStartedTrivia || hasSubmittedTriviaAnswer || hasFinishedTrivia) {
             return;
@@ -69,6 +88,39 @@ function Community() {
         return () => clearTimeout(timer);
     }, [hasStartedTrivia, hasSubmittedTriviaAnswer, hasFinishedTrivia, timeLeft]);
 
+    {/*===================*/ }
+    {/*Announcements Part */ }
+    {/*===================*/ }
+    {/*checks if active and can only have max of two announcements*/ }
+    const activeAnnouncements = communityAnnouncements
+        .filter((announcement) => {
+            return (
+                announcement.status === "published" &&
+                new Date(announcement.endAt).getTime() > Date.now()
+            );
+        })
+        .slice(0, 2);
+
+    {/*====================*/ }
+    {/*Social Calendar Part*/ }
+    {/*====================*/ }
+    {/*gets todays date and filters to get the next two upcoming events*/ }
+    const today = new Date().toLocaleDateString("en-CA");
+    const upcomingEvents = events
+        .filter((event) => event.date >= today)
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
+        .slice(0, 2);
+
+    {/*========================*/ }
+    {/*Community Milestone Part*/ }
+    {/*=======================*/ }
+    {/*get the current precentage*/ }
+    const milestonePercentage = Math.min(
+        (communityMilestone.currentPlays / communityMilestone.goalPlays) * 100,
+        100
+    );
+
+
     return (
         <main className="community-page">
             <div className="community-banner">
@@ -86,7 +138,47 @@ function Community() {
                 <p className="community-description">
                     Cast seasonal ballots, prove your tea mastery daily, and unlock collective privileges with members across every tea house.
                 </p>
+
+                {/* Members-only Community Milestone */}
+                {isAuthenticated && (
+                    <div className="community-milestone">
+
+                        <div className="milestone-header">
+                            <span className="milestone-current">
+                                {communityMilestone.currentPlays.toLocaleString()}
+                            </span>
+                            
+                            <span className="milestone-goal">
+                                of {communityMilestone.goalPlays.toLocaleString()} plays
+                            </span>
+                        </div>
+
+                        {/*accessibility for the progress bar*/}
+                        <div 
+                            className="milestone-progress"
+                            role="progressbar"
+                            aria-valuenow={communityMilestone.currentPlays}
+                            aria-valuemin={0}
+                            aria-valuemax={communityMilestone.goalPlays}
+                        >
+                            <div
+                                className="milestone-progress-fill"
+                                style={{ width: `${milestonePercentage}%` }}
+                            />
+                        </div>
+
+                        <p className="milestone-description">
+                            {communityMilestone.description}
+                        </p>                      
+                    </div>
+                )}
+
             </div>
+
+            {/*===================*/}
+            {/*Seasonal Poll Part */}
+            {/*===================*/}
+
             <section className="community-poll">
                 <div className="poll-header">
                     <p className="poll-label">{poll.label}</p>
@@ -132,7 +224,9 @@ function Community() {
                 </div>
 
 
-
+                {/*===================================*/}
+                {/*Non-members disabled button "Join.."*/}
+                {/*===================================*/}
                 {isAuthenticated ? (
                     <button type="button" className="poll-login-button"
                         disabled={selectedOptionId === null || hasVoted || !isPollOpen}
@@ -153,6 +247,11 @@ function Community() {
                 )}
             </section>
 
+
+
+            {/*========================*/}
+            {/*Keep or Retire Poll Part*/}
+            {/*========================*/}
             <div className="community-secondary-polls">
                 <section className="keep-retire-poll">
                     <img
@@ -194,6 +293,7 @@ function Community() {
                                             setKeepRetireChoice(option.id);
                                         }
                                     }}
+
                                     disabled={!isAuthenticated || hasVotedKeepRetire || !isKeepRetireOpen}
                                     aria-pressed={keepRetireChoice === option.id}
                                 >
@@ -207,6 +307,7 @@ function Community() {
                                 </button>
                             ))}
                         </div>
+
                         {hasVotedKeepRetire ? (
                             <p className="poll-confirmation">
                                 Your vote has been submitted!
@@ -219,6 +320,9 @@ function Community() {
                     </div>
                 </section>
 
+                {/*========================*/}
+                {/*Past Poll Results Part  */}
+                {/*========================*/}
                 <aside className="poll-history">
                     <h2 className="poll-history-title">Past results</h2>
 
@@ -240,10 +344,9 @@ function Community() {
                 </aside>
             </div>
 
-
-
-
-
+            {/*========================*/}
+            {/*Trivia Game Part*/}
+            {/*========================*/}
             <section className="community-trivia">
                 <div className="trivia-game">
                     <div className="trivia-header">
@@ -358,7 +461,7 @@ function Community() {
                                     )}
 
 
-                                    {/* Next Question — Questions 1 and 2 */}
+                                    {/* Next Question — Questions 1 and 28*/}
                                     {hasSubmittedTriviaAnswer &&
                                         currentQuestionIndex < mockTriviaQuestions.length - 1 && (
                                             <button
@@ -416,6 +519,9 @@ function Community() {
                     )}
                 </div>
 
+                {/*========================*/}
+                {/*Trivia Leaderboard Part */}
+                {/*========================*/}
                 <aside className="trivia-leaderboard">
                     <h2 className="trivia-leaderboard-title">
                         This month's leaderboard
@@ -442,6 +548,106 @@ function Community() {
                 </aside>
             </section>
 
+            {/*=======================================*/}
+            {/*Announcements and Social Calender Part */}
+            {/*=======================================*/}
+            <div className="community-announcements-calendar">
+
+                {/*========================*/}
+                {/*Announcements Part      */}
+                {/*========================*/}
+                <section className="community-announcements">
+                    <h2 className="announcements-heading">Announcements</h2>
+
+                    <div className="announcements-list">
+                        {activeAnnouncements.length === 0 ? (
+                            <div className="announcement-card">
+                                <Megaphone className="announcement-icon" size={28} color="#8A6A35" />
+
+                                <p className="announcement-empty">
+                                    No announcements at the moment. Check back soon!
+                                </p>
+                            </div>
+                        ) : (
+                            activeAnnouncements.map((announcement) => (
+                                <article
+                                    key={announcement.id}
+                                    className="announcement-card"
+                                >
+                                    <Megaphone className="announcement-icon" size={28} color="#8A6A35" />
+
+                                    {/* Announcement content */}
+                                    <div className="announcement-content">
+                                        <h3 className="announcement-title">
+                                            {announcement.title}
+                                        </h3>
+
+                                        <p className="announcement-description">
+                                            {announcement.description}
+                                        </p>
+                                    </div>
+                                </article>
+                            )))}
+                    </div>
+                </section>
+
+                {/*========================*/}
+                {/*Social Calendar Part    */}
+                {/*========================*/}
+                <section className="Social-calendar">
+                    <div className="social-calendar-header">
+                        <h2 className="social-calendar-heading">Social Calendar</h2>
+
+                        <Link to="/events" className="social-calendar-link">
+                            All Events
+                        </Link>
+                    </div>
+
+                    {/*two upcoming events*/}
+                    <div className="social-calendar-list">
+                        {upcomingEvents.length === 0 ? (
+                            <div className="social-calendar-card">
+                                <p className="social-calendar-empty">
+                                    No upcoming events at the moment. Check back soon!
+                                </p>
+                            </div>
+                        ) : (
+                            upcomingEvents.map((event) => (
+                                <article
+                                    key={event.id} className="social-calendar-card" >
+
+                                    {/* Event date need to break it from the data*/}
+                                    <div className="social-calendar-date">
+                                        <span className="social-calendar-month">
+                                            {new Date(
+                                                Number(event.date.split("-")[0]),
+                                                Number(event.date.split("-")[1]) - 1,
+                                                Number(event.date.split("-")[2])
+                                            ).toLocaleDateString("en-US", { month: "short" })}
+                                        </span>
+
+                                        <span className="social-calendar-day">
+                                            {Number(event.date.split("-")[2])}
+                                        </span>
+                                    </div>
+
+                                    {/* Event details */}
+                                    <div className="social-calendar-content">
+                                        <h3 className="social-calendar-title">
+                                            {event.title}
+                                        </h3>
+
+                                        <p className="social-calendar-details">
+                                            {event.time} · {event.location}
+                                        </p>
+                                    </div>
+
+                                </article>
+                            ))
+                        )}
+                    </div>
+                </section>
+            </div>
         </main>
     );
 }
