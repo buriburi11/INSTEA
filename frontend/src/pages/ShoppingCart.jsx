@@ -7,7 +7,8 @@ import {Link} from 'react-router';
 import { Pencil, Trash2, Gift } from 'lucide-react';
 import {formatPrice, calculateCartTotals, calculateItemTotal, } from '../utils/cartPricing'
 import { locations } from '../data/locations';
-import CheckoutOrderSummary from '../components/checkout/CheckoutOrderSummary';                                     // Reuse the shared order summary across the cart and checkout pages.
+import CheckoutOrderSummary from '../components/checkout/CheckoutOrderSummary';                                        // Reuse the shared order summary across the cart and checkout pages.
+import useAuth from '../auth/useAuth';                                                                                 // Access the existing customer authentication system.
 import './ShoppingCart.css';
 
 // ===========================
@@ -15,6 +16,8 @@ import './ShoppingCart.css';
 // ===========================
 
 function ShoppingCart() {
+
+    const { isAuthenticated } = useAuth();                                                                             // Check whether the customer is signed in.
 
     // ------- CART INITIALIZATION -------
 
@@ -251,27 +254,48 @@ function ShoppingCart() {
                                 </div>
                             </div>
 
-                            {/* ------- REWARDS PLACEHOLDER ------- */}
+                            
+                            {/* =========================== */}
+                            {/*    CUSTOMER REWARDS         */}
+                            {/* =========================== */}
 
                             <div className="cart-rewards">
-                                <h2>
-                                    <Gift size={20} strokeWidth={2.5} aria-hidden="true" />
-                                    Rewards available
-                                </h2>
+                                {isAuthenticated ? (
 
-                                {/* TODO: Replace with actual authentication status from backend. */}
-                                {/* When not signed in, display:
-                                    "Reward details will appear here when connected to your account."
-                                */}
+                                    // ------- SIGNED-IN CUSTOMER -------
+                                    <>
+                                        <h2>
+                                            <Gift size={20} strokeWidth={2.5} aria-hidden="true" />
+                                            Rewards available
+                                        </h2>
 
-                                {/* TODO: Replace placeholder reward with backend rewards data. */}
+                                        {/* Replace placeholder rewards with actual member rewards data. */}
 
-                                <p>Placeholder reward · up to placeholder $amount</p>
+                                        <p>Placeholder reward · up to placeholder $amount</p>
 
-                                <button type="button" disabled>
-                                    Apply reward
-                                </button>
+                                        <button type="button" disabled>
+                                            Apply reward
+                                        </button>
+                                    </>
+                                ) : (
+
+                                    // ------- GUEST CUSTOMER -------
+                                    <>
+                                        <h2>
+                                            <Gift size={20} strokeWidth={2.5} aria-hidden="true" />
+                                            Sign in to earn rewards
+                                        </h2>
+                                        <p>
+                                            Sign in to your INSTEA account to earn Tea Leaves and access
+                                            your available rewards.
+                                        </p>
+                                        <Link to="/login" className="cart-rewards-signin">
+                                            Sign in
+                                        </Link>
+                                    </>
+                                )}
                             </div>
+
                         </div>
                     </div>
                  
@@ -279,7 +303,7 @@ function ShoppingCart() {
                     {/*    SHARED ORDER SUMMARY     */}
                     {/* =========================== */}
 
-                    <CheckoutOrderSummary cartItems={cartItems}>
+                    <CheckoutOrderSummary cartItems={cartItems} showRewards={isAuthenticated}>                                                                 {/* Only show Tea Leaves earned for signed-in customers. */}
 
                         {/* ------- CONTINUE TO CHECKOUT ------- */}
 

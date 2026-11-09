@@ -401,3 +401,31 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* ===========================
+   GUEST REWARDS SIGN-IN
+   =========================== */
+
+.cart-rewards-signin {
+    box-sizing: border-box;                  /* Include padding within the button's width. */
+    display: flex;                           /* Center the text inside the link. */
+    align-items: center;
+    justify-content: center;
+    width: 100%;                             /* Fill the available space inside the card. */
+    max-width: 100%;                         /* Prevent the link from exceeding its container. */
+    padding: 12px 20px;
+    border-radius: 8px;
+    background-color: #1F3B2E;
+    color: #FFFFFF;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+/* ------- HOVER STATE ------- */
+
+.cart-rewards-signin:hover {
+    background-color: #2D5140;
+    color: #FFFFFF;
+}

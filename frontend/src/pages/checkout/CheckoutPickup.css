@@ -566,3 +566,87 @@
 .checkout-location-information .checkout-location-closed {
     color: #A14B3B;
 }
+
+
+/* =========================== */
+/*    CHECKOUT PROGRESS STATES */
+/* =========================== */
+
+/* ------- CLICKABLE PROGRESS STEPS ------- */
+
+.checkout-progress-step-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+/* ------- DISABLED FUTURE STEPS ------- */
+
+.checkout-progress-step-button:disabled {
+    cursor: default;
+}
+
+/* ------- CLICKABLE STEP HOVER ------- */
+
+.checkout-progress-step-button:not(:disabled):hover .checkout-step-label {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* ------- KEYBOARD FOCUS ------- */
+
+.checkout-progress-step-button:focus-visible {
+    outline: 2px solid #1F3B2E;
+    outline-offset: 5px;
+    border-radius: 4px;
+}
+
+/* =========================== */
+/*    COMPLETED CHECKMARKS     */
+/* =========================== */
+
+/* ------- COMPLETED STEP CIRCLE ------- */
+
+.checkout-progress-completed .checkout-step-number {
+    background: #1F3B2E;
+    border: 1px solid #1F3B2E;
+    border-radius: 50%;
+    color: #FFFFFF;
+}
+
+/* ------- COMPLETED STEP CHECK ICON ------- */
+
+.checkout-progress-completed .checkout-step-number svg {
+    width: 14px;
+    height: 14px;
+    color: #FFFFFF;
+    stroke-width: 2.5;
+}
+
+/* ------- COMPLETED STEP LABEL ------- */
+
+.checkout-progress-completed .checkout-step-label {
+    color: #666666;
+}
+
+/* ------- KEEP ACTIVE STEP GOLD ------- */
+
+.checkout-progress-active .checkout-step-number {
+    background: #C4A268;
+    border-color: #C4A268;
+    color: #1F3B2E;
+}
+
+/* ------- SMALL SCREEN BUTTONS ------- */
+
+@media (max-width: 600px) {
+    .checkout-progress-step-button {
+        gap: 6px;
+    }
+}

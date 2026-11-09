@@ -1,10 +1,13 @@
 
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { MapPin } from 'lucide-react';
 import CheckoutOrderSummary from '../../components/checkout/CheckoutOrderSummary';
 import { locations } from '../../data/locations';
 import { getPickupDates, getPickupTimes, getLocationStatus } from '../../utils/pickupScheduling';
 import { loadCheckoutData, saveCheckoutData } from '../../utils/checkoutStorage';
+import CheckoutProgress from '../../components/checkout/CheckoutProgress';
+import useAuth from '../../auth/useAuth';
 import './CheckoutPickup.css';
 
 // ===========================
@@ -12,6 +15,14 @@ import './CheckoutPickup.css';
 // ===========================
 
 function CheckoutPickup() {
+
+    const { isAuthenticated } = useAuth();                                                                                              // Only signed-in customers can earn Tea Leaves.
+
+    // ===========================
+    //    CHECKOUT NAVIGATION
+    // ===========================
+
+    const navigate = useNavigate();                                                                                                     // Access React Router navigation.
 
     // ===========================
     //    SHOPPING CART DATA
@@ -83,12 +94,12 @@ function CheckoutPickup() {
     useEffect(() => {
 
         saveCheckoutData({
-            pickupLocationId: selectedLocation,                                              // Store the selected location ID.
-            pickupDate: selectedDate,                                                        // Store the selected calendar date.
-            pickupTime: selectedTimeIsValid ? selectedTime : '',                             // Never persist an expired or unavailable time.
+            pickupLocationId: selectedLocation,                                                                                         // Store the selected location ID.
+            pickupDate: selectedDate,                                                                                                   // Store the selected calendar date.
+            pickupTime: selectedTimeIsValid ? selectedTime : '',                                                                        // Never persist an expired or unavailable time.
         });
 
-    }, [selectedLocation, selectedDate, selectedTime, selectedTimeIsValid]);                  // Save whenever a pickup selection changes.
+    }, [selectedLocation, selectedDate, selectedTime, selectedTimeIsValid]);                                                            // Save whenever a pickup selection changes.
 
 
     // ===========================
@@ -120,22 +131,7 @@ function CheckoutPickup() {
 
             {/* ------- CHECKOUT PROGRESS ------- */}
 
-            <nav className="checkout-progress" aria-label="Checkout progress">
-
-                {['Pickup', 'Contact', 'Payment', 'Review'].map((step, index) => (
-
-                    <div
-                        key={step}
-                        className={`checkout-progress-step ${index === 0 ? 'checkout-progress-active' : ''}`}
-                        aria-current={index === 0 ? 'step' : undefined}
-                    >
-                        <span className="checkout-step-number">{index + 1}</span>
-                        <span className="checkout-step-label">{step}</span>
-                    </div>
-
-                ))}
-
-            </nav>
+            <CheckoutProgress currentStep="Pickup" />                                                                                   {/* Display Pickup as the active checkout step. */}
 
             {/* =========================== */}
             {/*    TWO-COLUMN LAYOUT        */}
@@ -269,6 +265,15 @@ function CheckoutPickup() {
                         type="button"
                         className="checkout-continue-button"
                         disabled={!selectedLocation || !selectedDate || !selectedTimeIsValid}
+                        onClick={() => {
+                            saveCheckoutData({
+                                pickupLocationId: selectedLocation,                                                                     // Save the selected pickup location.
+                                pickupDate: selectedDate,                                                                               // Save the selected pickup date.
+                                pickupTime: selectedTime,                                                                               // Save the validated pickup time.
+                            });
+
+                            navigate('/checkout/contact');                                                                              // Continue to the Contact page.
+                        }}
                     >
                         Continue to contact
                     </button>
@@ -279,7 +284,10 @@ function CheckoutPickup() {
                 {/*    SHARED ORDER SUMMARY     */}
                 {/* =========================== */}
 
-                <CheckoutOrderSummary cartItems={cartItems} />
+                <CheckoutOrderSummary
+                    cartItems={cartItems}
+                    showRewards={isAuthenticated}                                                                                       // Hide rewards for guests on the Pickup page.
+                />
 
             </div>
 

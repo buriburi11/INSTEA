@@ -11,61 +11,63 @@
  //    CHECKOUT ORDER SUMMARY
  // ===========================
 
- function CheckoutOrderSummary({ cartItems = [], children }) {
+function CheckoutOrderSummary({ cartItems = [], children, showRewards = true }) {
 
-     // ------- CART PRICING -------
+    // ------- CART PRICING -------
 
-     const { subtotal, estimatedTax, orderTotal } = calculateCartTotals(cartItems);                                     // Reuse the shared pricing calculations already used by the Shopping Cart.
+    const { subtotal, estimatedTax, orderTotal } = calculateCartTotals(cartItems);                                      // Reuse the shared pricing calculations already used by the Shopping Cart.
 
-     const teaLeavesEarned = calculateTeaLeaves(subtotal);                                                              // Calculate earned Tea Leaves using the global rewards configuration.
+    const teaLeavesEarned = calculateTeaLeaves(subtotal);                                                               // Calculate earned Tea Leaves using the global rewards configuration.
 
-     // ===========================
-     //    ORDER SUMMARY DISPLAY
-     // ===========================
+    // ===========================
+    //    ORDER SUMMARY DISPLAY
+    // ===========================
 
-     return (
-         <aside className="cart-order-summary">
+    return (
+        <aside className="cart-order-summary">
 
-             {/* ------- SUMMARY HEADING ------- */}
+            {/* ------- SUMMARY HEADING ------- */}
 
-             <h2>Order summary</h2>
+            <h2>Order summary</h2>
 
-             {/* ------- CART SUBTOTAL ------- */}
+            {/* ------- CART SUBTOTAL ------- */}
 
-             <div className="cart-summary-row">
-                 <span>Subtotal</span>
-                 <span>{formatPrice(subtotal)}</span>
-             </div>
+            <div className="cart-summary-row">
+                <span>Subtotal</span>
+                <span>{formatPrice(subtotal)}</span>
+            </div>
 
-             {/* ------- ESTIMATED TAX ------- */}
+            {/* ------- ESTIMATED TAX ------- */}
 
-             <div className="cart-summary-row">
-                 <span>Estimated tax</span>
-                 <span>{formatPrice(estimatedTax)}</span>
-             </div>
+            <div className="cart-summary-row">
+                <span>Estimated tax</span>
+                <span>{formatPrice(estimatedTax)}</span>
+            </div>
 
-             {/* ------- ESTIMATED TOTAL ------- */}
+            {/* ------- ESTIMATED TOTAL ------- */}
 
-             <div className="cart-summary-total">
-                 <strong>Estimated total</strong>
-                 <strong>{formatPrice(orderTotal)}</strong>
-             </div>
+            <div className="cart-summary-total">
+                <strong>Estimated total</strong>
+                <strong>{formatPrice(orderTotal)}</strong>
+            </div>
 
-             {/* ------- TEA LEAVES REWARDS ------- */}
+            {/* ------- TEA LEAVES REWARDS ------- */}
 
-             <div className="cart-rewards-banner">
-                 <Leaf size={16} strokeWidth={3} aria-hidden="true" />
-                 <span>
-                     You'll earn {teaLeavesEarned} Tea Leaves with this order
-                 </span>
-             </div>
+            {showRewards && (
+                <div className="cart-rewards-banner">
+                    <Leaf size={16} strokeWidth={3} aria-hidden="true" />
+                    <span>
+                        You'll earn {teaLeavesEarned} Tea Leaves with this order
+                    </span>
+                </div>
+            )}
 
-             {/* ------- OPTIONAL PAGE ACTIONS ------- */}
+            {/* ------- OPTIONAL PAGE ACTIONS ------- */}
 
-             {children}                                                                                                 {/* Allow the Shopping Cart and Checkout pages to display their own buttons. */}
+            {children}                                                                                                  {/* Allow the Shopping Cart and Checkout pages to display their own buttons. */}
 
-         </aside>
-     );
- }
+        </aside>
+    );
+}
 
- export default CheckoutOrderSummary;
+export default CheckoutOrderSummary;

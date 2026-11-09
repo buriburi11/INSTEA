@@ -1,0 +1,265 @@
+/* =========================== */
+/*    CHECKOUT CONTACT PAGE    */
+/* =========================== */
+
+/* ------- MEMBER / GUEST OPTIONS ------- */
+
+.checkout-contact-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+/* ------- DEFAULT SELECTION CARD ------- */
+
+.checkout-contact-option {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 7px;
+    min-height: 96px;
+    box-sizing: border-box;
+    padding: 18px;
+    background: #FFFFFF;
+    border: 1px solid #E3D5BE;
+    border-radius: 12px;
+    color: #1F3B2E;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+/* ------- CONTACT OPTION HEADINGS ------- */
+
+.checkout-contact-option strong {
+    display: block;
+    color: #1F3B2E;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 20px;                     
+    font-style: italic;                  
+    font-weight: 600;                    
+    line-height: 1.2;
+    letter-spacing: 0;
+}
+
+.checkout-contact-option span {
+    color: #777777;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* ------- SELECTED OPTION ------- */
+
+.checkout-contact-option-selected {
+    background: #EDF2EE;
+    border: 2px solid #1F3B2E;
+    padding: 17px;
+}
+
+.checkout-contact-option:hover:not(.checkout-contact-option-selected) {
+    border-color: #1F3B2E;
+}
+
+/* =========================== */
+/*    MEMBER CONTACT DETAILS   */
+/* =========================== */
+
+.checkout-member-contact {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding: 20px;
+    background: #FFFFFF;
+    border: 1px solid #E3D5BE;
+    border-radius: 12px;
+    color: #1F3B2E;
+}
+
+/* ------- MEMBER CHECK ICON ------- */
+
+.checkout-member-contact > svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #1F3B2E;
+}
+
+/* ------- MEMBER NAME ------- */
+
+.checkout-member-contact strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* ------- MEMBER CONTACT INFORMATION ------- */
+
+.checkout-member-contact p {
+    margin: 0;
+    color: #666666;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* =========================== */
+/*    GUEST CONTACT FORM       */
+/* =========================== */
+
+.checkout-guest-contact {
+    margin-bottom: 28px;
+    padding: 24px;
+    background: #FFFFFF;
+    border: 1px solid #E3D5BE;
+    border-radius: 12px;
+}
+
+/* ------- FORM HEADING ------- */
+
+.checkout-guest-contact h2 {
+    margin: 0 0 8px;
+    color: #1F3B2E;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 25px;
+    font-weight: 600;
+    text-align: left;
+}
+
+/* ------- FORM DESCRIPTION ------- */
+
+.checkout-guest-contact > p {
+    margin: 0 0 22px;
+    color: #666666;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* ------- FORM FIELD LAYOUT ------- */
+
+.checkout-contact-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px 14px;
+}
+
+/* ------- INDIVIDUAL FIELD ------- */
+
+.checkout-contact-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.checkout-contact-field > span {
+    color: #1F3B2E;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ------- TEXT INPUT ------- */
+
+.checkout-contact-field input {
+    width: 100%;
+    min-height: 44px;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    background: #FFFFFF;
+    border: 1px solid #D9D4CA;
+    border-radius: 8px;
+    color: #333333;
+    font: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+.checkout-contact-field input:focus {
+    border-color: #1F3B2E;
+    box-shadow: 0 0 0 2px rgba(31, 59, 46, 0.12);
+}
+
+/* ------- INVALID FIELD ------- */
+
+.checkout-contact-field input[aria-invalid="true"] {
+    border-color: #B34D43;
+}
+
+.checkout-contact-error {
+    color: #B34D43;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+/* =========================== */
+/*    CHECKOUT NAVIGATION      */
+/* =========================== */
+
+.checkout-contact-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* ------- BACK TO PICKUP ------- */
+
+.checkout-contact-back {
+    color: #1F3B2E;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.checkout-contact-back:hover {
+    color: #446E55;
+}
+
+/* ------- CONTINUE BUTTON ------- */
+
+.checkout-contact-actions .checkout-continue-button {
+    width: auto;
+    margin: 0;
+}
+
+/* =========================== */
+/*    RESPONSIVE CONTACT PAGE  */
+/* =========================== */
+
+@media (max-width: 600px) {
+
+    /* ------- MEMBER / GUEST OPTIONS ------- */
+
+    .checkout-contact-options {
+        grid-template-columns: 1fr;
+    }
+
+    /* ------- GUEST FORM ------- */
+
+    .checkout-guest-contact {
+        padding: 18px;
+    }
+
+    .checkout-contact-fields {
+        grid-template-columns: 1fr;
+    }
+
+    /* ------- NAVIGATION ------- */
+
+    .checkout-contact-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .checkout-contact-actions .checkout-continue-button {
+        width: 100%;
+    }
+
+    .checkout-contact-back {
+        text-align: center;
+    }
+}

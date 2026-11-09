@@ -62,7 +62,7 @@
     font-weight: 400;
 }
 
-/* ------- TEA LEAVES REWARDS ------- */
+/* ------- REWARDS BANNER ------- */
 
 .cart-rewards-banner {
     display: flex;
@@ -70,12 +70,15 @@
     gap: 8px;
     margin: 16px 0;
     padding: 10px 12px;
-    background: #F7F0E2;
+    background: #F7F0E2;                   /* Original warm gold/beige background. */
     border-radius: 8px;
-    color: #8A672D;
+    color: #8A672D;                        /* Original golden-brown text. */
     font-size: 13px;
 }
 
+/* ------- REWARDS ICON ------- */
+
 .cart-rewards-banner svg {
     flex-shrink: 0;
+    color: #8A672D;                        /* Match the golden-brown text. */
 }
