@@ -1,0 +1,242 @@
+/* =========================== */
+/*    CHECKOUT PAYMENT PAGE    */
+/* =========================== */
+
+/* ------- PAYMENT METHOD OPTIONS ------- */
+
+.checkout-payment-methods {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+/* ------- DEFAULT PAYMENT METHOD ------- */
+
+.checkout-payment-method {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 90px;
+    box-sizing: border-box;
+    padding: 14px 10px;
+    background: #FFFFFF;
+    border: 1px solid #E3D5BE;
+    border-radius: 10px;
+    color: #1F3B2E;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+/* ------- PAYMENT METHOD ICON ------- */
+
+.checkout-payment-method svg {
+    width: 19px;
+    height: 19px;
+    color: #1F3B2E;
+}
+
+/* ------- SELECTED PAYMENT METHOD ------- */
+
+.checkout-payment-method.checkout-payment-selected {
+    background: #EDF2EE;
+    border-color: #1F3B2E;
+}
+
+/* ------- PAYMENT METHOD HOVER ------- */
+
+.checkout-payment-method:hover:not(.checkout-payment-selected) {
+    border-color: #1F3B2E;
+}
+
+/* =========================== */
+/*    PAYMENT DETAILS PANEL    */
+/* =========================== */
+
+.checkout-payment-details {
+    margin-bottom: 16px;
+    padding: 22px;
+    background: #FFFFFF;
+    border: 1px solid #E3D5BE;
+    border-radius: 12px;
+}
+
+/* ------- CARD DETAILS HEADER ------- */
+
+.checkout-payment-details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.checkout-payment-details-header h2 {
+    margin: 0;
+    color: #1F3B2E;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+/* ------- SQUARE SECURITY LABEL ------- */
+
+.checkout-payment-details-header > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: #666666;
+    font-size: 11px;
+}
+
+.checkout-payment-details-header > span svg {
+    flex-shrink: 0;
+}
+
+/* =========================== */
+/*    CARD FIELD PLACEHOLDERS  */
+/* =========================== */
+
+.checkout-payment-fields {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+/* ------- INDIVIDUAL FIELD ------- */
+
+.checkout-payment-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+/* ------- FIELD LABEL ------- */
+
+.checkout-payment-field label {
+    color: #333333;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ------- NON-INTERACTIVE PLACEHOLDER ------- */
+
+.checkout-payment-placeholder {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    background: #FFFFFF;
+    border: 1px solid #E3D5BE;
+    border-radius: 8px;
+    color: #A1A1AA;
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* =========================== */
+/*    PAYMENT SECURITY MESSAGE */
+/* =========================== */
+
+.checkout-payment-security {
+    margin: 0;
+    color: #777777;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* =========================== */
+/*    DIGITAL WALLET PLACEHOLDER */
+/* =========================== */
+
+.checkout-wallet-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 140px;
+    color: #666666;
+    text-align: center;
+}
+
+.checkout-wallet-placeholder svg {
+    color: #1F3B2E;
+}
+
+.checkout-wallet-placeholder p {
+    max-width: 320px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* =========================== */
+/*    RESPONSIVE PAYMENT PAGE  */
+/* =========================== */
+
+@media (max-width: 600px) {
+
+    /* ------- PAYMENT METHOD OPTIONS ------- */
+
+    .checkout-payment-methods {
+        gap: 8px;
+    }
+
+    .checkout-payment-method {
+        min-height: 76px;
+        padding: 10px 6px;
+        font-size: 12px;
+    }
+
+    /* ------- PAYMENT DETAILS PANEL ------- */
+
+    .checkout-payment-details {
+        padding: 18px;
+    }
+
+    /* ------- CARD DETAILS HEADER ------- */
+
+    .checkout-payment-details-header {
+        align-items: flex-start;
+    }
+
+    /* ------- CARD FIELD PLACEHOLDERS ------- */
+
+    .checkout-payment-fields {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .checkout-payment-field:first-child {
+        grid-column: 1 / -1;
+    }
+}
+
+/* =========================== */
+/*    REVIEW ORDER BUTTON      */
+/* =========================== */
+
+/* ------- PAYMENT PLACEHOLDER BUTTON ------- */
+
+.checkout-payment-review-button {
+    background: #1F3B2E;                /* Match Figma's dark green button. */
+    color: #FFFFFF;
+    opacity: 1;                           /* Prevent the disabled button from appearing gray. */
+    cursor: not-allowed;                  /* Payment processing is not implemented yet. */
+}
+
+/* ------- KEEP PLACEHOLDER BUTTON GREEN ------- */
+
+.checkout-payment-review-button:disabled {
+    background: #1F3B2E;
+    color: #FFFFFF;
+    opacity: 1;
+}
