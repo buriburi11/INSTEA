@@ -57,6 +57,7 @@
  * @property {string} address
  * @property {boolean} isOpen
  * @property {string} [estimatedPickupTime]
+ * @property {{open: string, close: string}} [pickupHours]
  */
 
 /**

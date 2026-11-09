@@ -13,5 +13,6 @@ export const locations = [
     address: '123 Tea Leaf Way, Sacramento, CA 95814',
     isOpen: true,
     estimatedPickupTime: '10 min',
+    pickupHours: {open: '08:00', close: '21:00'},
   },
-]
+];

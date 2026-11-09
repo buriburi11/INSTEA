@@ -556,3 +556,13 @@
         width: 100%;
     }
 }
+
+/* ------- LOCATION OPEN/CLOSED STATUS ------- */
+
+.checkout-location-information .checkout-location-open {
+    color: #1F3B2E;
+}
+
+.checkout-location-information .checkout-location-closed {
+    color: #A14B3B;
+}

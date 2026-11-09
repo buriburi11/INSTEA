@@ -1,8 +1,10 @@
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MapPin } from 'lucide-react';
 import CheckoutOrderSummary from '../../components/checkout/CheckoutOrderSummary';
 import { locations } from '../../data/locations';
+import { getPickupDates, getPickupTimes, getLocationStatus } from '../../utils/pickupScheduling';
+import { loadCheckoutData, saveCheckoutData } from '../../utils/checkoutStorage';
 import './CheckoutPickup.css';
 
 // ===========================
@@ -17,45 +19,77 @@ function CheckoutPickup() {
 
     const [cartItems] = useState(() => {
         try {
-            const savedCart = JSON.parse(localStorage.getItem('instea-cart') || '[]');       // Load the existing Shopping Cart.
-            return Array.isArray(savedCart) ? savedCart : [];                              // Ensure the cart contains an array.
+            const savedCart = JSON.parse(localStorage.getItem('instea-cart') || '[]');                                                  // Load the existing Shopping Cart.
+            return Array.isArray(savedCart) ? savedCart : [];                                                                           // Ensure the cart contains an array.
         } catch {
-            return [];                                                                     // Prevent invalid saved data from crashing checkout.
+            return [];                                                                                                                  // Prevent invalid saved data from crashing checkout.
         }
     });
 
+
+    
     // ===========================
     //    PICKUP SELECTION STATE
     // ===========================
 
-    const [selectedLocation, setSelectedLocation] = useState(locations[0]?.id ?? 0);       // Default to the first available INSTEA location.
-    const [selectedDate, setSelectedDate] = useState(0);                                   // Store the selected date's offset from today.
-    const [selectedTime, setSelectedTime] = useState('ASAP');                              // Default to the earliest pickup option.
+    const pickupDates = getPickupDates();                                                                                               // Generate the available pickup dates.
+    const [savedCheckout] = useState(() => loadCheckoutData());                                                                         // Load existing checkout selections once.
 
-    // ------- PICKUP DATES -------
+    // ------- SELECTED LOCATION -------
 
-    const pickupDates = Array.from({ length: 3 }, (_, index) => {
-        const date = new Date();                                                           // Start with today's local date.
-        date.setHours(0, 0, 0, 0);
-        date.setDate(date.getDate() + index);                                              // Generate today and the next two days.
-
-        return {
-            offset: index,
-            label: index === 0 ? 'Today' : index === 1 ? 'Tomorrow' : new Intl.DateTimeFormat('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).format(date),
-            date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-        };
+    const [selectedLocation, setSelectedLocation] = useState(() => {
+        const savedLocation = locations.find(
+            location => location.id === savedCheckout.pickupLocationId
+        );                                                                                                                              // Check whether the saved location still exists.
+        return savedLocation?.id ?? locations[0]?.id ?? '';                                                                             // Restore a valid location or use the first location.
     });
 
-    // ------- PLACEHOLDER PICKUP TIMES -------
+    // ------- SELECTED DATE -------
 
-    const pickupTimes = [
-        { value: 'ASAP', label: 'ASAP', description: '10–15 min' },
-        { value: '10:30 AM', label: '10:30 AM' },
-        { value: '10:45 AM', label: '10:45 AM' },
-        { value: '11:00 AM', label: '11:00 AM', disabled: true },
-        { value: '11:15 AM', label: '11:15 AM' },
-        { value: '11:30 AM', label: '11:30 AM' },
-    ];                                                                                     // Temporary Figma examples; real availability belongs to INST-63.
+    const [selectedDate, setSelectedDate] = useState(() => {
+        const savedDate = pickupDates.find(
+            date => date.value === savedCheckout.pickupDate
+        );                                                                                                                              // Check whether the saved date is still available.
+        return savedDate?.value ?? pickupDates[0]?.value ?? '';                                                                         // Restore a valid date or default to today.
+    });
+
+    // ------- SELECTED TIME -------
+
+    const [selectedTime, setSelectedTime] = useState(
+        () => savedCheckout.pickupTime ?? ''
+    );                                                                                                                                  // Restore the saved pickup time if one exists.
+
+    // ------- SELECTED STORE -------
+
+    const selectedStore = locations.find(location => location.id === selectedLocation);                                                 // Find the store selected by the customer.
+
+    // ------- AVAILABLE PICKUP TIMES ------- 
+
+    const pickupTimes = getPickupTimes(selectedDate, selectedStore?.pickupHours)                                                        // Generate pickup times using the selected store's hours.
+        .filter(time => !time.disabled)                                                                                                 // Remove past times and slots without enough preparation time.
+        .slice(0, 6);                                                                                                                   // Display only the next six available pickup times.
+
+    // ------- VALIDATE PICKUP SELECTION -------
+
+    const selectedTimeIsValid = pickupTimes.some(time =>
+        time.value === selectedTime && !time.disabled
+    );                                                                                                                                  // Confirm the selected time is still available.
+
+
+    // ===========================
+    //    SAVE PICKUP SELECTION
+    // ===========================
+
+    useEffect(() => {
+
+        saveCheckoutData({
+            pickupLocationId: selectedLocation,                                              // Store the selected location ID.
+            pickupDate: selectedDate,                                                        // Store the selected calendar date.
+            pickupTime: selectedTimeIsValid ? selectedTime : '',                             // Never persist an expired or unavailable time.
+        });
+
+    }, [selectedLocation, selectedDate, selectedTime, selectedTimeIsValid]);                  // Save whenever a pickup selection changes.
+
 
     // ===========================
     //    EMPTY CART PROTECTION
@@ -126,9 +160,12 @@ function CheckoutPickup() {
                                 <button
                                     key={location.id ?? index}
                                     type="button"
-                                    className={`checkout-location-card ${selectedLocation === (location.id ?? index) ? 'checkout-selected' : ''}`}
-                                    onClick={() => setSelectedLocation(location.id ?? index)}
-                                    aria-pressed={selectedLocation === (location.id ?? index)}
+                                    className={`checkout-location-card ${selectedLocation === location.id ? 'checkout-selected' : ''}`}
+                                    aria-pressed={selectedLocation === location.id}
+                                    onClick={() => {
+                                        setSelectedLocation(location.id);                                                               // Save the selected pickup location.
+                                        setSelectedTime('');                                                                            // Clear the time because store hours may differ.
+                                    }}
                                 >
                                     {/* ------- LOCATION ICON ------- */}
 
@@ -148,13 +185,21 @@ function CheckoutPickup() {
 
                                         {/* ------- LOCATION HOURS ------- */}
 
-                                        {location.hours && (
-                                            <span className="checkout-location-hours">
-                                                {typeof location.hours === 'string'
-                                                    ? location.hours
-                                                    : 'View store hours'}
-                                            </span>
-                                        )}
+                                        
+                                        {/* ------- LIVE LOCATION STATUS ------- */}
+
+                                        {(() => {
+                                            const status = getLocationStatus(location.pickupHours);                                     // Calculate whether this location is currently open.
+
+                                            return (
+                                                <span
+                                                    className={`checkout-location-hours ${status.isOpen ? 'checkout-location-open' : 'checkout-location-closed'}`}
+                                                >
+                                                    {status.label}
+                                                </span>
+                                            );
+                                        })()}
+
 
                                     </span>
                                 </button>
@@ -179,14 +224,14 @@ function CheckoutPickup() {
 
                             {pickupDates.map(date => (
                                 <button
-                                    key={date.offset}
+                                    key={date.value}
                                     type="button"
-                                    className={`checkout-date-card ${selectedDate === date.offset ? 'checkout-selected' : ''}`}
+                                    className={`checkout-date-card ${selectedDate === date.value ? 'checkout-selected' : ''}`}
                                     onClick={() => {
-                                        setSelectedDate(date.offset);                                          // Update the selected pickup date.
-                                        setSelectedTime('');                                                   // Clear the previous time selection when the date changes.
+                                        setSelectedDate(date.value);                                                                    // Update the selected pickup date.
+                                        setSelectedTime('');                                                                            // Clear the previous time selection when the date changes.
                                     }}
-                                    aria-pressed={selectedDate === date.offset}
+                                    aria-pressed={selectedDate === date.value}
                                 >
                                     <strong>{date.label}</strong>
                                     <span>{date.date}</span>
@@ -205,7 +250,7 @@ function CheckoutPickup() {
                                     type="button"
                                     disabled={time.disabled}
                                     className={`checkout-time-card ${selectedTime === time.value ? 'checkout-selected' : ''}`}
-                                    onClick={() => setSelectedTime(time.value)}                              // Save the customer's selected pickup time.
+                                    onClick={() => setSelectedTime(time.value)}                                                         // Save the customer's selected pickup time.
                                     aria-pressed={selectedTime === time.value}
                                 >
                                     <strong>{time.label}</strong>
@@ -223,7 +268,7 @@ function CheckoutPickup() {
                     <button
                         type="button"
                         className="checkout-continue-button"
-                        disabled={!selectedTime}
+                        disabled={!selectedLocation || !selectedDate || !selectedTimeIsValid}
                     >
                         Continue to contact
                     </button>
