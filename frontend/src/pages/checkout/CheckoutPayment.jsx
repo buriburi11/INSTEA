@@ -8,7 +8,7 @@ import { CreditCard, Smartphone, Wallet, Lock } from 'lucide-react';
 import useAuth from '../../auth/useAuth';
 import CheckoutProgress from '../../components/checkout/CheckoutProgress';
 import CheckoutOrderSummary from '../../components/checkout/CheckoutOrderSummary';
-import { loadCheckoutData } from '../../utils/checkoutStorage';
+import { loadCheckoutData, saveCheckoutData } from '../../utils/checkoutStorage';
 import './CheckoutPickup.css';
 import './CheckoutPayment.css';
 
@@ -44,10 +44,31 @@ function CheckoutPayment() {
     const [checkoutData] = useState(() => loadCheckoutData());                   // Restore pickup and contact information.
 
     // ===========================
-    //    PAYMENT METHOD SELECTION
+    //    PAYMENT METHOD STATE
     // ===========================
 
-    const [paymentMethod, setPaymentMethod] = useState('card');                  // Card is selected by default, matching Figma.
+    // ------- RESTORE SAVED PAYMENT METHOD -------
+
+    const [paymentMethod, setPaymentMethod] = useState(() => {
+        const savedCheckout = loadCheckoutData();
+
+        const allowedMethods = ['card', 'apple-pay', 'google-pay'];
+
+        return allowedMethods.includes(savedCheckout.paymentMethod)
+            ? savedCheckout.paymentMethod
+            : 'card';
+    });
+
+    // ------- UPDATE AND SAVE PAYMENT METHOD -------
+
+    const handlePaymentMethodChange = (method) => {
+        setPaymentMethod(method);
+
+        saveCheckoutData({
+            ...loadCheckoutData(),
+            paymentMethod: method,
+        });
+    };
 
     const paymentMethods = [
         { id: 'card', label: 'Card', icon: CreditCard },
@@ -125,7 +146,7 @@ function CheckoutPayment() {
                                     type="button"
                                     className={`checkout-payment-method ${paymentMethod === method.id ? 'checkout-payment-selected' : ''}`}
                                     aria-pressed={paymentMethod === method.id}
-                                    onClick={() => setPaymentMethod(method.id)}
+                                    onClick={() => handlePaymentMethodChange(method.id)}
                                 >
                                     <PaymentIcon size={19} aria-hidden="true" />
                                     <span>{method.label}</span>

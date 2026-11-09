@@ -49,16 +49,18 @@ function CheckoutProgress({ currentStep }) {
     //    STEP NAVIGATION
     // ===========================
 
+    
     function canNavigateToStep(stepIndex) {
 
         if (stepIndex === 0) return true;                                               // Pickup is always accessible.
-
         if (stepIndex === 1) return hasPickupSelection;                                 // Contact requires pickup information.
-
         if (stepIndex === 2) return hasPickupSelection && hasContactInformation;        // Payment requires pickup and contact information.
+        if (stepIndex === 3) return hasPickupSelection && hasContactInformation
+        && ['card', 'apple-pay', 'google-pay'].includes(checkoutData.paymentMethod);    // Review requires pickup, contact, and payment information.
 
-        return false;                                                                   // Review remains unavailable until Payment is implemented.
+        return false;                                                                   // Prevent navigating to unavailable steps.
     }
+
 
     function handleStepClick(stepIndex) {
 

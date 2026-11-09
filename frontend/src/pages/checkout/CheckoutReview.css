@@ -1,0 +1,250 @@
+/* ===========================
+   CHECKOUT DETAILS
+   =========================== */
+
+/* ------- DETAILS CONTAINER ------- */
+
+.checkout-review-details {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-bottom: 16px;
+    background: #FFFFFF;
+    border: 1px solid #E3D5BE;
+    border-radius: 12px;
+}
+
+/* ------- INDIVIDUAL DETAIL ROW ------- */
+
+.checkout-review-detail-row {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+    min-height: 35px;
+    box-sizing: border-box;
+    padding: 10px 12px;
+}
+
+.checkout-review-detail-row + .checkout-review-detail-row {
+    border-top: 1px solid #EAE1D3;
+}
+
+/* ------- DETAIL LABEL ------- */
+
+.checkout-review-detail-row strong {
+    color: #333333;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ------- DETAIL VALUE ------- */
+
+.checkout-review-detail-row > span {
+    min-width: 0;
+    color: #777777;
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+/* ------- EDIT BUTTON ------- */
+
+.checkout-review-detail-row button {
+    padding: 4px 0 4px 8px;
+    background: transparent;
+    border: none;
+    color: #1F3B2E;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.checkout-review-detail-row button:hover {
+    text-decoration: underline;
+}
+
+.checkout-review-detail-row button:focus-visible {
+    outline: 2px solid #1F3B2E;
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+
+/* ===========================
+   ORDER ITEMS
+   =========================== */
+
+/* ------- ITEMS CONTAINER ------- */
+
+.checkout-review-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+/* ------- INDIVIDUAL ITEM ------- */
+
+.checkout-review-item {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    color: #333333;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.checkout-review-item span:last-child {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+
+/* ===========================
+   PICKUP INSTRUCTIONS
+   =========================== */
+
+/* ------- INSTRUCTIONS CONTAINER ------- */
+
+.checkout-review-instructions {
+    margin-bottom: 22px;
+    padding: 14px 16px;
+    background: #F1EBDD;
+    border-radius: 10px;
+}
+
+/* ------- INSTRUCTIONS HEADING ------- */
+
+.checkout-review-instructions h2 {
+    margin: 0 0 5px;
+    color: #333333;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ------- INSTRUCTIONS TEXT ------- */
+
+.checkout-review-instructions p {
+    margin: 0;
+    color: #777777;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* ===========================
+   TERMS OF SERVICE
+   =========================== */
+
+/* ------- AGREEMENT CONTAINER ------- */
+
+.checkout-review-terms {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-bottom: 18px;
+    color: #333333;
+    font-size: 12px;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+/* ------- CHECKBOX ------- */
+
+.checkout-review-terms input {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    margin: 2px 0 0;
+    accent-color: #1F3B2E;
+    cursor: pointer;
+}
+
+/* ------- AGREEMENT TEXT ------- */
+
+.checkout-review-terms strong {
+    color: #1F3B2E;
+    font-weight: 600;
+}
+
+
+/* ===========================
+   PLACE ORDER BUTTON
+   =========================== */
+
+/* ------- BUTTON BASE ------- */
+
+.checkout-review-place-order {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 45px;
+    padding: 12px 18px;
+    background: #1F3B2E;
+    border: none;
+    border-radius: 9px;
+    color: #FFFFFF;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+/* ------- ENABLED HOVER ------- */
+
+.checkout-review-place-order:not(:disabled):hover {
+    background: #294D3C;
+}
+
+/* ------- DISABLED STATE ------- */
+
+.checkout-review-place-order:disabled {
+    background: #DFCCAA;
+    color: #657064;
+    cursor: not-allowed;
+}
+
+/* ------- KEYBOARD FOCUS ------- */
+
+.checkout-review-place-order:focus-visible {
+    outline: 2px solid #1F3B2E;
+    outline-offset: 3px;
+}
+
+
+/* ===========================
+   RESPONSIVE LAYOUT
+   =========================== */
+
+/* ------- MOBILE SCREENS ------- */
+
+@media (max-width: 600px) {
+    .checkout-review-detail-row {
+        grid-template-columns: 52px minmax(0, 1fr) auto;
+        gap: 8px;
+        padding: 11px 10px;
+    }
+
+    .checkout-review-detail-row strong,
+    .checkout-review-detail-row > span {
+        font-size: 11px;
+    }
+
+    .checkout-review-instructions {
+        padding: 14px;
+    }
+
+    .checkout-review-terms {
+        font-size: 11px;
+    }
+
+    .checkout-review-place-order {
+        min-height: 46px;
+    }
+}
