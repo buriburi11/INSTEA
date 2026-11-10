@@ -3,6 +3,7 @@
 // =============
 import { useLocation, Navigate, Link } from 'react-router';
 import { Check, Navigation, Phone, Leaf, Stamp, Flame } from 'lucide-react';
+import OrderStatus from '../../components/orders/OrderStatus';
 import './CheckoutConfirmation.css';
 
 // ===========================
@@ -75,38 +76,9 @@ function CheckoutConfirmation() {
                         Demo order {confirmationNumber} has been created.
                     </p>
 
-                    <p className="checkout-confirmation-demo-notice">
-                        This is a simulated order. No payment was processed
-                        and no order was sent to the store.
-                    </p>
-
                     {/* ------- ORDER STATUS ------- */}
 
-                    <section className="checkout-confirmation-status">
-
-                        <span className="checkout-confirmation-eyebrow">
-                            Current status
-                        </span>
-
-                        <h2>Received</h2>
-
-                        <div className="checkout-confirmation-steps">
-                            {['Received', 'Preparing', 'Ready', 'Completed'].map((step, index) => (
-                                <div
-                                    className={`checkout-confirmation-step ${index === 0 ? 'active' : ''}`}
-                                    key={step}
-                                >
-                                    <span className="checkout-confirmation-step-line" />
-                                    <span>{step}</span>
-                                </div>
-                            ))}
-                        </div>
-
-                        <p>
-                            This demo order is not being prepared by the store.
-                        </p>
-
-                    </section>
+                    <OrderStatus status={order.status ?? 'new'} isDemo={true} />
                     
                     {/* ------- MEMBER REWARDS ------- */}
 
