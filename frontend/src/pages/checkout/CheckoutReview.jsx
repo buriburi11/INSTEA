@@ -169,6 +169,7 @@ function CheckoutReview() {
         const demoOrder = {
             id: orderId,
             customerName: `${contact.firstName} ${contact.lastName}`,
+            checkoutMode: isMemberCheckout ? 'member' : 'guest',                                        // Preserve checkout mode for the confirmation page.
             items: orderItems,
             subtotal,
             estimatedTax,
@@ -189,7 +190,7 @@ function CheckoutReview() {
         });
 
         // ------- CLEAR COMPLETED CHECKOUT -------
-
+        
         localStorage.removeItem('instea-cart');                                                         // Clear cart after creating the demo order.
         window.dispatchEvent(new Event('instea-cart-updated'));                                         // Notify the header to refresh its cart count.
         clearCheckoutData();                                                                            // Clear pickup, contact, and payment selections.

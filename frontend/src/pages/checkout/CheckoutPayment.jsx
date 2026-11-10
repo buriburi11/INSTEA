@@ -3,7 +3,7 @@
 // ===========
 
 import { useState } from 'react';
-import { Navigate } from 'react-router';
+import { Navigate, useNavigate } from 'react-router';
 import { CreditCard, Smartphone, Wallet, Lock } from 'lucide-react';
 import useAuth from '../../auth/useAuth';
 import CheckoutProgress from '../../components/checkout/CheckoutProgress';
@@ -18,6 +18,8 @@ import './CheckoutPayment.css';
 
 function CheckoutPayment() {
 
+    const navigate = useNavigate();                                             // Navigate to the checkout review page.
+    
     // ===========================
     //    CUSTOMER AUTHENTICATION
     // ===========================
@@ -68,6 +70,19 @@ function CheckoutPayment() {
             ...loadCheckoutData(),
             paymentMethod: method,
         });
+    };
+
+    // ------- CONTINUE TO REVIEW -------
+
+    const handleReviewOrder = () => {
+
+        saveCheckoutData({
+            ...loadCheckoutData(),
+            paymentMethod,
+        });                                                                            // Preserve the selected demo payment method.
+
+        navigate('/checkout/review');                                                  // Continue without processing payment.
+
     };
 
     const paymentMethods = [
@@ -218,8 +233,7 @@ function CheckoutPayment() {
                     <button
                         type="button"
                         className="checkout-continue-button checkout-payment-review-button"
-                        disabled
-                        title="Payment processing will be available when Square is integrated."
+                        onClick={handleReviewOrder}
                     >
                         Review order
                     </button>

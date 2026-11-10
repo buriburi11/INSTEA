@@ -2,7 +2,7 @@
 //    IMPORTS
 // =============
 import { useLocation, Navigate, Link } from 'react-router';
-import { Check, MapPin } from 'lucide-react';
+import { Check, Navigation, Phone, Leaf, Stamp, Flame } from 'lucide-react';
 import './CheckoutConfirmation.css';
 
 // ===========================
@@ -20,8 +20,21 @@ function CheckoutConfirmation() {
 
     const firstName = order.customerName?.split(' ')[0] || 'Guest';
 
-    const formattedTotal = Number(order.total || 0).toFixed(2);
+    // ------- DISPLAY CONFIRMATION NUMBER -------
 
+    const confirmationNumber = `#${order.id.slice(-8).toUpperCase()}`;                  // Shorten the demo reference for display only.
+
+    // ------- STORE CONTACT LINKS -------
+
+    const storeAddress = order.pickupLocation?.address || '';
+    const storeName = order.pickupLocation?.name || 'INSTEA';
+    const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${storeName}, ${storeAddress}`)}`;
+    const storePhone = order.pickupLocation?.phone || '';
+
+    // ------- CHECKOUT MODE -------
+
+    const isMemberCheckout = order.checkoutMode === 'member';                           // Show member-only content only for member checkout.
+    const formattedTotal = Number(order.total || 0).toFixed(2);
     const formattedPickupDate = order.pickupDate
         ? new Date(`${order.pickupDate}T12:00:00`).toLocaleDateString('en-US', {
             month: 'short',
@@ -59,7 +72,7 @@ function CheckoutConfirmation() {
                     <h1>Thank you, {firstName}.</h1>
 
                     <p className="checkout-confirmation-subtitle">
-                        Demo order {order.id} has been created.
+                        Demo order {confirmationNumber} has been created.
                     </p>
 
                     <p className="checkout-confirmation-demo-notice">
@@ -94,37 +107,67 @@ function CheckoutConfirmation() {
                         </p>
 
                     </section>
+                    
+                    {/* ------- MEMBER REWARDS ------- */}
 
-                    {/* ------- PICKUP DETAILS ------- */}
+                    {isMemberCheckout && (
+                        <section
+                            className="checkout-confirmation-rewards"
+                            aria-label="Member rewards preview"
+                        >
+                            <div className="checkout-confirmation-reward-card">
+                                <Leaf size={19} aria-hidden="true" />
+                                <strong>Tea Leaves</strong>
+                                <span>Member rewards</span>
+                            </div>
 
-                    <section className="checkout-confirmation-pickup">
+                            <div className="checkout-confirmation-reward-card">
+                                <Stamp size={19} aria-hidden="true" />
+                                <strong>Milk Tea Ritual</strong>
+                                <span>Stamp card</span>
+                            </div>
 
-                        <h2>Pickup details</h2>
+                            <div className="checkout-confirmation-reward-card">
+                                <Flame size={19} aria-hidden="true" />
+                                <strong>Streak</strong>
+                                <span>Member progress</span>
+                            </div>
 
-                        <p>
-                            <strong>{order.pickupLocation?.name || 'Selected location'}</strong>
-                        </p>
-
-                        <p>{order.pickupLocation?.address}</p>
-
-                        <p>{formattedPickupDate} · {formattedPickupTime}</p>
-
-                    </section>
-
+                            <p className="checkout-confirmation-rewards-note">
+                                Rewards preview only. Demo orders do not earn Tea Leaves,
+                                stamps, or streak progress.
+                            </p>
+                        </section>
+                    )}
+                    
                     {/* ------- ACTIONS ------- */}
 
                     <div className="checkout-confirmation-actions">
 
-                        <Link to="/locations" className="checkout-confirmation-primary-action">
-                            <MapPin size={16} aria-hidden="true" />
-                            Store locations
-                        </Link>
+                        <a
+                            href={directionsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="checkout-confirmation-primary-action"
+                        >
+                            <Navigation size={16} aria-hidden="true" />
+                            Directions
+                        </a>
 
-                        <Link to="/menu" className="checkout-confirmation-secondary-action">
-                            Back to menu
-                        </Link>
+                        <a
+                            href={`tel:${storePhone.replace(/[^\d+]/g, '')}`}
+                            className="checkout-confirmation-secondary-action"
+                        >
+                            <Phone size={16} aria-hidden="true" />
+                            Contact store
+                        </a>
 
                     </div>
+
+                    <p className="checkout-confirmation-action-note">
+                        Demo store information only. Directions and contact details are fictional.
+                    </p>
+
 
                 </div>
 
@@ -138,7 +181,7 @@ function CheckoutConfirmation() {
 
                     <div className="checkout-confirmation-receipt-row">
                         <span>Confirmation</span>
-                        <strong>{order.id}</strong>
+                        <strong>{confirmationNumber}</strong>
                     </div>
 
                     <div className="checkout-confirmation-receipt-row">
@@ -171,16 +214,6 @@ function CheckoutConfirmation() {
 
                             </div>
                         ))}
-                    </div>
-
-                    <div className="checkout-confirmation-receipt-row">
-                        <span>Subtotal</span>
-                        <strong>${Number(order.subtotal).toFixed(2)}</strong>
-                    </div>
-
-                    <div className="checkout-confirmation-receipt-row">
-                        <span>Estimated tax</span>
-                        <strong>${Number(order.estimatedTax).toFixed(2)}</strong>
                     </div>
 
                     <div className="checkout-confirmation-receipt-total">
