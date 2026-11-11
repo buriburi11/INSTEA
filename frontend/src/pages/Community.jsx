@@ -12,6 +12,7 @@ import {
     mockTriviaLeaderboard,
     TRIVIA_POINTS_PER_CORRECT_ANSWER
 } from "../data/communityTrivia";
+import { keepOrRetirePoll } from "../data/communityKeepRetirePoll";
 import { communityAnnouncements } from "../data/communityAnnouncements";
 import { events } from "../data/events";
 import { communityMilestone } from "../data/communityMilestone";
@@ -289,7 +290,7 @@ function Community() {
                 <section className="keep-retire-poll">
                     <img
                         src={keepOrRetirePoll.image}
-                        alt="Golden Phoenix Oolong tea"
+                        alt={keepOrRetirePoll.title}
                         className="keep-retire-image"
                     />
 
