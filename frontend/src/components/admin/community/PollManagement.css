@@ -259,10 +259,10 @@
 
 /* Individual poll rows */
 .poll-published-item {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 100px 125px;
     align-items: center;
-    gap: 16px;
+    column-gap: 16px;
     padding: 10px 0;
 }
 
@@ -289,21 +289,26 @@
 }
 
 /* Published status badge */
+/* Published status badge */
 .poll-published-status {
     display: inline-flex;
     align-items: center;
     justify-content: center;
 
-    background-color: #EDF3EE;
-    color: #426653;
+    min-width: 80px;
+    padding: 6px 12px;
+    box-sizing: border-box;
+
+    background-color: #e1efe5;
+    color: #285b3d;
 
     font-family: "Inter", sans-serif;
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 13px;
+    font-weight: 600;
 
-    padding: 6px 12px;
-    border-radius: 20px;
+    border-radius: 999px;
     white-space: nowrap;
+    justify-self: end;
 }
 
 /* General Poll form button layout */
@@ -350,4 +355,45 @@
 /* Publish button hover */
 .poll-form-actions button:last-child:hover {
     background-color: #315541;
+}
+
+/* Delete Poll button */
+.poll-delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border: 1px solid #e9c9c5;
+    border-radius: 8px;
+    background-color: #fff5f3;
+    color: #a4473e;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.poll-delete-button:hover {
+    background-color: #fbe4e0;
+    border-color: #dba9a2;
+}
+
+.poll-delete-button:focus-visible {
+    outline: 2px solid #a4473e;
+    outline-offset: 3px;
+}
+
+/* Replaced polls - gray */
+.poll-published-status.replaced {
+    background-color: #e9e9e9;
+    color: #666666;
+}
+
+/* Expired polls - soft red */
+.poll-published-status.expired {
+    background-color: #fbe7e5;
+    color: #a4473e;
 }

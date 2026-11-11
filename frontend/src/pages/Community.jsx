@@ -60,12 +60,37 @@ function Community() {
     {/*======================*/ }
     {/*Poll Data and Deadline */ }
     {/*======================*/ }
-    const poll = mockPolls[0];
-    const keepOrRetirePoll = mockPolls[1];
+    // Get the polls published by the admin
+    const savedPolls = JSON.parse(
+        localStorage.getItem("instea-polls") || "null"
+    );
+
+    const allPolls = savedPolls ?? mockPolls;
+
+    // Find the newest General Poll that has not been replaced
+    const poll = [...allPolls].reverse().find(
+        (item) =>
+            item.type === "general" &&
+            item.status !== "replaced" &&
+            item.status !== "deleted"
+    );
+
+    // Find the newest Keep or Retire Poll that has not been replaced
+    const keepOrRetirePoll = [...allPolls].reverse().find(
+        (item) =>
+            item.type === "keep-retire" &&
+            item.status !== "replaced" &&
+            item.status !== "deleted"
+    );
+
+    // Find the product selected by the admin
+    const keepRetireProduct = products.find(
+        (product) => product.id === keepOrRetirePoll?.productId
+    );
 
     //gets the current date and the poll deadline
     const now = new Date();
-    const endDate = new Date(poll.endsAt);
+    const endDate = poll ? new Date(poll.endsAt) : null;
     // how many day left
     const daysRemaining = Math.ceil(
         (endDate - now) / (1000 * 60 * 60 * 24)
@@ -73,12 +98,12 @@ function Community() {
 
     //checks if the poll is active (seasonal)
     const isPollOpen =
-        poll.status === "active" &&
+        poll?.status === "active" &&
         endDate > now;
     //checks if the poll is active (keep or retire)
     const isKeepRetireOpen =
-        keepOrRetirePoll.status === "active" &&
-        new Date(keepOrRetirePoll.endsAt) > now;
+        keepOrRetirePoll?.status === "active" &&
+        new Date(keepOrRetirePoll?.endsAt) > now;
 
     {/*============*/ }
     {/*Trivia Timer */ }
@@ -213,88 +238,102 @@ function Community() {
             {/*===================*/}
             {/*Seasonal Poll Part */}
             {/*===================*/}
+            {poll ? (
+                <section className="community-poll">
+                    <div className="poll-header">
+                        <p className="poll-label">{poll.title || poll.label}</p>
 
-            <section className="community-poll">
-                <div className="poll-header">
-                    <p className="poll-label">{poll.label}</p>
+                        <p className="poll-deadline">
+                            <Clock size={16} />
+                            {isPollOpen ? `Closes in ${daysRemaining} days` : "Poll Expired"}
+                        </p>
+                    </div>
 
-                    <p className="poll-deadline">
-                        <Clock size={16} />
-                        {isPollOpen ? `Closes in ${daysRemaining} days` : "Poll Expired"}
-                    </p>
-                </div>
+                    <h2 className="poll-title">{poll.question || poll.title}</h2>
 
-                <h2 className="poll-title">{poll.title}</h2>
-
-                <p className="poll-description">{poll.description}</p>
-
-
-                <div className="poll-options">
-                    {poll.options.map((option) => {
-                        // Find the product associated with this poll option
-                        const product = products.find(
-                            (item) => item.id === option.productId
-                        );
-
-                        // Skip this option if the product doesn't exist
-                        if (!product) return null;
-
-                        return (
-                            <button
-                                type="button"
-                                key={option.id}
-                                className={`poll-option-card ${selectedOptionId === option.id ? "selected" : ""}`}
-                                onClick={() => setSelectedOptionId(option.id)}
-                                disabled={!isAuthenticated || hasVoted || !isPollOpen}
-                                aria-pressed={selectedOptionId === option.id}
-                            >
-                                <img
-                                    src={product.imageUrl}
-                                    alt={product.name}
-                                    className="poll-option-image"
-                                    onError={(event) => {
-                                        event.currentTarget.onerror = null;
-                                        event.currentTarget.src = "/images/products/placeholder.svg";
-                                    }}
-                                />
-
-                                <div className="poll-option-content">
-                                    <h3 className="poll-option-name">
-                                        {product.name}
-                                    </h3>
-
-                                    <p className="poll-option-description">
-                                        {product.description}
-                                    </p>
-                                </div>
-                            </button>
-                        );
-                    })}
-                </div>
+                    <p className="poll-description">{poll.description}</p>
 
 
-                {/*===================================*/}
-                {/*Non-members disabled button "Join.."*/}
-                {/*===================================*/}
-                {isAuthenticated ? (
-                    <button type="button" className="poll-login-button"
-                        disabled={selectedOptionId === null || hasVoted || !isPollOpen}
-                        onClick={() => setHasVoted(true)}>
-                        <Leaf size={16} />
-                        Cast ballot · + 15 leaves
-                    </button>
-                ) : (
-                    <Link to="/login" className="poll-login-button">
-                        Join INSTEA Rewards to Vote
-                    </Link>
-                )}
+                    <div className="poll-options">
+                        {poll.options.map((option) => {
+                            // Find the product associated with this poll option
+                            const product = products.find(
+                                (item) => item.id === option.productId
+                            );
 
-                {hasVoted && (
-                    <p className="poll-confirmation">
-                        Your ballot has been submitted!
-                    </p>
-                )}
-            </section>
+                            // Skip this option if the product doesn't exist
+                            if (!product) return null;
+
+                            return (
+                                <button
+                                    type="button"
+                                    key={option.id}
+                                    className={`poll-option-card ${selectedOptionId === option.id ? "selected" : ""}`}
+                                    onClick={() => setSelectedOptionId(option.id)}
+                                    disabled={!isAuthenticated || hasVoted || !isPollOpen}
+                                    aria-pressed={selectedOptionId === option.id}
+                                >
+                                    <img
+                                        src={product.imageUrl}
+                                        alt={product.name}
+                                        className="poll-option-image"
+                                        onError={(event) => {
+                                            event.currentTarget.onerror = null;
+                                            event.currentTarget.src = "/images/products/placeholder.svg";
+                                        }}
+                                    />
+
+                                    <div className="poll-option-content">
+                                        <h3 className="poll-option-name">
+                                            {product.name}
+                                        </h3>
+
+                                        <p className="poll-option-description">
+                                            {product.description}
+                                        </p>
+                                    </div>
+                                </button>
+                            );
+                        })}
+                    </div>
+
+
+                    {/*===================================*/}
+                    {/*Non-members disabled button "Join.."*/}
+                    {/*===================================*/}
+                    {isAuthenticated ? (
+                        <button type="button" className="poll-login-button"
+                            disabled={selectedOptionId === null || hasVoted || !isPollOpen}
+                            onClick={() => setHasVoted(true)}>
+                            <Leaf size={16} />
+                            Cast ballot · + 15 leaves
+                        </button>
+                    ) : (
+                        <Link to="/login" className="poll-login-button">
+                            Join INSTEA Rewards to Vote
+                        </Link>
+                    )}
+
+                    {hasVoted && (
+                        <p className="poll-confirmation">
+                            Your ballot has been submitted!
+                        </p>
+                    )}
+                </section>
+            ) : (
+                <section className="community-poll">
+                    <div className="poll-empty-state">
+                        <Leaf size={32} strokeWidth={1.5} />
+
+                        <h2>No poll available</h2>
+
+                        <p>
+                            Something new is brewing!
+                            Check back soon for our next community vote.
+                        </p>
+                    </div>
+                </section>
+            )}
 
 
 
@@ -302,72 +341,94 @@ function Community() {
             {/*Keep or Retire Poll Part*/}
             {/*========================*/}
             <div className="community-secondary-polls">
-                <section className="keep-retire-poll">
-                    <img
-                        src={keepOrRetirePoll.image}
-                        alt={keepOrRetirePoll.title}
-                        className="keep-retire-image"
-                    />
+                {keepOrRetirePoll ? (
+                    <section className="keep-retire-poll">
+                        <img
+                            src={keepRetireProduct?.imageUrl || keepOrRetirePoll.image || "/images/products/placeholder.svg"}
+                            alt={keepRetireProduct?.name || keepOrRetirePoll.title}
+                            className="keep-retire-image"
+                            onError={(event) => {
+                                event.currentTarget.onerror = null;
+                                event.currentTarget.src = "/images/products/placeholder.svg";
+                            }}
+                        />
 
-                    <div className="keep-retire-content">
-                        <p className="keep-retire-label">
-                            {keepOrRetirePoll.label}
-                        </p>
-
-                        <h2 className="keep-retire-title">
-                            {keepOrRetirePoll.title}
-                        </h2>
-
-                        <p className="keep-retire-description">
-                            {keepOrRetirePoll.description}
-                        </p>
-
-                        {!isKeepRetireOpen && (
-                            <p className="keep-retire-expired">
-                                Poll Expired
+                        <div className="keep-retire-content">
+                            <p className="keep-retire-label">
+                                {keepOrRetirePoll.label}
                             </p>
-                        )}
 
-                        <div className="keep-retire-options">
-                            {keepOrRetirePoll.options.map((option) => (
-                                <button
-                                    key={option.id}
-                                    type="button"
-                                    className={`keep-retire-button ${keepRetireChoice === option.id ? "selected" : ""
-                                        }`}
-                                    onClick={() => {
-                                        if (keepRetireChoice === option.id) {
-                                            setHasVotedKeepRetire(true);
-                                        } else {
-                                            setKeepRetireChoice(option.id);
-                                        }
-                                    }}
+                            <h2 className="keep-retire-title">
+                                {keepRetireProduct?.name || keepOrRetirePoll.title}
+                            </h2>
 
-                                    disabled={!isAuthenticated || hasVotedKeepRetire || !isKeepRetireOpen}
-                                    aria-pressed={keepRetireChoice === option.id}
-                                >
-                                    {option.name === "Keep it" ? (
-                                        <ThumbsUp size={18} />
-                                    ) : (
-                                        <ThumbsDown size={18} />
-                                    )}
+                            <p className="keep-retire-description">
+                                {keepOrRetirePoll.description}
+                            </p>
 
-                                    {option.name}
-                                </button>
-                            ))}
+                            {!isKeepRetireOpen && (
+                                <p className="keep-retire-expired">
+                                    Poll Expired
+                                </p>
+                            )}
+
+                            <div className="keep-retire-options">
+                                {keepOrRetirePoll.options.map((option) => (
+                                    <button
+                                        key={option.id}
+                                        type="button"
+                                        className={`keep-retire-button ${keepRetireChoice === option.id ? "selected" : ""
+                                            }`}
+                                        onClick={() => {
+                                            if (keepRetireChoice === option.id) {
+                                                setHasVotedKeepRetire(true);
+                                            } else {
+                                                setKeepRetireChoice(option.id);
+                                            }
+                                        }}
+
+                                        disabled={!isAuthenticated || hasVotedKeepRetire || !isKeepRetireOpen}
+                                        aria-pressed={keepRetireChoice === option.id}
+                                    >
+                                        {option.name === "Keep it" ? (
+                                            <ThumbsUp size={18} />
+                                        ) : (
+                                            <ThumbsDown size={18} />
+                                        )}
+
+                                        {option.name}
+                                    </button>
+                                ))}
+                            </div>
+
+                            {hasVotedKeepRetire ? (
+                                <p className="poll-confirmation">
+                                    Your vote has been submitted!
+                                </p>
+                            ) : keepRetireChoice !== null ? (
+                                <p className="keep-retire-hint">
+                                    Click your selected answer again to confirm your vote.
+                                </p>
+                            ) : null}
                         </div>
 
-                        {hasVotedKeepRetire ? (
-                            <p className="poll-confirmation">
-                                Your vote has been submitted!
+                    </section>
+
+                ) : (
+                    <section className="keep-retire-poll">
+                        <div className="poll-empty-state">
+                            <Leaf size={32} strokeWidth={1.5} />
+
+                            <h2>No tea on the ballot</h2>
+
+                            <p>
+                                Every blend deserves its moment!
+                                Check back soon to help decide which tea stays.
                             </p>
-                        ) : keepRetireChoice !== null ? (
-                            <p className="keep-retire-hint">
-                                Click your selected answer again to confirm your vote.
-                            </p>
-                        ) : null}
-                    </div>
-                </section>
+                        </div>
+                    </section>
+                )}
+
 
                 {/*========================*/}
                 {/*Past Poll Results Part  */}

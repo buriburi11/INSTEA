@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./PollManagement.css";
 import { products } from "../../../data/products";
 import { mockPolls } from "../../../data/communityPolls";
+import { Trash2 } from "lucide-react";
 
 export default function PollManagement() {
     // Controls which part of the poll creation interface is visible
@@ -17,7 +18,20 @@ export default function PollManagement() {
     // Stores a message when the admin tries to publish an invalid poll
     const [pollError, setPollError] = useState("");
     // Stores the polls displayed in the Published Polls section
-    const [publishedPolls, setPublishedPolls] = useState(mockPolls);
+    // Load saved polls, or use mock polls if nothing has been saved
+    const [publishedPolls, setPublishedPolls] = useState(() => {
+        const savedPolls = localStorage.getItem("instea-polls");
+
+        return savedPolls ? JSON.parse(savedPolls) : mockPolls;
+    });
+
+    // Save poll changes so the public Community page can read them
+    useEffect(() => {
+        localStorage.setItem(
+            "instea-polls",
+            JSON.stringify(publishedPolls)
+        );
+    }, [publishedPolls]);
 
     // Keep or Retire poll form information
     const [keepRetireProduct, setKeepRetireProduct] = useState("");
@@ -208,6 +222,16 @@ export default function PollManagement() {
         setKeepRetireError("");
         // Return to Create Poll screen
         setPollView("closed");
+    };
+
+    const deletePoll = (pollId) => {
+        setPublishedPolls((previousPolls) =>
+            previousPolls.map((poll) =>
+                poll.id === pollId
+                    ? { ...poll, status: "deleted" }
+                    : poll
+            )
+        );
     };
 
 
@@ -596,36 +620,64 @@ export default function PollManagement() {
             <div className="poll-published-list">
                 <h2>Polls</h2>
 
-                {[...publishedPolls].reverse().slice(0, 5).map((poll) => (
-                    <div className="poll-published-item" key={poll.id}>
-                        <div className="poll-published-info">
-                            {/* Main heading: product name for Keep or Retire */}
-                            <h3>
-                                {poll.type === "keep-retire"
-                                    ? products.find((product) => product.id === poll.productId)?.name || poll.title
-                                    : poll.question || poll.title}
-                            </h3>
+                {[...publishedPolls]
+                    .filter((poll) => poll.status !== "deleted")
+                    .reverse()
+                    .slice(0, 5)
+                    .map((poll) => (
+                        <div className="poll-published-item" key={poll.id}>
+                            <div className="poll-published-info">
+                                {/* Main heading: product name for Keep or Retire */}
+                                <h3>
+                                    {poll.type === "keep-retire"
+                                        ? products.find((product) => product.id === poll.productId)?.name || poll.title
+                                        : poll.question || poll.title}
+                                </h3>
 
-                            {/* Subtitle: poll type */}
-                            <p>
-                                {poll.type === "keep-retire"
-                                    ? "Keep or Retire?"
-                                    : poll.question
-                                        ? poll.title
-                                        : poll.label}
-                            </p>
+                                {/* Subtitle: poll type */}
+                                <p>
+                                    {poll.type === "keep-retire"
+                                        ? "Keep or Retire?"
+                                        : poll.question
+                                            ? poll.title
+                                            : poll.label}
+                                </p>
+                            </div>
+
+                            {/* Determine whether the poll has expired */}
+                            <span
+                                className={`poll-published-status ${poll.status === "replaced"
+                                        ? "replaced"
+                                        : new Date(poll.endsAt) <= new Date()
+                                            ? "expired"
+                                            : "active"
+                                    }`}
+                            >
+                                {poll.status === "replaced"
+                                    ? "Replaced"
+                                    : new Date(poll.endsAt) <= new Date()
+                                        ? "Expired"
+                                        : "Active"}
+                            </span>
+
+                            <button
+                                type="button"
+                                className="poll-delete-button"
+                                onClick={() => {
+                                    const confirmed = window.confirm(
+                                        "Are you sure you want to delete this poll?"
+                                    );
+
+                                    if (confirmed) {
+                                        deletePoll(poll.id);
+                                    }
+                                }}
+                            >
+                                <Trash2 size={16} />
+                                Delete
+                            </button>
                         </div>
-
-                        {/* Determine whether the poll has expired */}
-                        <span className={`poll-published-status ${poll.status}`}>
-                            {poll.status === "replaced"
-                                ? "Replaced"
-                                : new Date(poll.endsAt) <= new Date()
-                                    ? "Expired"
-                                    : "Active"}
-                        </span>
-                    </div>
-                ))}
+                    ))}
             </div>
 
         </section>

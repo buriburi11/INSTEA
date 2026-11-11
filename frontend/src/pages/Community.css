@@ -1257,3 +1257,48 @@ button.poll-login-button:disabled {
         grid-template-columns: 1fr;
     }
 }
+
+
+/* Empty states for General and Keep or Retire polls */
+.poll-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 14px;
+    width: 100%;
+    min-height: 220px;
+    padding: 32px 24px;
+    box-sizing: border-box;
+}
+
+.poll-empty-state svg {
+    color: #55745b;
+    width: 36px;
+    height: 36px;
+}
+
+.poll-empty-state h2 {
+    margin: 0;
+    color: #173d32;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 32px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.poll-empty-state p {
+    margin: 0;
+    color: #66766c;
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 420px;
+}
+
+/* Keep or Retire has a taller card layout */
+.keep-retire-poll:has(.poll-empty-state) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
