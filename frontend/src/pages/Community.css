@@ -219,6 +219,7 @@
     font-weight: 400;
     color: #66655E;
     margin: 0;
+    overflow-wrap: anywhere;
 }
 
 .poll-description {

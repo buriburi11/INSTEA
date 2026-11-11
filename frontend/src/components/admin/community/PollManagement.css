@@ -1,0 +1,353 @@
+/* Main poll management container */
+.poll-management {
+    width: 100%;
+}
+
+/* Create Poll card */
+.poll-management-create {
+    background-color: #ffffff;
+    border: 1.5px solid #e5d9c7;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(31, 59, 46, 0.08);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+/* Create Poll heading */
+.poll-management-create h2 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 34px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin: 0;
+}
+
+/* Create Poll button */
+.poll-management-create button {
+    background-color: #1F3B2E;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 30px;
+    font-family: "Inter", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Button hover */
+.poll-management-create button:hover {
+    background-color: #315743;
+}
+
+/* ==================
+   Poll Type Selection
+   ================== */
+
+/* White container matching the Create Poll card */
+.poll-type-selection {
+    background-color: #ffffff;
+    border: 1.5px solid #e5d9c7;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(31, 59, 46, 0.08);
+}
+
+/* Selection heading */
+.poll-type-selection h2 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 34px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin: 0 0 24px;
+}
+
+/* Two poll options side by side */
+.poll-type-options {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: 24px;
+}
+
+/* Each poll option card */
+.poll-type-options button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+
+    padding: 24px;
+    background-color: #ffffff;
+    border: 1.5px solid #e5d9c7;
+    border-radius: 12px;
+
+    color: #1F3B2E;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 30px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+/* Description under each poll type */
+.poll-type-options button span {
+    font-size: 20px;
+    font-weight: 500;
+    color: #314136;
+}
+
+/* Hover effect */
+.poll-type-options button:hover {
+    border-color: #1F3B2E;
+    background-color: #f7f9f5;
+}
+
+/* Cancel button */
+.poll-type-selection>button {
+    display: block;
+    margin-left: auto;
+    padding: 12px 28px;
+
+    background-color: #ffffff;
+    border: 1px solid #1F3B2E;
+    border-radius: 8px;
+
+    color: #1F3B2E;
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.poll-type-selection>button:hover {
+    background-color: #f3f5f0;
+}
+
+/* Stack options on smaller screens */
+@media (max-width: 700px) {
+    .poll-type-options {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================
+   General Poll Creation Form
+   ========================== */
+
+/* White form container */
+.poll-create-form {
+    background-color: #ffffff;
+    border: 1px solid #e5d9c7;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(31, 59, 46, 0.08);
+}
+
+/* Form heading */
+.poll-create-form h2 {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin: 0 0 8px;
+}
+
+/* Form description */
+.poll-create-form>p {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    color: #66756b;
+    margin: 0 0 24px;
+}
+
+/* Each form field */
+.poll-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+/* Field labels */
+.poll-form-field label {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F3B2E;
+}
+
+/* Text inputs and description */
+.poll-form-field input,
+.poll-form-field textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 16px;
+    border: 1px solid #d9d2c5;
+    border-radius: 8px;
+    background-color: #ffffff;
+    color: #1F3B2E;
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+}
+
+/* Description height */
+.poll-form-field textarea {
+    min-height: 110px;
+    resize: vertical;
+}
+
+/* Highlight selected input */
+.poll-form-field input:focus,
+.poll-form-field textarea:focus {
+    outline: 2px solid #52745d;
+    outline-offset: 1px;
+}
+
+/* Description character counter */
+.poll-character-counter {
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    color: #66756b;
+    text-align: right;
+}
+
+/* General Poll product dropdowns */
+.poll-form-field select {
+    width: 100%;
+    padding: 14px 16px;
+
+    font-family: "Inter", sans-serif;
+    font-size: 15px;
+    color: #1F3B2E;
+
+    background-color: #ffffff;
+    border: 1px solid #DED3C2;
+    border-radius: 10px;
+
+    cursor: pointer;
+}
+
+/* Highlight dropdown when selected */
+.poll-form-field select:focus {
+    outline: none;
+    border-color: #426653;
+    box-shadow: 0 0 0 2px rgba(66, 102, 83, 0.12);
+}
+
+/* Published Polls container */
+.poll-published-list {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 24px;
+}
+
+/* Polls heading */
+.poll-published-list h2 {
+    font-family: "Cormorant Garamond", serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin: 0 0 12px;
+}
+
+/* Individual poll rows */
+.poll-published-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+}
+
+/* Divider between polls */
+.poll-published-item+.poll-published-item {
+    border-top: 1px solid #e5e5e5;
+}
+
+/* Poll name */
+.poll-published-info h3 {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1F3B2E;
+    margin: 0 0 4px;
+}
+
+/* Poll subtitle */
+.poll-published-info p {
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    color: #777777;
+    margin: 0;
+}
+
+/* Published status badge */
+.poll-published-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #EDF3EE;
+    color: #426653;
+
+    font-family: "Inter", sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+
+    padding: 6px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+/* General Poll form button layout */
+.poll-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* Shared button styling */
+.poll-form-actions button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Back and Cancel buttons */
+.poll-form-actions button:not(:last-child) {
+    background-color: #ffffff;
+    color: #1F3B2E;
+    border: 1px solid #DED3C2;
+}
+
+/* Back and Cancel button hover */
+.poll-form-actions button:not(:last-child):hover {
+    background-color: #EDF3EE;
+    border-color: #426653;
+    color: #1F3B2E;
+}
+
+/* Publish Poll button */
+.poll-form-actions button:last-child {
+    background-color: #1F3B2E;
+    color: #ffffff;
+    border: 1px solid #1F3B2E;
+}
+
+/* Publish button hover */
+.poll-form-actions button:last-child:hover {
+    background-color: #315541;
+}

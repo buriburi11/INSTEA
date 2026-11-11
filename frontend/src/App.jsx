@@ -22,6 +22,7 @@ import CheckoutConfirmation from './pages/checkout/CheckoutConfirmation';
 import AdminLayout from './layouts/AdminLayout.jsx';
 import AdminPlaceholder from './pages/admin/AdminPlaceholder.jsx';
 import StaffLogin from './pages/admin/StaffLogin.jsx';
+import AdminCommunity from "./pages/admin/AdminCommunity";
 
 import LoginPage from './pages/customer/LoginPage.jsx'
 import RegisterPage from './pages/customer/RegisterPage.jsx'
@@ -57,7 +58,7 @@ function App() {
                 <Route path="products" element={<AdminPlaceholder title="Products" />} />
                 <Route path="customers" element={<AdminPlaceholder title="Customers" />} />
                 <Route path="loyalty" element={<AdminPlaceholder title="Loyalty" />} />
-                <Route path="community" element={<AdminPlaceholder title="Community" />} />
+                <Route path="community" element={<AdminCommunity />} />
                 <Route path="roles" element={<AdminPlaceholder title="Roles & Access" />} />
                 <Route path="*" element={<AdminPlaceholder title="Admin page not found" />} />
             </Route>
