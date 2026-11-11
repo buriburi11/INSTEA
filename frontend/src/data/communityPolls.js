@@ -3,40 +3,38 @@
 export const mockPolls = [
     {
         id: 1,
+        type: "general",
         label: "Winter seasonal vote",
         title: "Which blend should join the winter menu?",
         description: "Vote on our tea masters’ next single-batch creation. The winning blend launches at every counter on Dec 15.",
         status: "active",
         endsAt: "2026-12-10T23:59:59",
+
         options: [
             {
                 id: 1,
-                name: "Spiced Vanilla Cardamom",
-                description: "Ceylon base with Madagascar vanilla bean",
-                image: "/images/products/placeholder.svg"
+                productId: "prod-jasmine-green-tea"
             },
             {
                 id: 2,
-                name: "Yuzu Blossom White Tea",
-                description: "Silver Needle with sun-ripened Kochi yuzu",
-                image: "/images/products/placeholder.svg"
+                productId: "prod-hibiscus-rose-tisane"
             },
             {
                 id: 3,
-                name: "Roasted Chestnut Hojicha",
-                description: "Kyoto bancha with candied chestnuts",
-                image: "/images/products/placeholder.svg"
+                productId: "prod-brown-sugar-milk-tea"
             }
         ]
     },
     {
         id: 2,
+        type: "keep-retire",
         label: "Keep or Retire?",
         title: "Golden Phoenix Oolong",
         description: "Our autumn specialty. Keep it on the menu year-round?",
         image: "/images/products/placeholder.svg",
         status: "active",
         endsAt: "2026-12-15T23:59:59",
+
         options: [
             {
                 id: 1,
@@ -48,7 +46,7 @@ export const mockPolls = [
             }
         ]
     }
-];   
+];
 
 
 export const mockPollHistory = [

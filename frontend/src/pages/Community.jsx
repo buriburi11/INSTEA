@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import "./Community.css";
 import { Clock, Leaf, ThumbsUp, ThumbsDown, Megaphone, Star, Pencil, Trash2, Flag } from "lucide-react";
 import background_Banner from "../assets/Green_Banner.svg";
+import { products } from "../data/products";
 //Authentication and routing
 import useAuth from "../auth/useAuth.js";
 import { Link } from "react-router";
@@ -229,32 +230,46 @@ function Community() {
 
 
                 <div className="poll-options">
-                    {poll.options.map((option) => (
-                        <button
-                            type="button"
-                            key={option.id}
-                            className={`poll-option-card ${selectedOptionId === option.id ? "selected" : ""}`}
-                            onClick={() => setSelectedOptionId(option.id)}
-                            disabled={!isAuthenticated || hasVoted || !isPollOpen}
-                            aria-pressed={selectedOptionId === option.id}
-                        >
-                            <img
-                                src={option.image}
-                                alt={option.name}
-                                className="poll-option-image"
-                            />
+                    {poll.options.map((option) => {
+                        // Find the product associated with this poll option
+                        const product = products.find(
+                            (item) => item.id === option.productId
+                        );
 
-                            <div className="poll-option-content">
-                                <h3 className="poll-option-name">
-                                    {option.name}
-                                </h3>
+                        // Skip this option if the product doesn't exist
+                        if (!product) return null;
 
-                                <p className="poll-option-description">
-                                    {option.description}
-                                </p>
-                            </div>
-                        </button>
-                    ))}
+                        return (
+                            <button
+                                type="button"
+                                key={option.id}
+                                className={`poll-option-card ${selectedOptionId === option.id ? "selected" : ""}`}
+                                onClick={() => setSelectedOptionId(option.id)}
+                                disabled={!isAuthenticated || hasVoted || !isPollOpen}
+                                aria-pressed={selectedOptionId === option.id}
+                            >
+                                <img
+                                    src={product.imageUrl}
+                                    alt={product.name}
+                                    className="poll-option-image"
+                                    onError={(event) => {
+                                        event.currentTarget.onerror = null;
+                                        event.currentTarget.src = "/images/products/placeholder.svg";
+                                    }}
+                                />
+
+                                <div className="poll-option-content">
+                                    <h3 className="poll-option-name">
+                                        {product.name}
+                                    </h3>
+
+                                    <p className="poll-option-description">
+                                        {product.description}
+                                    </p>
+                                </div>
+                            </button>
+                        );
+                    })}
                 </div>
 
 
