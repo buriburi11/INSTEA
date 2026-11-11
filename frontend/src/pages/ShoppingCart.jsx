@@ -4,9 +4,11 @@
 
 import {useState} from 'react';
 import {Link} from 'react-router';
-import { Pencil, Trash2, Leaf, Gift } from 'lucide-react';
+import { Pencil, Trash2, Gift } from 'lucide-react';
 import {formatPrice, calculateCartTotals, calculateItemTotal, } from '../utils/cartPricing'
 import { locations } from '../data/locations';
+import CheckoutOrderSummary from '../components/checkout/CheckoutOrderSummary';                                        // Reuse the shared order summary across the cart and checkout pages.
+import useAuth from '../auth/useAuth';                                                                                 // Access the existing customer authentication system.
 import './ShoppingCart.css';
 
 // ===========================
@@ -14,6 +16,8 @@ import './ShoppingCart.css';
 // ===========================
 
 function ShoppingCart() {
+
+    const { isAuthenticated } = useAuth();                                                                             // Check whether the customer is signed in.
 
     // ------- CART INITIALIZATION -------
 
@@ -60,9 +64,7 @@ function ShoppingCart() {
 
     // ------- CART PRICING -------
 
-    const { subtotal, estimatedTax, orderTotal } = calculateCartTotals(cartItems);                                     // Calculate preliminary subtotal, tax, and total using shared pricing utilities.
-
-    const teaLeavesEarned = Math.floor(Math.round(subtotal * 100) / 10);                                               // Earn 1 Tea Leaf for every $0.10 spent, excluding tax.
+    const { subtotal } = calculateCartTotals(cartItems);                                                               // Calculate the subtotal for other Shopping Cart features that still need it.
 
     // ------- MOCK PICKUP LOCATION -------
 
@@ -252,72 +254,62 @@ function ShoppingCart() {
                                 </div>
                             </div>
 
-                            {/* ------- REWARDS PLACEHOLDER ------- */}
+                            
+                            {/* =========================== */}
+                            {/*    CUSTOMER REWARDS         */}
+                            {/* =========================== */}
 
                             <div className="cart-rewards">
-                                <h2>
-                                    <Gift size={20} strokeWidth={2.5} aria-hidden="true" />
-                                    Rewards available
-                                </h2>
+                                {isAuthenticated ? (
 
-                                {/* TODO: Replace with actual authentication status from backend. */}
-                                {/* When not signed in, display:
-                                    "Reward details will appear here when connected to your account."
-                                */}
+                                    // ------- SIGNED-IN CUSTOMER -------
+                                    <>
+                                        <h2>
+                                            <Gift size={20} strokeWidth={2.5} aria-hidden="true" />
+                                            Rewards available
+                                        </h2>
 
-                                {/* TODO: Replace placeholder reward with backend rewards data. */}
+                                        {/* Replace placeholder rewards with actual member rewards data. */}
 
-                                <p>Placeholder reward · up to placeholder $amount</p>
+                                        <p>Placeholder reward · up to placeholder $amount</p>
 
-                                <button type="button" disabled>
-                                    Apply reward
-                                </button>
+                                        <button type="button" disabled>
+                                            Apply reward
+                                        </button>
+                                    </>
+                                ) : (
+
+                                    // ------- GUEST CUSTOMER -------
+                                    <>
+                                        <h2>
+                                            <Gift size={20} strokeWidth={2.5} aria-hidden="true" />
+                                            Sign in to earn rewards
+                                        </h2>
+                                        <p>
+                                            Sign in to your INSTEA account to earn Tea Leaves and access
+                                            your available rewards.
+                                        </p>
+                                        <Link to="/login" className="cart-rewards-signin">
+                                            Sign in
+                                        </Link>
+                                    </>
+                                )}
                             </div>
+
                         </div>
                     </div>
+                 
+                    {/* =========================== */}
+                    {/*    SHARED ORDER SUMMARY     */}
+                    {/* =========================== */}
 
-                    {/* ===========================
-                           ORDER SUMMARY
-                       =========================== */}
+                    <CheckoutOrderSummary cartItems={cartItems} showRewards={isAuthenticated}>                                                                 {/* Only show Tea Leaves earned for signed-in customers. */}
 
-                    <aside className="cart-order-summary">
-                        <h2>Order summary</h2>
+                        {/* ------- CONTINUE TO CHECKOUT ------- */}
 
-                        {/* ------- CART SUBTOTAL ------- */}
-
-                        <div className="cart-summary-row">
-                            <span>Subtotal</span>
-                            <span>{formatPrice(subtotal)}</span>
-                        </div>
-
-                        {/* ------- ESTIMATED TAX ------- */}
-
-                        <div className="cart-summary-row">
-                            <span>Estimated tax</span>
-                            <span>{formatPrice(estimatedTax)}</span>
-                        </div>
-
-                        {/* ------- ESTIMATED TOTAL ------- */}
-
-                        <div className="cart-summary-total">
-                            <strong>Estimated total</strong>
-                            <strong>{formatPrice(orderTotal)}</strong>
-                        </div>
-
-                        {/* ------- TEA LEAVES REWARDS ------- */}
-
-                        <div className="cart-rewards-banner">
-                            <Leaf size={16} strokeWidth={3} aria-hidden="true" />
-                            <span>
-                                You'll earn {teaLeavesEarned} Tea Leaves with this order
-                            </span>
-                        </div>
-
-                        {/* ------- CHECKOUT PLACEHOLDER ------- */}
-
-                        <button type="button" className="cart-checkout-button" disabled>
+                        <Link to="/checkout" className="cart-checkout-button">
                             Continue to checkout
-                        </button>
+                        </Link>
 
                         {/* ------- CONTINUE SHOPPING ------- */}
 
@@ -325,12 +317,14 @@ function ShoppingCart() {
                             Add more items
                         </Link>
 
-                        {/* ------- TAX DISCLAIMER ------- */}
+                        {/* ------- ESTIMATED TAX DISCLAIMER ------- */}
 
                         <p className="cart-tax-note">
-                            Tax is an estimate. Final taxes will be calculated at checkout.
+                            Tax is estimated and may change when your order is finalized.
                         </p>
-                    </aside>
+
+                    </CheckoutOrderSummary>
+
 
                 </div>
             )}

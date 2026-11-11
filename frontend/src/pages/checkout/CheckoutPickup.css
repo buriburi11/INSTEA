@@ -1,0 +1,652 @@
+
+/* =========================== */
+/*    CHECKOUT PAGE            */
+/* =========================== */
+
+.checkout-page {
+    width: 100%;
+    max-width: 1440px;
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 30px 40px 56px;
+    color: #1F3B2E;
+    font-family: inherit;
+}
+
+/* ------- PAGE HEADING ------- */
+
+.checkout-heading {
+    margin: 0 0 26px;
+    color: #1F3B2E;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.2;
+    text-align: left;
+}
+
+/* =========================== */
+/*    CHECKOUT PROGRESS        */
+/* =========================== */
+
+.checkout-progress {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    margin: 0 0 34px;
+}
+
+/* ------- INDIVIDUAL STEP ------- */
+
+.checkout-progress-step {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 8px;
+    color: #666666;
+    font-size: 13px;
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+/* ------- NUMBERED CIRCLES ------- */
+
+.checkout-step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    border: 1px solid #E3D5BE;
+    border-radius: 50%;
+    background: #FFFFFF;
+    color: #666666;
+    font-size: 12px;
+}
+
+/* ------- CONNECTOR LINES ------- */
+
+.checkout-progress-step:not(:last-child)::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    margin: 0 12px;
+    background: #E3D5BE;
+}
+
+/* ------- ACTIVE STEP ------- */
+
+.checkout-progress-active {
+    color: #1F3B2E;
+    font-weight: 600;
+}
+
+.checkout-progress-active .checkout-step-number {
+    background: #C4A268;
+    border-color: #C4A268;
+    color: #1F3B2E;
+    font-weight: 600;
+}
+
+/* =========================== */
+/*    CHECKOUT LAYOUT          */
+/* =========================== */
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr);
+    align-items: start;
+    gap: 36px;
+    width: 100%;
+    min-width: 0;
+}
+
+.checkout-main-content {
+    text-align: left;
+    min-width: 0;
+}
+
+/* =========================== */
+/*    PICKUP SECTIONS          */
+/* =========================== */
+
+.checkout-pickup-section {
+    margin: 0 0 28px;
+}
+
+.checkout-pickup-section h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 16px;
+    color: #1F3B2E;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: left;
+}
+
+/* ------- SECTION ICONS ------- */
+
+.checkout-pickup-section h2 svg {
+    width: 17px;
+    height: 17px;
+    flex-shrink: 0;
+    color: #1F3B2E;
+}
+
+/* ------- SECTION DESCRIPTIONS ------- */
+
+.checkout-section-description {
+    display: none;
+}
+
+/* =========================== */
+/*    PICKUP LOCATION CARDS    */
+/* =========================== */
+
+.checkout-location-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+/* ------- DEFAULT LOCATION CARD ------- */
+
+.checkout-location-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    width: 100%;
+    min-height: 112px;
+    box-sizing: border-box;
+    padding: 15px 12px;
+    background: #FFFFFF;
+    border: 1px solid #E3D5BE;
+    border-radius: 12px;
+    color: #1F3B2E;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+/* ------- LOCATION INFORMATION ------- */
+
+.checkout-location-information {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+}
+
+.checkout-location-information strong {
+    color: #1F3B2E;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.35;
+}
+
+.checkout-location-information > span {
+    color: #777777;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* ------- SELECTED LOCATION ------- */
+
+.checkout-location-card.checkout-selected {
+    padding: 14px 11px;
+    background: #EDF2EE;
+    border: 2px solid #1F3B2E;
+}
+
+.checkout-location-card.checkout-selected .checkout-selection-circle {
+    border: 5px solid #1F3B2E;
+    background: #FFFFFF;
+}
+
+/* ------- LOCATION ICON ------- */
+
+.checkout-location-icon {
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: #1F3B2E;
+}
+
+/* ------- LOCATION HOURS ------- */
+
+.checkout-location-information .checkout-location-hours {
+    margin-top: 4px;
+    color: #1F3B2E;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* ------- LOCATION HOVER ------- */
+
+.checkout-location-card:hover:not(.checkout-selected) {
+    border-color: #1F3B2E;
+}
+
+/* =========================== */
+/*    PICKUP DATE SELECTOR     */
+/* =========================== */
+
+.checkout-date-list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+/* ------- DEFAULT DATE BUTTON ------- */
+
+.checkout-date-card {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    min-height: 34px;
+    padding: 7px 15px;
+    background: #FFFFFF;
+    border: 1px solid #E3D5BE;
+    border-radius: 999px;
+    color: #333333;
+    cursor: pointer;
+}
+
+/* ------- DATE TEXT ------- */
+
+.checkout-date-card strong {
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+/* ------- HIDE SECOND DATE LABEL ------- */
+
+.checkout-date-card span {
+    display: none;
+}
+
+/* ------- SELECTED DATE ------- */
+
+.checkout-date-card.checkout-selected {
+    background: #1F3B2E;
+    border-color: #1F3B2E;
+    color: #FFFFFF;
+}
+
+.checkout-date-card:hover:not(.checkout-selected) {
+    border-color: #1F3B2E;
+}
+
+/* =========================== */
+/*    PICKUP TIME SELECTOR     */
+/* =========================== */
+
+.checkout-time-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+/* ------- DEFAULT TIME BUTTON ------- */
+
+.checkout-time-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 42px;
+    box-sizing: border-box;
+    padding: 10px 8px;
+    background: #FFFFFF;
+    border: 1px solid #E3D5BE;
+    border-radius: 10px;
+    color: #333333;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+/* ------- TIME TEXT ------- */
+
+.checkout-time-card strong {
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.checkout-time-card span {
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* ------- SELECTED TIME ------- */
+
+.checkout-time-card.checkout-selected {
+    background: #1F3B2E;
+    border-color: #1F3B2E;
+    color: #FFFFFF;
+}
+
+.checkout-time-card.checkout-selected span {
+    color: #FFFFFF;
+}
+
+/* ------- DISABLED TIME ------- */
+
+.checkout-time-card:disabled {
+    background: #F2EBDD;
+    border-color: #E3D5BE;
+    color: #AAAAAA;
+    cursor: not-allowed;
+}
+
+.checkout-time-card:hover:not(:disabled):not(.checkout-selected) {
+    border-color: #1F3B2E;
+}
+
+/* =========================== */
+/*    CONTINUE TO CONTACT      */
+/* =========================== */
+
+.checkout-continue-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 200px;
+    min-height: 42px;
+    box-sizing: border-box;
+    margin-top: 4px;
+    margin-left: 0;
+    margin-right:auto;
+    padding: 12px 24px;
+    background: #1F3B2E;
+    border: none;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.checkout-continue-button:hover:not(:disabled) {
+    background: #294D3C;
+}
+
+.checkout-continue-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* =========================== */
+/*    ORDER SUMMARY OVERRIDES  */
+/* =========================== */
+
+.checkout-page .cart-order-summary {
+    min-height: 0;
+    padding: 24px;
+    border-radius: 14px;
+}
+
+.checkout-page .cart-order-summary h2 {
+    margin-bottom: 18px;
+    font-size: 24px;
+}
+
+.checkout-page .cart-summary-row {
+    margin-bottom: 14px;
+    font-size: 13px;
+}
+
+.checkout-page .cart-summary-total {
+    margin-top: 16px;
+    padding-top: 18px;
+}
+
+.checkout-page .cart-summary-total strong:first-child {
+    font-size: 14px;
+}
+
+.checkout-page .cart-summary-total strong:last-child {
+    font-size: 26px;
+}
+
+.checkout-page .cart-rewards-banner {
+    margin: 12px 0 0;
+    padding: 9px 10px;
+    font-size: 11px;
+}
+
+/* =========================== */
+/*    EMPTY CART               */
+/* =========================== */
+
+.checkout-empty {
+    max-width: 600px;
+    margin: 48px auto;
+    padding: 48px 24px;
+    background: #FFFFFF;
+    border: 1px solid #E5E0D6;
+    border-radius: 14px;
+    text-align: center;
+}
+
+.checkout-empty h1 {
+    margin: 0 0 12px;
+    color: #1F3B2E;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+}
+
+.checkout-empty p {
+    margin: 0 0 24px;
+    color: #666666;
+}
+
+/* ------- EMPTY CART BUTTON ------- */
+
+.checkout-primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 28px;
+    background: #1F3B2E;
+    border-radius: 10px;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.checkout-primary-button:hover {
+    background: #294D3C;
+}
+
+/* =========================== */
+/*    SHARED PAGE LAYOUT       */
+/* =========================== */
+
+.page-layout-container:has(.checkout-page) {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+/* =========================== */
+/*    TABLET RESPONSIVENESS    */
+/* =========================== */
+
+@media (max-width: 900px) {
+
+    .checkout-page {
+        padding: 28px 24px 48px;
+    }
+
+    .checkout-layout {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .checkout-location-card {
+        min-height: 110px;
+    }
+}
+
+/* =========================== */
+/*    MOBILE RESPONSIVENESS    */
+/* =========================== */
+
+@media (max-width: 600px) {
+
+    .checkout-page {
+        padding: 24px 16px 48px;
+    }
+
+    .checkout-heading {
+        font-size: 32px;
+    }
+
+    /* ------- PROGRESS INDICATOR ------- */
+
+    .checkout-progress {
+        justify-content: space-between;
+        gap: 6px;
+        margin-bottom: 28px;
+    }
+
+    .checkout-progress-step {
+        font-size: 11px;
+    }
+
+    .checkout-progress-step:not(:last-child)::after {
+        width: 12px;
+        margin: 0 4px;
+    }
+
+    /* ------- LOCATION CARDS ------- */
+
+    .checkout-location-list {
+        grid-template-columns: 1fr;
+    }
+
+    .checkout-location-card {
+        min-height: 72px;
+    }
+
+    /* ------- TIME SELECTOR ------- */
+
+    .checkout-time-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    /* ------- CONTINUE BUTTON ------- */
+
+    .checkout-continue-button {
+        width: 100%;
+    }
+}
+
+/* ------- LOCATION OPEN/CLOSED STATUS ------- */
+
+.checkout-location-information .checkout-location-open {
+    color: #1F3B2E;
+}
+
+.checkout-location-information .checkout-location-closed {
+    color: #A14B3B;
+}
+
+
+/* =========================== */
+/*    CHECKOUT PROGRESS STATES */
+/* =========================== */
+
+/* ------- CLICKABLE PROGRESS STEPS ------- */
+
+.checkout-progress-step-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+}
+
+/* ------- DISABLED FUTURE STEPS ------- */
+
+.checkout-progress-step-button:disabled {
+    cursor: default;
+}
+
+/* ------- CLICKABLE STEP HOVER ------- */
+
+.checkout-progress-step-button:not(:disabled):hover .checkout-step-label {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* ------- KEYBOARD FOCUS ------- */
+
+.checkout-progress-step-button:focus-visible {
+    outline: 2px solid #1F3B2E;
+    outline-offset: 5px;
+    border-radius: 4px;
+}
+
+/* =========================== */
+/*    COMPLETED CHECKMARKS     */
+/* =========================== */
+
+/* ------- COMPLETED STEP CIRCLE ------- */
+
+.checkout-progress-completed .checkout-step-number {
+    background: #1F3B2E;
+    border: 1px solid #1F3B2E;
+    border-radius: 50%;
+    color: #FFFFFF;
+}
+
+/* ------- COMPLETED STEP CHECK ICON ------- */
+
+.checkout-progress-completed .checkout-step-number svg {
+    width: 14px;
+    height: 14px;
+    color: #FFFFFF;
+    stroke-width: 2.5;
+}
+
+/* ------- COMPLETED STEP LABEL ------- */
+
+.checkout-progress-completed .checkout-step-label {
+    color: #666666;
+}
+
+/* ------- KEEP ACTIVE STEP GOLD ------- */
+
+.checkout-progress-active .checkout-step-number {
+    background: #C4A268;
+    border-color: #C4A268;
+    color: #1F3B2E;
+}
+
+/* ------- SMALL SCREEN BUTTONS ------- */
+
+@media (max-width: 600px) {
+    .checkout-progress-step-button {
+        gap: 6px;
+    }
+}

@@ -13,6 +13,12 @@ import MenuPage from './pages/MenuPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import ShoppingCart from './pages/ShoppingCart';
 
+import CheckoutPickup from './pages/checkout/CheckoutPickup';
+import CheckoutContact from './pages/checkout/CheckoutContact';
+import CheckoutPayment from './pages/checkout/CheckoutPayment';
+import CheckoutReview from './pages/checkout/CheckoutReview';
+import CheckoutConfirmation from './pages/checkout/CheckoutConfirmation';
+
 import AdminLayout from './layouts/AdminLayout.jsx';
 import AdminPlaceholder from './pages/admin/AdminPlaceholder.jsx';
 import StaffLogin from './pages/admin/StaffLogin.jsx';
@@ -73,6 +79,11 @@ function App() {
                 <Route path="/menu" element={<MenuPage />} />
                 <Route path="/menu/:productId" element={<ProductDetailPage />} />
                 <Route path="/cart" element={<ShoppingCart />} />
+                <Route path="/checkout" element={<CheckoutPickup />} />
+                <Route path="/checkout/contact" element={<CheckoutContact />} />
+                <Route path="/checkout/payment" element={<CheckoutPayment />} />
+                <Route path="/checkout/review" element={<CheckoutReview />} />
+                <Route path="/checkout/confirmation/:orderId" element={<CheckoutConfirmation />} />
                 <Route element={<ProtectedRoute />}>
                     <Route path="/profile" element={<ProfilePage />} />
                     {/* Rewards shows the member's own balance, so it requires login like Profile. */}

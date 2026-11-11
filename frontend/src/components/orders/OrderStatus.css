@@ -1,0 +1,92 @@
+/* =========================== */
+/*    ORDER STATUS DISPLAY     */
+/* =========================== */
+
+.checkout-confirmation-status {
+    margin-top: 24px;
+    padding: 22px;
+    min-width: 0;
+    max-width: 100%;
+    border: 1px solid #e4e4dc;
+    border-radius: 6px;
+    background: #fff;
+    color: #1f3b2e;
+    text-align: left;
+}
+
+.checkout-confirmation-eyebrow {
+    display: block;
+    margin-bottom: 10px;
+    color: #788177;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.checkout-confirmation-status h2 {
+    margin: 0 0 20px;
+    color: #1f3b2e;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 30px;
+    font-weight: 600;
+    text-align: left;
+}
+
+/* ------- PROGRESS INDICATOR ------- */
+
+.checkout-confirmation-steps {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    margin: 18px 0;
+}
+
+.checkout-confirmation-step {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: #858c83;
+    font-size: 12px;
+    text-align: center;
+}
+
+.checkout-confirmation-step-line {
+    height: 5px;
+    border-radius: 4px;
+    background: #e3e6df;
+}
+
+.checkout-confirmation-step.active {
+    color: #1f3b2e;
+    font-weight: 700;
+}
+
+.checkout-confirmation-step.active .checkout-confirmation-step-line {
+    background: #1f3b2e;
+}
+
+/* ------- STATUS MESSAGE ------- */
+
+.checkout-confirmation-status > p {
+    margin: 0;
+    color: #677268;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* ------- CANCELLED / REFUNDED ------- */
+
+.checkout-confirmation-status.order-status-terminal h2 {
+    color: #a34c3d;
+}
+
+/* ------- RESPONSIVE ------- */
+
+@media (max-width: 480px) {
+
+    .checkout-confirmation-status {
+        padding: 20px;
+    }
+
+}

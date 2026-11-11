@@ -11,7 +11,9 @@ export const locations = [
     id: 'loc-downtown',
     name: 'INSTEA Downtown',
     address: '123 Tea Leaf Way, Sacramento, CA 95814',
+    phone: '(555) 010-0142',
     isOpen: true,
     estimatedPickupTime: '10 min',
+    pickupHours: {open: '08:00', close: '21:00'},
   },
-]
+];

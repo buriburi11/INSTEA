@@ -1,0 +1,84 @@
+
+/* =========================== */
+/*    SHARED ORDER SUMMARY     */
+/* =========================== */
+
+.cart-order-summary {
+    width: 100%;
+    min-height: 385.75px;
+    box-sizing: border-box;
+    padding: 24px;
+    background: #FFFFFF;
+    border: 1.25px solid #E4DACA;
+    border-radius: 16px;
+    color: #1F3B2E;
+}
+
+/* ------- SUMMARY HEADING ------- */
+
+.cart-order-summary h2 {
+    margin: 0 0 24px;
+    color: #1F3B2E;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: left;
+}
+
+/* ------- SUBTOTAL AND TAX ------- */
+
+.cart-summary-row,
+.cart-summary-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.cart-summary-row {
+    color: #666666;
+    font-size: 15px;
+}
+
+/* ------- ESTIMATED TOTAL ------- */
+
+.cart-summary-total {
+    margin-top: 18px;
+    padding-top: 22px;
+    border-top: 1px solid #E3D5BE;
+    font-size: 20px;
+}
+
+.cart-summary-total strong:first-child {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.cart-summary-total strong:last-child {
+    color: #1F3B2E;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+}
+
+/* ------- REWARDS BANNER ------- */
+
+.cart-rewards-banner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 16px 0;
+    padding: 10px 12px;
+    background: #F7F0E2;                   /* Original warm gold/beige background. */
+    border-radius: 8px;
+    color: #8A672D;                        /* Original golden-brown text. */
+    font-size: 13px;
+}
+
+/* ------- REWARDS ICON ------- */
+
+.cart-rewards-banner svg {
+    flex-shrink: 0;
+    color: #8A672D;                        /* Match the golden-brown text. */
+}

@@ -55,8 +55,10 @@
  * @property {string} id
  * @property {string} name
  * @property {string} address
+ * @property {string} [phone]
  * @property {boolean} isOpen
  * @property {string} [estimatedPickupTime]
+ * @property {{open: string, close: string}} [pickupHours]
  */
 
 /**

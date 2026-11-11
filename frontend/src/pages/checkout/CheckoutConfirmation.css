@@ -1,0 +1,355 @@
+/* =========================== */
+/*    CHECKOUT CONFIRMATION    */
+/* =========================== */
+
+.checkout-confirmation-page {
+    width: 100%;
+    min-height: auto;
+    padding: 40px 6% 36px;
+    box-sizing: border-box;
+    background: #faf8f3;
+    color: #1f3b2e;
+}
+
+.checkout-confirmation-layout {
+    display: grid;
+    box-sizing: border-box;
+    min-width: 0;
+    grid-template-columns: minmax(0, 1.45fr) minmax(320px, 1fr);
+    gap: 64px;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+/* =========================== */
+/*    CONFIRMATION DETAILS     */
+/* =========================== */
+
+.checkout-confirmation-main {
+    min-width: 0;
+}
+
+.checkout-confirmation-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    background: #1f3b2e;
+    color: #fff;
+}
+
+.checkout-confirmation-main h1 {
+    margin: 0 0 12px;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(32px, 3vw, 40px);
+    font-weight: 600;
+    line-height: 1.1;
+}
+
+.checkout-confirmation-subtitle {
+    margin: 0 0 16px;
+    font-size: 16px;
+    color: #4d5a50;
+}
+
+/* =========================== */
+/*    CONFIRMATION ACTIONS     */
+/* =========================== */
+
+.checkout-confirmation-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.checkout-confirmation-primary-action,
+.checkout-confirmation-secondary-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 26px;
+    padding: 3px 18px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+.checkout-confirmation-primary-action {
+    background: #1f3b2e;
+    color: #fff;
+}
+
+.checkout-confirmation-secondary-action {
+    border: 1px solid #e1d8c7;
+    background: #fff;
+    color: #1f3b2e;
+}
+
+
+/* =========================== */
+/*    ORDER RECEIPT            */
+/* =========================== */
+
+.checkout-confirmation-receipt h2 {
+    margin: 0 0 20px;
+    color: #1f3b2e;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 30px;
+    font-weight: 600;
+    text-align: left;
+}
+
+.checkout-confirmation-receipt {
+    align-self: start;
+    padding: 20px;
+    min-width: 0;
+    box-sizing: border-box;
+    border: 1px solid #e4e4dc;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.checkout-confirmation-receipt-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 5px 0;
+    font-size: 13px;
+}
+
+.checkout-confirmation-receipt-row > span {
+    color: #737c72;
+}
+
+.checkout-confirmation-receipt-row strong {
+    font-weight: 600;
+    text-align: right;
+}
+
+.checkout-confirmation-receipt-items {
+    margin: 12px 0;
+    padding: 10px 0;
+    border-top: 1px solid #e8e8e1;
+    border-bottom: 1px solid #e8e8e1;
+}
+
+.checkout-confirmation-receipt-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 6px 0;
+    font-size: 13px;
+}
+
+.checkout-confirmation-receipt-item > div {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.checkout-confirmation-receipt-item small {
+    color: #899087;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.checkout-confirmation-receipt-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding-top: 12px;
+    font-size: 18px;
+}
+
+.checkout-confirmation-receipt-total strong:first-child {
+    font-weight: 500;
+}
+
+.checkout-confirmation-payment-note {
+    margin: 12px 0 0;
+    padding: 8px;
+    border-radius: 4px;
+    background: #f5eedc;
+    color: #64552f;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* =========================== */
+/*    RESPONSIVE LAYOUT        */
+/* =========================== */
+
+@media (max-width: 900px) {
+
+    .checkout-confirmation-layout {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 30px;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .checkout-confirmation-page {
+        padding: 40px 5% 70px;
+        min-width: 0;
+    }
+
+    .checkout-confirmation-main,
+    .checkout-confirmation-receipt {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .checkout-confirmation-receipt-row strong {
+        overflow-wrap: anywhere;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .checkout-confirmation-receipt {
+        padding: 20px;
+    }
+
+    .checkout-confirmation-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .checkout-confirmation-primary-action,
+    .checkout-confirmation-secondary-action {
+        width: 100%;
+    }
+
+}
+
+/* =========================== */
+/*    CONFIRMATION OVERRIDES   */
+/* =========================== */
+
+.checkout-confirmation-page .checkout-confirmation-main,
+.checkout-confirmation-page .checkout-confirmation-receipt {
+    text-align: left;
+}
+
+.checkout-confirmation-page .checkout-confirmation-main h1,
+.checkout-confirmation-page .checkout-confirmation-receipt {
+    color: #1f3b2e;
+    text-align: left;
+}
+
+/* =========================== */
+/*    MEMBER REWARDS           */
+/* =========================== */
+
+.checkout-confirmation-rewards {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 18px;
+}
+
+.checkout-confirmation-reward-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 0;
+    padding: 18px 14px;
+    border-radius: 12px;
+    background: #F5F0E4;
+    color: #1F3B2E;
+}
+
+.checkout-confirmation-reward-card:nth-child(2) {
+    background: #EEF3EF;
+}
+
+.checkout-confirmation-reward-card:nth-child(3) {
+    background: #F0F2EE;
+}
+
+.checkout-confirmation-reward-card strong {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.checkout-confirmation-reward-card span {
+    color: #69736B;
+    font-size: 12px;
+}
+
+.checkout-confirmation-rewards-note {
+    grid-column: 1 / -1;
+    margin: 0;
+    color: #777777;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* ------- REWARDS ICON COLORS ------- */
+
+.checkout-confirmation-reward-card:first-child > svg {
+    color: #9b7835;
+}
+
+.checkout-confirmation-reward-card:nth-child(2) > svg {
+    color: #1f3b2e;
+}
+
+.checkout-confirmation-reward-card:nth-child(3) > svg {
+    color: #9b7835;
+}
+
+/* ------- REWARDS TYPOGRAPHY ------- */
+
+.checkout-confirmation-reward-card strong {
+    font-size: 18px;
+    line-height: 1.1;
+}
+
+.checkout-confirmation-reward-card span {
+    font-size: 11px;
+}
+
+
+@media (max-width: 480px) {
+    .checkout-confirmation-rewards {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================== */
+/*    DEMO STORE NOTICE        */
+/* =========================== */
+
+.checkout-confirmation-action-note {
+    margin: 8px 0 0;
+    color: #777777;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* =========================== */
+/*    RECEIPT PRICE TYPOGRAPHY */
+/* =========================== */
+
+.checkout-confirmation-receipt-item > span {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.checkout-confirmation-receipt-total strong:last-child {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 22px;
+    font-weight: 500;
+}
