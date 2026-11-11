@@ -17,6 +17,9 @@ import { events } from "../data/events";
 import { communityMilestone } from "../data/communityMilestone";
 import { communityReviews } from "../data/communityReviews";
 
+//review date calculation
+import { getReviewDate } from "../utils/reviewDate";
+
 
 
 function Community() {
@@ -763,13 +766,13 @@ function Community() {
                                 Submit review
                             </button>
                             {reviewMessage && (
-                                    <p
-                                        className={`community-review-message ${reviewMessageType}`}
-                                        role={reviewMessageType === "error" ? "alert" : "status"}
-                                    >
-                                        {reviewMessage}
-                                    </p>
-                                )}
+                                <p
+                                    className={`community-review-message ${reviewMessageType}`}
+                                    role={reviewMessageType === "error" ? "alert" : "status"}
+                                >
+                                    {reviewMessage}
+                                </p>
+                            )}
                         </div>
                     </div>
 
@@ -805,11 +808,7 @@ function Community() {
                                         {/* Displays the review date for other customers in their review*/}
                                         {!isOwnReview && (
                                             <span className="community-review-date">
-                                                {review.id === 2
-                                                    ? "2 days ago"
-                                                    : review.id === 3
-                                                        ? "1 week ago"
-                                                        : "2 weeks ago"}
+                                                {getReviewDate(review.date)}
                                             </span>
                                         )}
 
