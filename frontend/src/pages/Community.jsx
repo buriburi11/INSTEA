@@ -25,10 +25,11 @@ import { getReviewDate } from "../utils/reviewDate";
 function Community() {
     const { isAuthenticated, customer } = useAuth();
 
-    {/*This will only display reviews that were aprroved by an admin*/ }
-    const publishedReviews = communityReviews.filter(
-        (review) => review.status === "published"
-    );
+    {/*This will only display reviews that were aprroved by an admin, and only up to 4 (the most recent)*/ }
+    const publishedReviews = communityReviews
+        .filter(review => review.status === "published")
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 4);
 
     {/*===================*/ }
     {/*Seasonal Poll Part */ }
