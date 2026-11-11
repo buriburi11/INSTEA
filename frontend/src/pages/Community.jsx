@@ -45,6 +45,7 @@ function Community() {
     const [keepRetireChoice, setKeepRetireChoice] = useState(null);
     const [hasVotedKeepRetire, setHasVotedKeepRetire] = useState(false);
 
+
     {/*==============*/ }
     {/*  Triva Part  */ }
     {/*==============*/ }
@@ -104,6 +105,28 @@ function Community() {
     const isKeepRetireOpen =
         keepOrRetirePoll?.status === "active" &&
         new Date(keepOrRetirePoll?.endsAt) > now;
+
+    useEffect(() => {
+        if (!poll) return;
+
+        const voteKey = `instea-voted-${poll.id}`;
+        const alreadyVoted = localStorage.getItem(voteKey) !== null;
+
+        setHasVoted(alreadyVoted);
+        setSelectedOptionId(null);
+    }, [poll?.id]);
+
+    // Remember if this browser already voted on Keep or Retire
+    useEffect(() => {
+        if (!keepOrRetirePoll) return;
+
+        const voteKey = `instea-voted-${keepOrRetirePoll.id}`;
+        const alreadyVoted = localStorage.getItem(voteKey) !== null;
+
+        setHasVotedKeepRetire(alreadyVoted);
+        setKeepRetireChoice(null);
+    }, [keepOrRetirePoll?.id]);
+
 
     {/*============*/ }
     {/*Trivia Timer */ }
@@ -179,6 +202,68 @@ function Community() {
 
         setReviewMessage("Your review has been submitted! Check back soon to see it published.");
         setReviewMessageType("success");
+    };
+
+    {/*===============*/ }
+    {/* does the vote */ }
+    {/*===============*/ }
+    const handleGeneralVote = () => {
+        if (!poll || !isPollOpen || selectedOptionId === null || hasVoted) {
+            return;
+        }
+
+        const voteKey = `instea-voted-${poll.id}`;
+
+        // Prevent duplicate votes from this browser
+        if (localStorage.getItem(voteKey)) {
+            setHasVoted(true);
+            return;
+        }
+
+        const savedPolls = JSON.parse(
+            localStorage.getItem("instea-polls") || "null"
+        );
+
+        const updatedPolls = (savedPolls ?? mockPolls).map((item) =>
+            item.id === poll.id
+                ? { ...item, voteCount: (item.voteCount ?? 0) + 1 }
+                : item
+        );
+
+        localStorage.setItem("instea-polls", JSON.stringify(updatedPolls));
+        localStorage.setItem(voteKey, String(selectedOptionId));
+
+        setHasVoted(true);
+    };
+
+    // Saves a Keep or Retire vote
+    const handleKeepRetireVote = (optionId) => {
+        if (!keepOrRetirePoll || !isKeepRetireOpen || hasVotedKeepRetire) {
+            return;
+        }
+
+        const voteKey = `instea-voted-${keepOrRetirePoll.id}`;
+
+        // Prevent duplicate votes from this browser
+        if (localStorage.getItem(voteKey) !== null) {
+            handleKeepRetireVote(option.id);
+            return;
+        }
+
+        const savedPolls = JSON.parse(
+            localStorage.getItem("instea-polls") || "null"
+        );
+
+        const updatedPolls = (savedPolls ?? mockPolls).map((item) =>
+            item.id === keepOrRetirePoll.id
+                ? { ...item, voteCount: (item.voteCount ?? 0) + 1 }
+                : item
+        );
+
+        localStorage.setItem("instea-polls", JSON.stringify(updatedPolls));
+        localStorage.setItem(voteKey, String(optionId));
+
+        setHasVotedKeepRetire(true);
     };
 
     return (
@@ -304,7 +389,7 @@ function Community() {
                     {isAuthenticated ? (
                         <button type="button" className="poll-login-button"
                             disabled={selectedOptionId === null || hasVoted || !isPollOpen}
-                            onClick={() => setHasVoted(true)}>
+                            onClick={handleGeneralVote}>
                             <Leaf size={16} />
                             Cast ballot · + 15 leaves
                         </button>
@@ -381,7 +466,7 @@ function Community() {
                                             }`}
                                         onClick={() => {
                                             if (keepRetireChoice === option.id) {
-                                                setHasVotedKeepRetire(true);
+                                                handleKeepRetireVote(option.id);
                                             } else {
                                                 setKeepRetireChoice(option.id);
                                             }

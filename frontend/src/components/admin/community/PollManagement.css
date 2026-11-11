@@ -260,7 +260,7 @@
 /* Individual poll rows */
 .poll-published-item {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 100px 125px;
+    grid-template-columns: minmax(0, 1fr) 100px 90px 125px;
     align-items: center;
     column-gap: 16px;
     padding: 10px 0;
@@ -396,4 +396,24 @@
 .poll-published-status.expired {
     background-color: #fbe7e5;
     color: #a4473e;
+}
+
+/* Published poll voter count */
+.poll-vote-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    color: #66756b;
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+
+    white-space: nowrap;
+}
+
+.poll-vote-count svg {
+    color: #52745d;
+    flex-shrink: 0;
 }

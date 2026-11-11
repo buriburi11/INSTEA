@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "./PollManagement.css";
 import { products } from "../../../data/products";
 import { mockPolls } from "../../../data/communityPolls";
-import { Trash2 } from "lucide-react";
+import { Trash2, Users } from "lucide-react";
 
 export default function PollManagement() {
     // Controls which part of the poll creation interface is visible
@@ -130,6 +130,7 @@ export default function PollManagement() {
             description: pollDescription.trim(),
             status: "active",
             endsAt: `${pollEndDate}T23:59:59`,
+            voteCount: 0,
 
             // Only include selected products
             options: pollOptions
@@ -188,6 +189,7 @@ export default function PollManagement() {
             description: keepRetireDescription.trim(),
             status: "active",
             endsAt: `${keepRetireEndDate}T23:59:59`,
+            voteCount: 0,
 
             // Voting options are always the same
             options: [
@@ -644,13 +646,18 @@ export default function PollManagement() {
                                 </p>
                             </div>
 
+                            <span className="poll-vote-count">
+                                <Users size={16} />
+                                {poll.voteCount ?? 0} {(poll.voteCount ?? 0) === 1 ? "vote" : "votes"}
+                            </span>
+
                             {/* Determine whether the poll has expired */}
                             <span
                                 className={`poll-published-status ${poll.status === "replaced"
-                                        ? "replaced"
-                                        : new Date(poll.endsAt) <= new Date()
-                                            ? "expired"
-                                            : "active"
+                                    ? "replaced"
+                                    : new Date(poll.endsAt) <= new Date()
+                                        ? "expired"
+                                        : "active"
                                     }`}
                             >
                                 {poll.status === "replaced"
