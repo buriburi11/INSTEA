@@ -399,7 +399,7 @@ function Community() {
                         </Link>
                     )}
 
-                    {hasVoted && (
+                    {isAuthenticated && hasVoted && (
                         <p className="poll-confirmation">
                             Your ballot has been submitted!
                         </p>
@@ -486,7 +486,7 @@ function Community() {
                                 ))}
                             </div>
 
-                            {hasVotedKeepRetire ? (
+                            {isAuthenticated && hasVotedKeepRetire ? (
                                 <p className="poll-confirmation">
                                     Your vote has been submitted!
                                 </p>
