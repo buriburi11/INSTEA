@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&display=swap");
+
+/* Main Admin Community page */
+.admin-community {
+    width: 100%;
+    padding: 32px;
+}
+
+/* Community title - Figma typography */
+.admin-community .admin-community-title {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 50px;
+    font-weight: 600;
+    line-height: 40px;
+    letter-spacing: 0;
+    color: #1F3B2E;
+    margin: 0 0 28px;
+}

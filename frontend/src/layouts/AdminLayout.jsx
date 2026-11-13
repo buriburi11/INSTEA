@@ -20,12 +20,12 @@ export default function AdminLayout() {
         <header className="admin-shell__header">
           <div>
             <p className="admin-shell__store">Store name</p>
-            <p>Welcome, staff member</p>
+            <p className="admin-shell__welcome">Welcome, Staff Member</p>
           </div>
 
           <div className="admin-shell__profile">
             <div>
-              <p>Staff member</p>
+              <p>Staff Member</p>
               <span>Administrator</span>
             </div>
 

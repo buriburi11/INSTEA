@@ -1,3 +1,6 @@
+/* Shared INSTEA admin fonts */
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap");
+
 .admin-shell {
   --admin-background: #faf6ee;
   --admin-sidebar: #1e3d30;
@@ -5,6 +8,7 @@
   --admin-muted: #6b7169;
   --admin-border: #e3ddcf;
   --admin-gold: #bea064;
+
 
   display: grid;
   grid-template-columns: 230px minmax(0, 1fr);
@@ -28,6 +32,14 @@
 
 .admin-shell p {
   margin: 0;
+}
+
+/* Welcome message in the admin header */
+.admin-shell__welcome {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #1F3B2E;
 }
 
 .admin-shell__sidebar {
@@ -63,18 +75,23 @@
   min-width: 0;
 }
 
+/* Main admin header */
 .admin-shell__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
+  height: 90px;
+  min-height: 90px;
   padding: 20px 32px;
   border-bottom: 1px solid var(--admin-border);
 }
 
+/* Store name in the admin header */
 .admin-shell__store {
   color: var(--admin-muted);
-  font-size: 13px;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
 }
 
 .admin-shell__profile {
@@ -126,6 +143,27 @@
     padding: 24px;
   }
 }
+
 .admin-shell.admin-shell--collapsed {
   grid-template-columns: 76px minmax(0, 1fr);
+}
+
+/* ===================
+   Shared Admin 
+   =================== */
+
+/* Default font for admin pages */
+.admin-shell__content {
+  font-family: "Inter", sans-serif;
+  color: #1F3B2E;
+}
+
+/* Main page titles (Community, Orders, Menu, etc.) */
+.admin-shell__content h1 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: 50px;
+  font-weight: 600;
+  line-height: 40px;
+  letter-spacing: 0;
+  color: #1F3B2E;
 }
