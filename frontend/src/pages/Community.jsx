@@ -151,16 +151,27 @@ function Community() {
     }, [hasStartedTrivia, hasSubmittedTriviaAnswer, hasFinishedTrivia, timeLeft]);
 
     {/*===================*/ }
-    {/*Announcements Part */ }
+    {/*Active Announcements*/ }
     {/*===================*/ }
-    {/*checks if active and can only have max of two announcements*/ }
-    const activeAnnouncements = communityAnnouncements
+
+    // Load announcements created by the admin
+    const savedAnnouncements = JSON.parse(
+        localStorage.getItem("instea-announcements") || "null"
+    );
+
+    // Use saved announcements or original mock data
+    const allAnnouncements = savedAnnouncements ?? communityAnnouncements;
+
+    // Show only the 2 most recent active announcements
+    const activeAnnouncements = allAnnouncements
         .filter((announcement) => {
             return (
-                announcement.status === "published" &&
+                ["active", "published"].includes(announcement.status) &&
                 new Date(announcement.endAt).getTime() > Date.now()
             );
         })
+        .slice()
+        .reverse()
         .slice(0, 2);
 
     {/*====================*/ }

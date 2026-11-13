@@ -1,4 +1,5 @@
 import PollManagement from "../../components/admin/community/PollManagement";
+import AnnouncementManagement from "../../components/admin/community/AnnouncementManagement";
 import "./AdminCommunity.css";
 
 export default function AdminCommunity() {
@@ -12,6 +13,9 @@ export default function AdminCommunity() {
 
             {/* Poll Management */}
             <PollManagement />
+
+            {/* Announcement Management */}
+            <AnnouncementManagement />
 
         </section>
     );
