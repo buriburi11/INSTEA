@@ -781,6 +781,9 @@ button.poll-login-button:disabled {
     font-weight: 550;
     color: #2A2A27;
     margin: 0px 0 0px;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    white-space: normal;
 }
 
 /* Announcement and social calendar description */
@@ -791,6 +794,16 @@ button.poll-login-button:disabled {
     font-weight: 400;
     color: #66655E;
     margin: 0;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    white-space: normal;
+}
+.announcement-content {
+    min-width: 0;
+}
+
+.announcement-icon {
+    flex-shrink: 0;
 }
 
 /* Message when no announcements are available */
