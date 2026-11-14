@@ -1,0 +1,293 @@
+/* Order history (INST-68), based on the Figma "Order history" screen.
+   Colors match ProfilePage.css: #faf6ee cream, #1d4232 green, #bc9141 gold. */
+
+.order-history-page {
+  min-height: 70vh;
+  padding: 55px 28px 60px;
+  background: #faf6ee;
+  color: #2b2b27;
+  text-align: left;
+}
+
+.order-history-container {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+}
+
+.order-history-container > h1 {
+  margin: 0 0 32px;
+  color: #1d4232;
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.order-history-body {
+  width: min(100%, 940px);
+  margin: 0 auto;
+  padding-top: 30px;
+}
+
+/* ----- Filters ----- */
+
+.order-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+
+.order-filter {
+  padding: 8px 20px;
+  border: 1px solid #ddcfb9;
+  border-radius: 999px;
+  background: #fff;
+  color: #1d4232;
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.order-filter:hover {
+  border-color: #1d4232;
+}
+
+.order-filter.active {
+  border-color: #1d4232;
+  background: #1d4232;
+  color: #fff;
+}
+
+/* ----- Order cards ----- */
+
+.order-list {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.order-card {
+  padding: 24px 26px 20px;
+  border: 1px solid #e6dac6;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.order-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.order-card-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: #1d4232;
+  font-family: Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+
+.order-status-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: #e8f0e9;
+  color: #25563b;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.order-status-badge.completed {
+  background: #f1e8d8;
+  color: #4a4136;
+}
+
+.order-status-badge.cancelled,
+.order-status-badge.refunded {
+  background: #fbe9e7;
+  color: #a83a2f;
+}
+
+.order-card-meta {
+  margin: 6px 0 0;
+  color: #716c64;
+  font-size: 0.88rem;
+}
+
+.order-card-total {
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.order-card-price {
+  margin: 0;
+  color: #1d4232;
+  font-family: Georgia, serif;
+  font-size: 1.35rem;
+}
+
+.order-card-leaves {
+  margin: 4px 0 0;
+  color: #8f6a24;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.order-card-items {
+  margin: 14px 0 0;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #ece2d1;
+  color: #2b2b27;
+}
+
+.order-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.order-action-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  border: 1px solid #ddcfb9;
+  border-radius: 10px;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.order-action-button.secondary {
+  background: #fff;
+  color: #1d4232;
+}
+
+.order-action-button.secondary:hover {
+  border-color: #1d4232;
+}
+
+.order-action-button.primary {
+  border-color: #1d4232;
+  background: #1d4232;
+  color: #fff;
+}
+
+.order-action-button.primary:hover {
+  background: #163427;
+}
+
+.order-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 6px;
+  padding: 9px 4px;
+  border: 0;
+  background: transparent;
+  color: #1d4232;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.order-action-link:hover {
+  text-decoration: underline;
+}
+
+.order-card-notice {
+  margin: 12px 0 0;
+  color: #716c64;
+  font-size: 0.88rem;
+}
+
+.order-card-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid #ddcfb9;
+  border-radius: 12px;
+  background: #faf6ee;
+}
+
+.order-card-confirm p {
+  margin: 0;
+  color: #2b2b27;
+  font-size: 0.92rem;
+}
+
+.order-card-confirm > div {
+  display: flex;
+  gap: 8px;
+}
+
+.order-action-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+/* ----- Empty, loading, and error states ----- */
+
+.order-history-message {
+  margin: 0;
+  padding: 30px;
+  border: 1px dashed #ddcfb9;
+  border-radius: 16px;
+  color: #716c64;
+  text-align: center;
+}
+
+.order-history-empty {
+  padding: 50px 30px;
+  border: 1px solid #e6dac6;
+  border-radius: 16px;
+  background: #fff;
+  text-align: center;
+}
+
+.order-history-empty h2 {
+  margin: 0 0 8px;
+  color: #1d4232;
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.order-history-empty p {
+  margin: 0 0 22px;
+  color: #716c64;
+}
+
+@media (max-width: 640px) {
+  .order-history-page {
+    padding: 35px 16px 45px;
+  }
+
+  .order-card {
+    padding: 20px 18px 16px;
+  }
+
+  .order-card-top {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .order-card-total {
+    text-align: left;
+  }
+}
