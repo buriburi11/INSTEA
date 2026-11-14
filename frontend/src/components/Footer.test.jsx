@@ -21,7 +21,7 @@ describe('Footer', () => {
   it('links navigation items to their routes', () => {
     renderFooter()
     expect(screen.getByRole('link', { name: 'Menu' })).toHaveAttribute('href', '/menu')
-    expect(screen.getByRole('link', { name: 'Staff Portal' })).toHaveAttribute('href', '/staff_portal')
+    expect(screen.getByRole('link', { name: 'Staff Portal' })).toHaveAttribute('href', '/staff-portal')
   })
 
   it('opens social links in a new tab safely', () => {
