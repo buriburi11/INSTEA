@@ -1,0 +1,449 @@
+.member-dashboard-page {
+  max-width: 1180px;
+  min-height: 700px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+}
+
+.member-dashboard-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(340px, 0.9fr);
+  align-items: start;
+  gap: 1.5rem;
+}
+
+.member-dashboard-column {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.dashboard-card {
+  border: 1px solid #ded4c2;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgb(50 45 35 / 7%);
+}
+
+.dashboard-card h2,
+.member-dashboard-section h2 {
+  margin: 0;
+  color: #1f4335;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.55rem;
+  font-weight: 500;
+}
+
+.dashboard-card h3 {
+  margin: 0;
+  color: #1f4335;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 500;
+}
+
+.dashboard-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.dashboard-section-heading p {
+  margin: 0.35rem 0 0;
+  color: #716f69;
+}
+
+.dashboard-eyebrow {
+  margin: 0 0 0.3rem;
+  color: #9b7537;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.member-loyalty-card {
+  padding: 2rem;
+  border-radius: 24px;
+  background: #1f4335;
+  color: #fff;
+  box-shadow: 0 10px 24px rgb(31 67 53 / 18%);
+}
+
+.member-loyalty-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #d5b36f;
+  font-size: 0.83rem;
+  font-weight: 700;
+}
+
+.member-tier-badge {
+  padding: 0.3rem 1.1rem;
+  border: 1px solid #c9a460;
+  border-radius: 999px;
+}
+
+.member-leaves-balance {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  margin: 2rem 0 0.55rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2.5rem, 6vw, 3.7rem);
+}
+
+.member-leaves-balance span {
+  color: #d5b36f;
+  font-size: 1.05rem;
+  font-style: italic;
+}
+
+.member-loyalty-message {
+  color: #d9ddd9;
+}
+
+.member-loyalty-progress {
+  height: 7px;
+  margin-top: 1.5rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 20%);
+}
+
+.member-loyalty-progress span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #d1ad68;
+}
+
+.member-loyalty-progress-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.65rem;
+  color: #c5cdc8;
+  font-size: 0.76rem;
+}
+
+.member-loyalty-progress-label strong {
+  color: #d5b36f;
+}
+
+.member-gold-button,
+.member-dark-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.member-gold-button {
+  box-sizing: border-box;
+  text-align: center;
+  width: 100%;
+  margin-top: 1.7rem;
+  padding: 0.9rem;
+  background: #c9a460;
+  color: #173328;
+}
+
+.member-dark-button {
+  margin-top: 0.65rem;
+  padding: 0.55rem 0.85rem;
+  background: #1f4335;
+  color: #fff;
+  font-size: 0.83rem;
+}
+
+.member-weekly-streak,
+.member-ritual-card {
+  padding: 1.6rem;
+}
+
+.member-streak-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  background: #eef2ed;
+  color: #486453;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.member-streak-weeks {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.55rem;
+  margin: 1.4rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.member-streak-weeks li {
+  display: grid;
+  min-height: 108px;
+  place-items: center;
+  padding: 0.7rem 0.25rem;
+  border: 1px solid #ded4c2;
+  border-radius: 13px;
+  background: #fbf7ef;
+  font-size: 0.72rem;
+}
+
+.member-streak-weeks li.current {
+  border-color: #c9a460;
+}
+
+.member-streak-icon {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 50%;
+  background: #1f4335;
+  color: #fff;
+}
+
+.member-streak-weeks li.current .member-streak-icon {
+  background: #c9a460;
+  color: #1f4335;
+}
+
+.member-streak-footer {
+  margin: 1rem 0 0;
+  color: #716f69;
+  font-size: 0.84rem;
+}
+
+.member-ritual-stamps {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.45rem;
+  margin: 1.4rem 0;
+}
+
+.member-ritual-stamps span {
+  aspect-ratio: 1;
+  border: 1px solid #c9a460;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.member-ritual-stamps span.earned {
+  background: #1f4335;
+}
+
+.member-ritual-card p {
+  margin-bottom: 0.5rem;
+  color: #716f69;
+}
+
+.member-text-link {
+  color: #1f4335;
+  font-size: 0.87rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.member-usual-order {
+  display: grid;
+  grid-template-columns: 105px minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.member-usual-order-image {
+  width: 105px;
+  height: 105px;
+  border-radius: 14px;
+  object-fit: cover;
+  background: #f0ece4;
+}
+
+.member-usual-order h2 {
+  font-size: 1.25rem;
+}
+
+.member-usual-options {
+  margin: 0.35rem 0 0;
+  color: #716f69;
+  font-size: 0.83rem;
+}
+
+.member-dashboard-section {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.member-reward-widgets {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.member-reward-widget {
+  padding: 1.1rem;
+  border: 1px solid #e1cc9e;
+  border-radius: 16px;
+  background: #fbf2df;
+}
+
+.member-widget-label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #936d2e;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.member-reward-widget h3 {
+  margin: 0.6rem 0 0.25rem;
+  font-size: 1.15rem;
+}
+
+.member-reward-widget p {
+  margin: 0;
+  color: #716f69;
+  font-size: 0.8rem;
+}
+
+.member-community-widgets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.member-community-widget {
+  display: flex;
+  min-height: 135px;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1.1rem;
+  color: #1f4335;
+  text-decoration: none;
+}
+
+.member-community-widget span {
+  color: #716f69;
+  font-size: 0.78rem;
+}
+
+.member-recommendations {
+  overflow: hidden;
+}
+
+.member-recommendation {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 1px solid #e4dac9;
+  color: #282b29;
+  text-decoration: none;
+}
+
+.member-recommendation:last-child {
+  border-bottom: 0;
+}
+
+.member-recommendation:hover {
+  background: #faf7f1;
+}
+
+.member-recommendation-image {
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  object-fit: cover;
+  background: #f0ece4;
+}
+
+.member-recommendation > span {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.member-recommendation small {
+  overflow: hidden;
+  color: #716f69;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.member-recent-orders {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.member-recent-order {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.member-recent-order > span {
+  display: flex;
+  flex-direction: column;
+}
+
+.member-recent-order small {
+  margin-top: 0.25rem;
+  color: #716f69;
+}
+
+.member-empty-orders {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .member-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .member-dashboard-page {
+    padding: 1.25rem 1rem 3rem;
+  }
+
+  .member-loyalty-card {
+    padding: 1.4rem;
+  }
+
+  .member-loyalty-progress-label {
+    flex-direction: column;
+  }
+
+  .member-streak-weeks {
+    grid-template-columns: repeat(5, minmax(70px, 1fr));
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+
+  .member-ritual-stamps {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .member-community-widgets {
+    grid-template-columns: 1fr;
+  }
+
+  .member-usual-order {
+    grid-template-columns: 82px minmax(0, 1fr);
+  }
+
+  .member-usual-order-image {
+    width: 82px;
+    height: 82px;
+  }
+
+  .member-recommendation {
+    grid-template-columns: 48px minmax(0, 1fr) auto;
+  }
+}
