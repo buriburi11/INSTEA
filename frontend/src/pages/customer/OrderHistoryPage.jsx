@@ -3,8 +3,14 @@ import { Flag, ReceiptText, RotateCcw } from 'lucide-react'
 import { Link } from 'react-router'
 import useAuth from '../../auth/useAuth.js'
 import { getOrdersByCustomer } from '../../services/orderService.js'
-import { calculateTeaLeaves } from '../../data/rewards.js'
 import { formatPrice } from '../../utils/cartPricing.js'
+import {
+  ORDER_CHANNEL_LABELS,
+  ORDER_STATUS_LABELS,
+  formatOrderDate,
+  orderLeaves,
+  orderNumber,
+} from '../../utils/orderDisplay.js'
 import AccountTabs from './AccountTabs.jsx'
 import './OrderHistoryPage.css'
 
@@ -16,48 +22,11 @@ const FILTERS = [
   { id: 'in-store', label: 'In-store' },
 ]
 
-const STATUS_LABELS = {
-  new: 'Received',
-  preparing: 'Preparing',
-  ready: 'Ready',
-  completed: 'Completed',
-  cancelled: 'Cancelled',
-  refunded: 'Refunded',
-}
-
-const CHANNEL_LABELS = { online: 'Online', 'in-store': 'In-store' }
-
-// Times are shown in the store's time zone so every customer sees the same pickup time.
-const STORE_TIME_ZONE = 'America/Los_Angeles'
-
-// "ord-1006" -> "1006"
-function orderNumber(orderId) {
-  return orderId.replace(/^ord-/, '')
-}
-
-function formatOrderDate(isoDate) {
-  const date = new Date(isoDate)
-  const day = date.toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    timeZone: STORE_TIME_ZONE,
-  })
-  const time = date.toLocaleTimeString('en-US', {
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: STORE_TIME_ZONE,
-  })
-  return `${day} · ${time}`
-}
-
 function leavesLabel(order) {
-  if (order.status === 'cancelled' || order.status === 'refunded') {
-    return 'No leaves earned'
-  }
-  const leaves = calculateTeaLeaves(order.subtotal)
+  const { amount, state } = orderLeaves(order)
+  if (state === 'none') return 'No leaves earned'
   // Leaves post after pickup, so orders still in progress show them as pending.
-  return order.status === 'completed' ? `+${leaves} leaves` : `+${leaves} leaves pending`
+  return state === 'earned' ? `+${amount} leaves` : `+${amount} leaves pending`
 }
 
 function OrderCard({ order }) {
@@ -66,7 +35,7 @@ function OrderCard({ order }) {
 
   const details = [
     formatOrderDate(order.createdAt),
-    CHANNEL_LABELS[order.channel],
+    ORDER_CHANNEL_LABELS[order.channel],
     order.pickupLocation?.name,
   ].filter(Boolean)
 
@@ -77,7 +46,7 @@ function OrderCard({ order }) {
           <h2 className="order-card-title">
             Order #{number}
             <span className={`order-status-badge ${order.status}`}>
-              {STATUS_LABELS[order.status] ?? order.status}
+              {ORDER_STATUS_LABELS[order.status] ?? order.status}
             </span>
           </h2>
           <p className="order-card-meta">{details.join(' · ')}</p>

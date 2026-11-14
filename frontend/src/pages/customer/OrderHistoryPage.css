@@ -244,11 +244,6 @@
   color: #716c64;
 }
 
-.order-history-empty .order-card-title {
-  justify-content: center;
-  margin-bottom: 8px;
-}
-
 @media (max-width: 640px) {
   .order-history-page {
     padding: 35px 16px 45px;
