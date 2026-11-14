@@ -4,7 +4,8 @@ import { AuthContext } from '../../auth/AuthContext.js'
 import { getOrdersByCustomer } from '../../services/orderService.js'
 import OrderHistoryPage from './OrderHistoryPage.jsx'
 
-// Alex has two mock orders in src/data/orders.js: ord-1006 (online, new) and ord-1003 (in-store, completed).
+// Alex has three mock orders in src/data/orders.js:
+// ord-1006 (online, new), ord-1003 (in-store, completed), ord-1000 (online, completed, includes sold-out Taro).
 const alex = { id: 'cust-alex-rivera', firstName: 'Alex' }
 const newCustomer = { id: 'cust-brand-new', firstName: 'Casey' }
 
@@ -26,7 +27,7 @@ const cards = () => screen.getAllByRole('listitem')
 describe('getOrdersByCustomer', () => {
   it("returns only that customer's orders, newest first", async () => {
     const orders = await getOrdersByCustomer('cust-alex-rivera')
-    expect(orders.map((o) => o.id)).toEqual(['ord-1006', 'ord-1003'])
+    expect(orders.map((o) => o.id)).toEqual(['ord-1006', 'ord-1003', 'ord-1000'])
   })
 
   it('returns an empty list for a customer with no orders', async () => {
@@ -38,7 +39,7 @@ describe('OrderHistoryPage', () => {
   it('shows multiple orders, newest first', async () => {
     renderHistory()
     expect(await screen.findByText('Order #1006')).toBeInTheDocument()
-    expect(cards()).toHaveLength(2)
+    expect(cards()).toHaveLength(3)
     expect(within(cards()[0]).getByText('Order #1006')).toBeInTheDocument()
     expect(within(cards()[1]).getByText('Order #1003')).toBeInTheDocument()
   })
@@ -72,17 +73,18 @@ describe('OrderHistoryPage', () => {
     expect(screen.getByText('Order #1003')).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Online' }))
-    expect(cards()).toHaveLength(1)
+    expect(cards()).toHaveLength(2)
     expect(screen.getByText('Order #1006')).toBeInTheDocument()
+    expect(screen.queryByText('Order #1003')).not.toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'All' }))
-    expect(cards()).toHaveLength(2)
+    expect(cards()).toHaveLength(3)
   })
 
-  it('shows placeholders for reorder and report an issue', async () => {
+  it('shows a placeholder for report an issue', async () => {
     renderHistory()
-    fireEvent.click(await screen.findByRole('button', { name: 'Reorder order #1006' }))
-    expect(screen.getByRole('status')).toHaveTextContent('Reorder is coming soon.')
+    fireEvent.click(await screen.findByRole('button', { name: 'Report an issue with order #1006' }))
+    expect(screen.getByRole('status')).toHaveTextContent('Issue reporting is coming soon.')
   })
 
   it('shows an empty state when there are no orders', async () => {

@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Flag, ReceiptText, RotateCcw } from 'lucide-react'
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import useAuth from '../../auth/useAuth.js'
 import { getOrdersByCustomer } from '../../services/orderService.js'
+import { getProducts } from '../../services/productService.js'
 import { formatPrice } from '../../utils/cartPricing.js'
 import {
   ORDER_CHANNEL_LABELS,
@@ -11,6 +12,7 @@ import {
   orderLeaves,
   orderNumber,
 } from '../../utils/orderDisplay.js'
+import { buildReorderCart, readCart, replaceCart } from '../../utils/reorder.js'
 import AccountTabs from './AccountTabs.jsx'
 import './OrderHistoryPage.css'
 
@@ -30,8 +32,48 @@ function leavesLabel(order) {
 }
 
 function OrderCard({ order }) {
+  const navigate = useNavigate()
   const [notice, setNotice] = useState('')
+  const [isReordering, setIsReordering] = useState(false)
+  // Set when the cart already has items, so the customer can confirm replacing them.
+  const [pendingReorder, setPendingReorder] = useState(null)
   const number = orderNumber(order.id)
+
+  // INST-70: builds a new cart from this order using today's menu.
+  async function handleReorder() {
+    setNotice('')
+    setIsReordering(true)
+
+    try {
+      const reorder = buildReorderCart(order, await getProducts())
+
+      if (reorder.cartItems.length === 0) {
+        setNotice('None of the items in this order are available right now.')
+        return
+      }
+
+      const itemsInCart = readCart().reduce((total, item) => total + (Number(item.quantity) || 0), 0)
+
+      if (itemsInCart > 0) {
+        setPendingReorder({ ...reorder, itemsInCart })
+        return
+      }
+
+      finishReorder(reorder)
+    } catch {
+      setNotice("We couldn't reorder right now. Please try again.")
+    } finally {
+      setIsReordering(false)
+    }
+  }
+
+  function finishReorder({ cartItems, unavailableItems, changedOptions }) {
+    replaceCart(cartItems)
+    // The cart page reads this to explain anything that couldn't be reordered exactly.
+    navigate('/cart', {
+      state: { reorder: { orderNumber: number, unavailableItems, changedOptions } },
+    })
+  }
 
   const details = [
     formatOrderDate(order.createdAt),
@@ -72,12 +114,12 @@ function OrderCard({ order }) {
           View receipt
         </Link>
 
-        {/* Placeholder: reorder is INST-70. */}
         <button
           type="button"
           className="order-action-button primary"
           aria-label={`Reorder order #${number}`}
-          onClick={() => setNotice('Reorder is coming soon.')}
+          disabled={isReordering}
+          onClick={handleReorder}
         >
           <RotateCcw size={16} aria-hidden="true" />
           Reorder
@@ -94,6 +136,32 @@ function OrderCard({ order }) {
           Report an issue
         </button>
       </div>
+
+      {pendingReorder && (
+        <div className="order-card-confirm" role="alertdialog" aria-label="Replace cart">
+          <p>
+            Your cart has {pendingReorder.itemsInCart}{' '}
+            {pendingReorder.itemsInCart === 1 ? 'item' : 'items'}. Replace{' '}
+            {pendingReorder.itemsInCart === 1 ? 'it' : 'them'} with this order?
+          </p>
+          <div>
+            <button
+              type="button"
+              className="order-action-button primary"
+              onClick={() => finishReorder(pendingReorder)}
+            >
+              Replace cart
+            </button>
+            <button
+              type="button"
+              className="order-action-button secondary"
+              onClick={() => setPendingReorder(null)}
+            >
+              Keep my cart
+            </button>
+          </div>
+        </div>
+      )}
 
       {notice && (
         <p className="order-card-notice" role="status">
