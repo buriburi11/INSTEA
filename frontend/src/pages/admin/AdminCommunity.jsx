@@ -1,5 +1,6 @@
 import PollManagement from "../../components/admin/community/PollManagement";
 import AnnouncementManagement from "../../components/admin/community/AnnouncementManagement";
+import TriviaManagement from "../../components/admin/community/TriviaManagement";
 import "./AdminCommunity.css";
 
 export default function AdminCommunity() {
@@ -16,6 +17,9 @@ export default function AdminCommunity() {
 
             {/* Announcement Management */}
             <AnnouncementManagement />
+
+            {/* Trivia Management */}
+            <TriviaManagement />
 
         </section>
     );

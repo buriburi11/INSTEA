@@ -44,11 +44,7 @@
     background-color: #315743;
 }
 
-/* ==================
-   Poll Type Selection
-   ================== */
-
-/* White container matching the Create Poll card */
+/* Poll Type Selection*/
 .poll-type-selection {
     background-color: #ffffff;
     border: 1.5px solid #e5d9c7;
