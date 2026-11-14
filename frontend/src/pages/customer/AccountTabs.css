@@ -1,0 +1,19 @@
+/* Link tabs in AccountTabs.jsx, styled to match the button tabs in ProfilePage.css. */
+
+.profile-settings-tabs a {
+  flex: 0 0 auto;
+  padding: 0 2px 15px;
+  border-bottom: 2px solid transparent;
+  color: #5f5b54;
+  text-decoration: none;
+}
+
+.profile-settings-tabs a:hover {
+  color: #1d4232;
+}
+
+.profile-settings-tabs a.active {
+  border-bottom-color: #bc9141;
+  color: #1d4232;
+  font-weight: 700;
+}
