@@ -1,0 +1,57 @@
+.admin-roles {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-roles-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.admin-roles-header h1 {
+  margin-bottom: 12px;
+}
+
+.admin-roles-header p,
+.admin-roles-note {
+  color: var(--admin-muted);
+  font-size: 0.8rem;
+}
+
+.admin-roles-header .admin-button {
+  white-space: nowrap;
+}
+
+.admin-roles-admin-heading {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.admin-roles .admin-table {
+  min-width: 760px;
+}
+
+.admin-roles .admin-table td:first-child {
+  min-width: 200px;
+}
+
+.admin-roles [role='status'] {
+  padding: 12px;
+  border-radius: 8px;
+  background: #edf3ee;
+  color: #224f3b;
+}
+
+.admin-roles [role='alert'] {
+  color: #a12e2e;
+}
+
+@media (max-width: 900px) {
+  .admin-roles-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

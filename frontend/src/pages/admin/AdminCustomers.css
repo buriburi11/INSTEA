@@ -1,0 +1,239 @@
+.admin-customers {
+  display: grid;
+  gap: 20px;
+  max-width: 1100px;
+}
+
+.admin-customers h1 {
+  margin-bottom: 4px;
+}
+
+.admin-customers-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 200px;
+  gap: 12px;
+}
+
+.admin-customers-results {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 28px;
+  color: var(--admin-muted);
+  font-size: 0.8rem;
+}
+
+.admin-customers-list .admin-table th:first-child {
+  width: 65%;
+}
+
+.admin-customers-list .admin-table td:first-child {
+  padding: 0;
+}
+
+.admin-customers-list tr:has(.admin-customer-select[aria-pressed='true']) {
+  background: #eef3ee;
+}
+
+.admin-customer-select {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 66px;
+  padding: 12px 16px;
+  border: 0;
+  background: transparent;
+  color: var(--admin-text);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-customer-select:focus-visible {
+  outline: 3px solid #52745d;
+  outline-offset: -3px;
+}
+
+.admin-customer-avatar {
+  display: grid;
+  flex: 0 0 36px;
+  place-items: center;
+  height: 36px;
+  border-radius: 50%;
+  background: #f1eadb;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.admin-customer-identity,
+.admin-customer-balance {
+  display: grid;
+  gap: 3px;
+}
+
+.admin-customer-identity span,
+.admin-customer-balance span {
+  color: var(--admin-muted);
+  font-size: 0.75rem;
+}
+
+.admin-customer-balance {
+  min-width: 80px;
+}
+
+.admin-customer-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.admin-customer-status--active {
+  background: #edf3ee;
+  color: #224f3b;
+}
+
+.admin-customer-status--deactivated {
+  background: #fbeeea;
+  color: #a13628;
+}
+
+.admin-customer-status--unknown {
+  background: #f1efe9;
+  color: #615c53;
+}
+
+.admin-customer-details {
+  padding: 24px;
+  border: 1px solid var(--admin-border);
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgb(31 59 46 / 7%);
+}
+
+.admin-customer-details-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-customer-details h2 {
+  margin: 0 0 4px;
+  color: var(--admin-text);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.admin-customer-details-header p,
+.admin-customer-account-info,
+.admin-customer-management > p {
+  color: var(--admin-muted);
+  font-size: 0.8rem;
+}
+
+.admin-customer-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 20px 0;
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  background: #faf7f0;
+}
+
+.admin-customer-summary > div {
+  padding: 14px;
+  text-align: center;
+}
+
+.admin-customer-summary > div + div {
+  border-left: 1px solid var(--admin-border);
+}
+
+.admin-customer-summary dt {
+  color: var(--admin-muted);
+  font-size: 0.75rem;
+}
+
+.admin-customer-summary dd {
+  margin: 6px 0 0;
+  font-size: 0.875rem;
+}
+
+.admin-customer-account-info {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 20px;
+}
+
+.admin-customer-account-info > div {
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.admin-customer-account-info dd {
+  margin: 0;
+  color: var(--admin-text);
+}
+
+.admin-customer-management {
+  padding-top: 20px;
+  border-top: 1px solid var(--admin-border);
+}
+
+.admin-customer-management h3 {
+  margin: 0 0 6px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.admin-customer-management fieldset {
+  min-width: 0;
+  margin: 20px 0 16px;
+  padding: 0;
+  border: 0;
+}
+
+.admin-customer-management legend {
+  margin-bottom: 10px;
+  padding: 0;
+  font-size: 0.875rem;
+}
+
+.admin-customer-adjustment {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.admin-customer-review {
+  width: 100%;
+  margin-top: 12px;
+}
+
+.admin-customer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-customer-actions .admin-button {
+  flex: 1 1 auto;
+}
+
+@media (max-width: 800px) {
+  .admin-customers-toolbar,
+  .admin-customer-adjustment {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-customer-details {
+    padding: 18px;
+  }
+}

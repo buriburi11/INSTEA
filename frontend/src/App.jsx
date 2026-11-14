@@ -23,6 +23,10 @@ import AdminLayout from './layouts/AdminLayout.jsx';
 import AdminPlaceholder from './pages/admin/AdminPlaceholder.jsx';
 import StaffLogin from './pages/admin/StaffLogin.jsx';
 import AdminCommunity from "./pages/admin/AdminCommunity";
+import AdminCustomers from './pages/admin/AdminCustomers.jsx';
+import AdminOrders from './pages/admin/AdminOrders.jsx';
+import AdminProducts from './pages/admin/AdminProducts.jsx';
+import AdminRoles from './pages/admin/AdminRoles.jsx';
 
 import LoginPage from './pages/customer/LoginPage.jsx'
 import RegisterPage from './pages/customer/RegisterPage.jsx'
@@ -54,12 +58,12 @@ function App() {
             {/* Admin pages */}
             <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminPlaceholder title="Dashboard" />} />
-                <Route path="orders" element={<AdminPlaceholder title="Orders" />} />
-                <Route path="products" element={<AdminPlaceholder title="Products" />} />
-                <Route path="customers" element={<AdminPlaceholder title="Customers" />} />
+                <Route path="orders" element={<AdminOrders />} />
+                <Route path="products" element={<AdminProducts />} />
+                <Route path="customers" element={<AdminCustomers />} />
                 <Route path="loyalty" element={<AdminPlaceholder title="Loyalty" />} />
                 <Route path="community" element={<AdminCommunity />} />
-                <Route path="roles" element={<AdminPlaceholder title="Roles & Access" />} />
+                <Route path="roles" element={<AdminRoles />} />
                 <Route path="*" element={<AdminPlaceholder title="Admin page not found" />} />
             </Route>
 

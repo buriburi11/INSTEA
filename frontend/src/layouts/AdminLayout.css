@@ -167,3 +167,28 @@
   letter-spacing: 0;
   color: #1F3B2E;
 }
+
+.admin-shell__profile .admin-field {
+  min-width: 170px;
+  text-align: left;
+}
+
+.admin-shell .admin-shell__preview-note {
+  margin-bottom: 24px;
+  color: var(--admin-muted);
+  font-size: 0.75rem;
+}
+
+.admin-shell__restricted {
+  padding: 24px;
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+@media (max-width: 900px) {
+  .admin-shell__header {
+    height: auto;
+    flex-wrap: wrap;
+  }
+}

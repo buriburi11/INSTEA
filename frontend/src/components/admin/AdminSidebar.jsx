@@ -14,6 +14,8 @@ import {
 } from 'lucide-react'
 import './AdminSidebar.css'
 import insteaLogo from '../../assets/instea-logo.svg'
+import useAdminPermissions from '../../auth/useAdminPermissions.js'
+import { adminRoutePermissions } from '../../data/adminPermissions.js'
 
 const navigation = [
   { label: 'Overview', path: '/admin', icon: LayoutDashboard, end: true },
@@ -26,6 +28,7 @@ const navigation = [
 ]
 
 export default function AdminSidebar({ collapsed, onToggle }) {
+  const { can } = useAdminPermissions()
   return (
     <aside className="admin-sidebar">
       <div className="admin-sidebar__brand">
@@ -49,7 +52,7 @@ export default function AdminSidebar({ collapsed, onToggle }) {
         className="admin-sidebar__navigation"
         aria-label="Administrator navigation"
       >
-        {navigation.map(({ label, path, icon: Icon, end }) => (
+        {navigation.filter(({ path }) => can(adminRoutePermissions[path])).map(({ label, path, icon: Icon, end }) => (
           <NavLink
             key={path}
             to={path}
