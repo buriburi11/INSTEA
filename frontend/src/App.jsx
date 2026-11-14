@@ -38,6 +38,8 @@ import ResetPasswordPage from './pages/customer/ResetPasswordPage.jsx'
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 import ProfilePage from './pages/customer/ProfilePage.jsx'
 import RewardsPage from './pages/customer/RewardsPage.jsx'
+import OrderHistoryPage from './pages/customer/OrderHistoryPage.jsx'
+import OrderDetailPage from './pages/customer/OrderDetailPage.jsx'
 
 import EventDetails from './pages/EventDetails.jsx';
 
@@ -93,6 +95,8 @@ function App() {
                     <Route path="/profile" element={<ProfilePage />} />
                     {/* Rewards shows the member's own balance, so it requires login like Profile. */}
                     <Route path="/rewards" element={<RewardsPage />} />
+                    <Route path="/orders" element={<OrderHistoryPage />} />
+                    <Route path="/orders/:orderId" element={<OrderDetailPage />} />
                 </Route>
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Route>

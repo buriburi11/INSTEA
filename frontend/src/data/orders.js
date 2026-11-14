@@ -7,6 +7,7 @@
  * - `unitPrice` includes option upcharges; `totalPrice` = unitPrice x quantity.
  * - `estimatedTax` = subtotal x ESTIMATED_TAX_RATE, rounded to the cent.
  * - There is one order for each status.
+ * - `channel` says whether the order was placed online or in-store.
  */
 
 import { locations } from './locations.js'
@@ -59,6 +60,7 @@ export const orders = [
     pickupDate: '2026-10-18',
     pickupTime: '09:30',
     paymentStatus: 'paid',
+    channel: 'online',
     createdAt: '2026-10-18T16:15:00Z',
   },
   {
@@ -89,6 +91,7 @@ export const orders = [
     pickupDate: '2026-10-18',
     pickupTime: '09:20',
     paymentStatus: 'paid',
+    channel: 'online',
     createdAt: '2026-10-18T16:05:00Z',
   },
   {
@@ -117,6 +120,7 @@ export const orders = [
     pickupDate: '2026-10-18',
     pickupTime: '09:10',
     paymentStatus: 'paid',
+    channel: 'online',
     createdAt: '2026-10-18T15:55:00Z',
   },
   {
@@ -157,6 +161,7 @@ export const orders = [
     pickupDate: '2026-10-12',
     pickupTime: '14:00',
     paymentStatus: 'paid',
+    channel: 'in-store',
     createdAt: '2026-10-12T20:45:00Z',
   },
   {
@@ -186,6 +191,7 @@ export const orders = [
     pickupDate: '2026-10-10',
     pickupTime: '08:45',
     paymentStatus: 'refunded',
+    channel: 'online',
     specialInstructions: 'Cancelled by customer before preparation.',
     createdAt: '2026-10-10T15:30:00Z',
   },
@@ -217,6 +223,7 @@ export const orders = [
     pickupDate: '2026-10-05',
     pickupTime: '11:15',
     paymentStatus: 'refunded',
+    channel: 'in-store',
     createdAt: '2026-10-05T18:00:00Z',
   },
 ]
