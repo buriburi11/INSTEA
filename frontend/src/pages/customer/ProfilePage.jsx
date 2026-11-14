@@ -1,16 +1,8 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import useAuth from '../../auth/useAuth.js'
+import AccountTabs from './AccountTabs.jsx'
 import './ProfilePage.css'
-
-const settingsTabs = [
-  'Overview',
-  'Member card',
-  'Rewards',
-  'Orders',
-  'Notifications',
-  'Settings',
-]
 
 export default function ProfilePage() {
   const { customer, logout } = useAuth()
@@ -70,17 +62,7 @@ export default function ProfilePage() {
       <div className="profile-settings-container">
         <h1>Profile &amp; settings</h1>
 
-        <nav className="profile-settings-tabs" aria-label="Customer account">
-          {settingsTabs.map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              className={tab === 'Settings' ? 'active' : ''}
-            >
-              {tab}
-            </button>
-          ))}
-        </nav>
+        <AccountTabs active="Settings" />
 
         {feedback && (
           <div className="profile-settings-feedback" role="status">
