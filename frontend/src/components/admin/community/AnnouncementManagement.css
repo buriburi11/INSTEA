@@ -8,7 +8,7 @@
     background: #ffffff;
     border: 1px solid #e5d8c3;
     border-radius: 20px;
-    padding: 30px;
+    padding: 24px;
     margin-bottom: 30px;
     box-shadow: 0 4px 12px rgba(31, 59, 46, 0.08);
 }
@@ -23,9 +23,9 @@
 
 .announcement-create-header h2 {
     margin: 0;
-    color: #173b30;
+    color: #1F3B2E;
     font-family: "Cormorant Garamond", serif;
-    font-size: 38px;
+    font-size: 34px;
     font-weight: 600;
 }
 
@@ -36,6 +36,7 @@
     border: none;
     border-radius: 8px;
     padding: 14px 30px;
+    font-family: "Inter", sans-serif;
     font-size: 18px;
     font-weight: 600;
     cursor: pointer;

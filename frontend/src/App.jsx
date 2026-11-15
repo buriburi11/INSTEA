@@ -23,6 +23,7 @@ import AdminLayout from './layouts/AdminLayout.jsx'
 import AdminPlaceholder from './pages/admin/AdminPlaceholder.jsx'
 import StaffLogin from './pages/admin/StaffLogin.jsx'
 import AdminCommunity from './pages/admin/AdminCommunity'
+import TriviaQuestionBank from "./pages/admin/TriviaQuestionBank";
 import AdminCustomers from './pages/admin/AdminCustomers.jsx'
 import AdminOrders from './pages/admin/AdminOrders.jsx'
 import AdminProducts from './pages/admin/AdminProducts.jsx'
@@ -66,6 +67,7 @@ function App() {
         <Route path="customers" element={<AdminCustomers />} />
         <Route path="loyalty" element={<AdminPlaceholder title="Loyalty" />} />
         <Route path="community" element={<AdminCommunity />} />
+        <Route path="community/triviaquestions" element={<TriviaQuestionBank />} />
         <Route path="roles" element={<AdminRoles />} />
         <Route
           path="*"
@@ -101,17 +103,17 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<MemberLayout />}>
             <Route
-                path="/member"
-                element={<MemberDashboardPage />}
+              path="/member"
+              element={<MemberDashboardPage />}
             />
             <Route
-            path="/member-card"
-            element={<MemberCardPage />}
+              path="/member-card"
+              element={<MemberCardPage />}
             />
             <Route path="/rewards" element={<RewardsPage />} />
             <Route
-            path="/orders"
-            element={<OrderHistoryPage />}
+              path="/orders"
+              element={<OrderHistoryPage />}
             />
             <Route
               path="/notifications"
