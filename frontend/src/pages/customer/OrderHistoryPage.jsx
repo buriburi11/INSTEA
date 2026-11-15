@@ -13,10 +13,10 @@ import {
   orderNumber,
 } from '../../utils/orderDisplay.js'
 import { buildReorderCart, readCart, replaceCart } from '../../utils/reorder.js'
-import AccountTabs from './AccountTabs.jsx'
 import './OrderHistoryPage.css'
 
 // INST-68: the signed-in customer's past orders, newest first, based on the Figma "Order history" screen.
+// The page title and account tabs come from MemberLayout.
 
 const FILTERS = [
   { id: 'all', label: 'All' },
@@ -240,12 +240,6 @@ export default function OrderHistoryPage() {
   return (
     <main className="order-history-page">
       <div className="order-history-container">
-        <h1>
-          Order <em>history</em>
-        </h1>
-
-        <AccountTabs active="Orders" />
-
         <div className="order-history-body">
           {orders?.length > 0 && (
             <div className="order-filters" role="group" aria-label="Filter orders">

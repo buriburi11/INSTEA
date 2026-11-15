@@ -1,0 +1,67 @@
+.member-layout {
+  background: #fbf7ef;
+  color: #1f2d27;
+}
+
+.member-layout-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 3.25rem 1.5rem 1.4rem;
+}
+
+.member-layout-header h1 {
+  margin: 0;
+  color: #1f4335;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+}
+
+.member-layout-eyebrow {
+  margin: 0 0 0.35rem;
+  color: #9b7537;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.member-layout-notification-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid #ded4c2;
+  border-radius: 999px;
+  background: #fff;
+  color: #1f4335;
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.member-layout-notification-button:hover {
+  border-color: #c9a460;
+}
+
+@media (max-width: 700px) {
+  .member-layout-header {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 2.25rem 1rem 1.25rem;
+  }
+}
+
+.member-layout-title-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.member-layout-eyebrow {
+  margin: 0 0 0.75rem; /* Increase this last value to add more space below the eyebrow */
+  color: #9b7537;
+  font-size: 0.82rem;
+  font-weight: 600;
+}

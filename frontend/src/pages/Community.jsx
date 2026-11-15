@@ -9,11 +9,11 @@ import { Link } from "react-router";
 //Mock data
 import { mockPolls, mockPollHistory } from "../data/communityPolls";
 import {
-    mockTriviaQuestions,
     mockTriviaLeaderboard,
     TRIVIA_POINTS_PER_CORRECT_ANSWER
 } from "../data/communityTrivia";
-import { keepOrRetirePoll } from "../data/communityKeepRetirePoll";
+// Daily Trivia Service
+import { getDailyTrivia } from "../services/triviaService";
 import { communityAnnouncements } from "../data/communityAnnouncements";
 import { events } from "../data/events";
 import { communityMilestone } from "../data/communityMilestone";
@@ -49,13 +49,51 @@ function Community() {
     {/*==============*/ }
     {/*  Triva Part  */ }
     {/*==============*/ }
+    // Today's date for tracking trivia completion
+    const todayTriviaDate = new Date().toLocaleDateString("en-CA");
+    // Unique completion key for today's trivia and current member
+    const triviaCompletionKey = isAuthenticated && customer?.id != null
+        ? `instea-trivia-completed-${customer.id}-${todayTriviaDate}`
+        : null;
+
+    // Check whether this member already completed today's trivia
+    const [hasCompletedToday, setHasCompletedToday] = useState(false);
+
+    // Store today's completed trivia results
+    const [savedTriviaResult, setSavedTriviaResult] = useState(null);
+
+    // Load today's saved trivia results for the current member
+    useEffect(() => {
+        if (!triviaCompletionKey) {
+            setHasCompletedToday(false);
+            setSavedTriviaResult(null);
+            return;
+        }
+
+        const savedCompletion = localStorage.getItem(triviaCompletionKey);
+
+        if (savedCompletion) {
+            const result = JSON.parse(savedCompletion);
+
+            setHasCompletedToday(true);
+            setSavedTriviaResult(result);
+        } else {
+            setHasCompletedToday(false);
+            setSavedTriviaResult(null);
+        }
+    }, [triviaCompletionKey]);
+
+    // Load today's questions once when the component initializes
+    const [dailyTriviaQuestions] = useState(() => getDailyTrivia());
     const [timeLeft, setTimeLeft] = useState(30);
     const [hasFinishedTrivia, setHasFinishedTrivia] = useState(false);
     const [hasStartedTrivia, setHasStartedTrivia] = useState(false);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedTriviaAnswer, setSelectedTriviaAnswer] = useState(null);
     const [triviaScore, setTriviaScore] = useState(0);
-    const currentTriviaQuestion = mockTriviaQuestions[currentQuestionIndex];
+    const currentTriviaQuestion = dailyTriviaQuestions[currentQuestionIndex];
+    // Check if today's trivia has any questions
+    const hasDailyTrivia = dailyTriviaQuestions.length > 0;
     const [hasSubmittedTriviaAnswer, setHasSubmittedTriviaAnswer] = useState(false);
 
     {/*======================*/ }
@@ -128,9 +166,9 @@ function Community() {
     }, [keepOrRetirePoll?.id]);
 
 
-    {/*============*/ }
+    {/*=============*/ }
     {/*Trivia Timer */ }
-    {/*============*/ }
+    {/*=============*/ }
     useEffect(() => {
         if (!hasStartedTrivia || hasSubmittedTriviaAnswer || hasFinishedTrivia) {
             return;
@@ -150,9 +188,9 @@ function Community() {
         return () => clearTimeout(timer);
     }, [hasStartedTrivia, hasSubmittedTriviaAnswer, hasFinishedTrivia, timeLeft]);
 
-    {/*===================*/ }
+    {/*====================*/ }
     {/*Active Announcements*/ }
-    {/*===================*/ }
+    {/*====================*/ }
 
     // Load announcements created by the admin
     const savedAnnouncements = JSON.parse(
@@ -567,7 +605,7 @@ function Community() {
                     </div>
                     {hasStartedTrivia && (
                         <div className="trivia-progress">
-                            {mockTriviaQuestions.map((question, index) => (
+                            {dailyTriviaQuestions.map((question, index) => (
                                 <div
                                     key={question.id}
                                     className={`trivia-progress-line ${index <= currentQuestionIndex ? "active" : ""
@@ -577,7 +615,7 @@ function Community() {
                         </div>
                     )}
 
-                    {hasFinishedTrivia ? (
+                    {(hasFinishedTrivia || hasCompletedToday) ? (
                         <div className="trivia-results">
                             <h2 className="trivia-title">Trivia Complete!</h2>
 
@@ -588,7 +626,7 @@ function Community() {
                             <div className="trivia-results-stats">
                                 <div className="trivia-result-stat">
                                     <span className="trivia-result-number">
-                                        {triviaScore} / {mockTriviaQuestions.length}
+                                        {savedTriviaResult?.score ?? triviaScore} / {savedTriviaResult?.totalQuestions ?? dailyTriviaQuestions.length}
                                     </span>
                                     <span className="trivia-result-label">
                                         Correct answers
@@ -597,7 +635,7 @@ function Community() {
 
                                 <div className="trivia-result-stat">
                                     <span className="trivia-result-number">
-                                        {triviaScore * TRIVIA_POINTS_PER_CORRECT_ANSWER}
+                                        {(savedTriviaResult?.score ?? triviaScore) * TRIVIA_POINTS_PER_CORRECT_ANSWER}
                                     </span>
                                     <span className="trivia-result-label">
                                         Leaves earned
@@ -669,7 +707,7 @@ function Community() {
 
                                     {/* Next Question — Questions 1 and 28*/}
                                     {hasSubmittedTriviaAnswer &&
-                                        currentQuestionIndex < mockTriviaQuestions.length - 1 && (
+                                        currentQuestionIndex < dailyTriviaQuestions.length - 1 && (
                                             <button
                                                 type="button"
                                                 className="trivia-start-button"
@@ -684,13 +722,31 @@ function Community() {
                                             </button>
                                         )}
 
-                                    {/* ADD THIS PART — Finish Trivia on Question 3 */}
+                                    {/* Finish Trivia on the last question */}
                                     {hasSubmittedTriviaAnswer &&
-                                        currentQuestionIndex === mockTriviaQuestions.length - 1 && (
+                                        currentQuestionIndex === dailyTriviaQuestions.length - 1 && (
                                             <button
                                                 type="button"
                                                 className="trivia-start-button"
-                                                onClick={() => setHasFinishedTrivia(true)}
+                                                onClick={() => {
+                                                    const result = {
+                                                        completedAt: new Date().toISOString(),
+                                                        score: triviaScore,
+                                                        totalQuestions: dailyTriviaQuestions.length
+                                                    };
+
+                                                    if (triviaCompletionKey) {
+                                                        localStorage.setItem(
+                                                            triviaCompletionKey,
+                                                            JSON.stringify(result)
+                                                        );
+
+                                                        setSavedTriviaResult(result);
+                                                        setHasCompletedToday(true);
+                                                    }
+
+                                                    setHasFinishedTrivia(true);
+                                                }}
                                             >
                                                 Finish Trivia
                                             </button>
@@ -702,8 +758,10 @@ function Community() {
                             {!hasStartedTrivia && (
                                 <>
                                     <p className="trivia-description">
-                                        Answer three questions and discover how much
-                                        you know about tea.
+                                        {hasDailyTrivia
+                                            ? `Answer ${dailyTriviaQuestions.length} ${dailyTriviaQuestions.length === 1 ? "question" : "questions"
+                                            } and discover how much you know about tea.`
+                                            : "No trivia questions are available today. Check back soon!"}
                                     </p>
 
                                     {isAuthenticated ? (
@@ -711,9 +769,11 @@ function Community() {
                                             type="button"
                                             className="trivia-start-button"
                                             onClick={() => setHasStartedTrivia(true)}
+                                            disabled={!hasDailyTrivia || hasCompletedToday}
                                         >
-                                            Start Trivia
+                                            {hasCompletedToday ? "Completed for Today" : "Start Trivia"}
                                         </button>
+
                                     ) : (
                                         <Link to="/login" className="trivia-start-button">
                                             Join INSTEA Rewards to Play

@@ -112,7 +112,7 @@
 @media (max-width: 1200px) {
     .header .logo {
         width: 180px;
-    } 
+    }
 
     .header-nav {
         font-size: 12px;
@@ -232,4 +232,29 @@
     font-size: 11px;
     font-weight: 700;
     line-height: 1;
+}
+
+.header-notification-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-notification-count {
+  position: absolute;
+  top: -8px;
+  right: -9px;
+  display: grid;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  place-items: center;
+  border: 2px solid #fbf7ef;
+  border-radius: 999px;
+  background: #1f3b2e;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
 }

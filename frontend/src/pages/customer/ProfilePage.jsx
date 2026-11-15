@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import useAuth from '../../auth/useAuth.js'
-import AccountTabs from './AccountTabs.jsx'
 import './ProfilePage.css'
 
 export default function ProfilePage() {
@@ -60,9 +59,6 @@ export default function ProfilePage() {
   return (
     <main className="profile-settings-page">
       <div className="profile-settings-container">
-        <h1>Profile &amp; settings</h1>
-
-        <AccountTabs active="Settings" />
 
         {feedback && (
           <div className="profile-settings-feedback" role="status">
