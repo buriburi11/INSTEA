@@ -28,6 +28,7 @@ import AdminCustomers from './pages/admin/AdminCustomers.jsx'
 import AdminOrders from './pages/admin/AdminOrders.jsx'
 import AdminProducts from './pages/admin/AdminProducts.jsx'
 import AdminRoles from './pages/admin/AdminRoles.jsx'
+import AdminLoyalty from './pages/admin/AdminLoyalty.jsx'
 
 import LoginPage from './pages/customer/LoginPage.jsx'
 import RegisterPage from './pages/customer/RegisterPage.jsx'
@@ -67,7 +68,7 @@ function App() {
         <Route path="orders" element={<AdminOrders />} />
         <Route path="products" element={<AdminProducts />} />
         <Route path="customers" element={<AdminCustomers />} />
-        <Route path="loyalty" element={<AdminPlaceholder title="Loyalty" />} />
+        <Route path="loyalty" element={<AdminLoyalty />} />
         <Route path="community" element={<AdminCommunity />} />
         <Route path="community/triviaquestions" element={<TriviaQuestionBank />} />
         <Route path="roles" element={<AdminRoles />} />
