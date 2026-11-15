@@ -2,6 +2,7 @@ import PollManagement from "../../components/admin/community/PollManagement";
 import AnnouncementManagement from "../../components/admin/community/AnnouncementManagement";
 import EventManagement from "../../components/admin/community/EventManagement";
 import ReviewManagement from "../../components/admin/community/ReviewManagement";
+import TriviaManagement from "../../components/admin/community/TriviaManagement";
 import "./AdminCommunity.css";
 
 export default function AdminCommunity() {
@@ -24,6 +25,8 @@ export default function AdminCommunity() {
 
             {/* Review Moderation */}
             <ReviewManagement />
+            {/* Trivia Management */}
+            <TriviaManagement />
 
         </section>
     );

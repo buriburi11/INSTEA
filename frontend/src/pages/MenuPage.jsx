@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import { categories } from '../data/categories'
 import { products, PRODUCT_IMAGE_PLACEHOLDER } from '../data/products'
 import { formatPrice } from '../utils/cartPricing'
+import FavoriteButton from '../components/favorites/FavoriteButton.jsx'
 import './MenuPages.css'
 
 function MenuPage() {
@@ -68,10 +69,11 @@ function MenuPage() {
             const isAvailable = product.available && !product.soldOut
 
             return (
+              // The heart sits beside the card link (a button can't go inside a link).
+              <div className="product-card-shell" key={product.id}>
               <Link
                 className={`product-card ${isAvailable ? '' : 'unavailable'}`}
                 to={`/menu/${product.id}`}
-                key={product.id}
                 aria-label={`${product.name}, ${formatPrice(product.price)}, ${
                   isAvailable ? 'available' : 'sold out'
                 }. View details.`}
@@ -111,6 +113,12 @@ function MenuPage() {
                   </div>
                 </div>
               </Link>
+              <FavoriteButton
+                productId={product.id}
+                productName={product.name}
+                className="product-card-favorite"
+              />
+              </div>
             )
           })}
         </div>

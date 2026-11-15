@@ -6,6 +6,7 @@ const memberTabs = [
   { label: 'Member card', path: '/member-card' },
   { label: 'Rewards', path: '/rewards' },
   { label: 'Orders', path: '/orders' },
+  { label: 'Favorites', path: '/favorites' },
   { label: 'Notifications', path: '/notifications' },
   { label: 'Settings', path: '/profile' },
 ]

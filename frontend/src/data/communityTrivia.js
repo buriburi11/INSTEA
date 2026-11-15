@@ -1,6 +1,7 @@
 export const mockTriviaQuestions = [
     {
         id: 1,
+        createdAt: "2026-11-12T09:00:00",
         question: "Which Japanese region produces ceremonial matcha traditionally shade-grown under straw mats?",
         options: [
             { id: "A", text: "Uji, Kyoto Prefecture" },
@@ -11,6 +12,7 @@ export const mockTriviaQuestions = [
     },
     {
         id: 2,
+        createdAt: "2026-11-13T09:00:00",
         question: "Which country is traditionally known as the birthplace of tea?",
         options: [
             { id: "A", text: "Japan" },
@@ -21,6 +23,7 @@ export const mockTriviaQuestions = [
     },
     {
         id: 3,
+        createdAt: "2026-11-14T09:00:00",
         question: "Why is green tea usually brewed at a lower temperature than black tea?",
         options: [
             { id: "A", text: "To prevent bitterness and preserve delicate flavors" },

@@ -23,11 +23,13 @@ import AdminLayout from './layouts/AdminLayout.jsx'
 import AdminPlaceholder from './pages/admin/AdminPlaceholder.jsx'
 import StaffLogin from './pages/admin/StaffLogin.jsx'
 import AdminCommunity from './pages/admin/AdminCommunity'
+import TriviaQuestionBank from "./pages/admin/TriviaQuestionBank";
 import AdminCustomers from './pages/admin/AdminCustomers.jsx'
 import AdminDashboard from './pages/admin/AdminDashboard.jsx'
 import AdminOrders from './pages/admin/AdminOrders.jsx'
 import AdminProducts from './pages/admin/AdminProducts.jsx'
 import AdminRoles from './pages/admin/AdminRoles.jsx'
+import AdminLoyalty from './pages/admin/AdminLoyalty.jsx'
 
 import LoginPage from './pages/customer/LoginPage.jsx'
 import RegisterPage from './pages/customer/RegisterPage.jsx'
@@ -42,6 +44,8 @@ import NotificationPreferencesPage from './pages/customer/NotificationPreference
 import MemberDashboardPage from './pages/customer/MemberDashboardPage.jsx'
 import MemberCardPage from './pages/customer/MemberCardPage.jsx'
 import OrderHistoryPage from './pages/customer/OrderHistoryPage.jsx'
+import OrderDetailPage from './pages/customer/OrderDetailPage.jsx'
+import FavoritesPage from './pages/customer/FavoritesPage.jsx'
 
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 
@@ -65,8 +69,9 @@ function App() {
         <Route path="orders" element={<AdminOrders />} />
         <Route path="products" element={<AdminProducts />} />
         <Route path="customers" element={<AdminCustomers />} />
-        <Route path="loyalty" element={<AdminPlaceholder title="Loyalty" />} />
+        <Route path="loyalty" element={<AdminLoyalty />} />
         <Route path="community" element={<AdminCommunity />} />
+        <Route path="community/triviaquestions" element={<TriviaQuestionBank />} />
         <Route path="roles" element={<AdminRoles />} />
         <Route
           path="*"
@@ -102,17 +107,21 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route element={<MemberLayout />}>
             <Route
-                path="/member"
-                element={<MemberDashboardPage />}
+              path="/member"
+              element={<MemberDashboardPage />}
             />
             <Route
-            path="/member-card"
-            element={<MemberCardPage />}
+              path="/member-card"
+              element={<MemberCardPage />}
             />
             <Route path="/rewards" element={<RewardsPage />} />
             <Route
-            path="/orders"
-            element={<OrderHistoryPage />}
+              path="/orders"
+              element={<OrderHistoryPage />}
+            />
+            <Route
+              path="/orders/:orderId"
+              element={<OrderDetailPage />}
             />
             <Route
               path="/notifications"
@@ -122,6 +131,7 @@ function App() {
               path="/notifications/preferences"
               element={<NotificationPreferencesPage />}
             />
+            <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Route>

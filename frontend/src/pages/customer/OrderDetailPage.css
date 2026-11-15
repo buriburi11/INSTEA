@@ -1,0 +1,152 @@
+/* Order detail / receipt (INST-69), styled after the receipt and status cards on the
+   Figma "Order confirmation" screen. Shares page and card styles with OrderHistoryPage.css. */
+
+.order-detail-back {
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.order-detail-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(300px, 1fr);
+  gap: 40px;
+  align-items: start;
+  margin-top: 24px;
+}
+
+.order-detail-main h1 {
+  margin: 0;
+  color: #1d4232;
+  font-family: Georgia, serif;
+  font-size: clamp(2rem, 4vw, 2.6rem);
+  font-weight: 500;
+}
+
+.order-detail-placed {
+  margin: 8px 0 0;
+  color: #716c64;
+}
+
+.order-detail-main .checkout-confirmation-status {
+  border-color: #e6dac6;
+  border-radius: 16px;
+}
+
+/* ----- Leaves tile ----- */
+
+.order-detail-leaves {
+  display: grid;
+  gap: 4px;
+  width: min(100%, 240px);
+  margin-top: 20px;
+  padding: 18px 20px;
+  border-radius: 16px;
+  background: #f5ecdc;
+  color: #8f6a24;
+}
+
+.order-detail-leaves strong {
+  color: #1d4232;
+  font-family: Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.order-detail-leaves span {
+  color: #716c64;
+  font-size: 0.88rem;
+}
+
+/* ----- Receipt card ----- */
+
+.order-detail-receipt {
+  padding: 26px 26px 22px;
+  border: 1px solid #e6dac6;
+  border-radius: 16px;
+  background: #fff;
+}
+
+.order-detail-receipt h2 {
+  margin: 0 0 18px;
+  color: #1d4232;
+  font-family: Georgia, serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.order-detail-rows {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+}
+
+.order-detail-rows > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.order-detail-rows dt {
+  color: #716c64;
+}
+
+.order-detail-rows dd {
+  margin: 0;
+  color: #2b2b27;
+  text-align: right;
+}
+
+.order-detail-items {
+  display: grid;
+  gap: 16px;
+  margin: 20px 0 0;
+  padding: 20px 0;
+  border-top: 1px solid #ece2d1;
+  border-bottom: 1px solid #ece2d1;
+  list-style: none;
+}
+
+.order-detail-item-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: #2b2b27;
+}
+
+.order-detail-item-options,
+.order-detail-item-note {
+  margin: 4px 0 0 16px;
+  color: #716c64;
+  font-size: 0.85rem;
+}
+
+.order-detail-item-note {
+  font-style: italic;
+}
+
+.order-detail-subtotals {
+  padding: 16px 0;
+  border-bottom: 1px solid #ece2d1;
+  font-size: 0.95rem;
+}
+
+.order-detail-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-top: 16px;
+  color: #1d4232;
+  font-weight: 600;
+}
+
+.order-detail-total strong {
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+@media (max-width: 860px) {
+  .order-detail-layout {
+    grid-template-columns: 1fr;
+  }
+}

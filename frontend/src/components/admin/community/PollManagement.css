@@ -7,7 +7,7 @@
 .poll-management-create {
     background-color: #ffffff;
     border: 1.5px solid #e5d9c7;
-    border-radius: 16px;
+    border-radius: 20px;
     padding: 24px;
     box-shadow: 0 4px 12px rgba(31, 59, 46, 0.08);
 
@@ -44,11 +44,7 @@
     background-color: #315743;
 }
 
-/* ==================
-   Poll Type Selection
-   ================== */
-
-/* White container matching the Create Poll card */
+/* Poll Type Selection*/
 .poll-type-selection {
     background-color: #ffffff;
     border: 1.5px solid #e5d9c7;
