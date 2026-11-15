@@ -43,6 +43,7 @@ import MemberDashboardPage from './pages/customer/MemberDashboardPage.jsx'
 import MemberCardPage from './pages/customer/MemberCardPage.jsx'
 import OrderHistoryPage from './pages/customer/OrderHistoryPage.jsx'
 import OrderDetailPage from './pages/customer/OrderDetailPage.jsx'
+import FavoritesPage from './pages/customer/FavoritesPage.jsx'
 
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 
@@ -128,6 +129,7 @@ function App() {
               path="/notifications/preferences"
               element={<NotificationPreferencesPage />}
             />
+            <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Route>

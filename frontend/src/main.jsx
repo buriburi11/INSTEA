@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router'
 import App from './App.jsx'
 import AuthProvider from './auth/AuthProvider.jsx'
 import NotificationProvider from './notifications/NotificationProvider.jsx'
+import FavoritesProvider from './favorites/FavoritesProvider.jsx'
 import './index.css'
 
 createRoot(document.getElementById('root')).render(
@@ -11,7 +12,9 @@ createRoot(document.getElementById('root')).render(
     <BrowserRouter>
       <AuthProvider>
         <NotificationProvider>
-          <App />
+          <FavoritesProvider>
+            <App />
+          </FavoritesProvider>
         </NotificationProvider>
       </AuthProvider>
     </BrowserRouter>

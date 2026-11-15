@@ -7,6 +7,7 @@
  import { categories } from '../data/categories'
  import { products, PRODUCT_IMAGE_PLACEHOLDER } from '../data/products'
  import {formatPrice, calculateUnitPrice, calculateItemTotal, } from '../utils/cartPricing'
+ import FavoriteButton from '../components/favorites/FavoriteButton.jsx'
  import './MenuPages.css'
 
  // =============
@@ -368,7 +369,10 @@
              <span className="detail-product-badge">{product.badges[0]}</span>
            )}
 
-           <h1>{product.name}</h1>
+           <div className="detail-title-row">
+             <h1>{product.name}</h1>
+             <FavoriteButton productId={product.id} productName={product.name} />
+           </div>
            <p className="detail-description">{product.description}</p>
 
            {/* ------- BASE PRICE AND AVAILABILITY ------- */}

@@ -30,6 +30,9 @@ export default function MemberLayout() {
     '/orders': {
       title: 'Order history',
     },
+    '/favorites': {
+      title: 'Favorites',
+    },
     '/notifications': {
       title: 'Notifications',
     },

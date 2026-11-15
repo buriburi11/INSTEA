@@ -891,3 +891,52 @@
     justify-content: center;
   }
 }
+
+/* ------- FAVORITES (INST-71) ------- */
+
+.product-card-shell {
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+/* Lift the whole card, heart included, instead of only the link. */
+.product-card-shell:hover {
+  transform: translateY(-3px);
+}
+
+.product-card-shell .product-card:hover {
+  transform: none;
+}
+
+.product-card-favorite {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 1;
+}
+
+/* Make room for the heart in the top-right corner. */
+.product-card-shell .availability-badge {
+  right: 60px;
+}
+
+.detail-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.detail-title-row .favorite-button {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  margin-top: 6px;
+}
+
+/* Keep the filled look here too; the product page's own button styles would otherwise override it. */
+.detail-title-row .favorite-button.active {
+  border-color: #1f4335;
+  background: #1f4335;
+  color: #fffdf8;
+}
