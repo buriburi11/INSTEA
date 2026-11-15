@@ -1,0 +1,625 @@
+/*
+ * Admin dashboard overview. The layout responds to the width of the page area
+ * (a container query), not the window, because the sidebar takes a different
+ * amount of space at each shell breakpoint and when it is collapsed.
+ */
+.admin-dashboard {
+  --admin-dashboard-border: var(--admin-border, #e3ddcf);
+  --admin-dashboard-heading: #1f3b2e;
+  --admin-dashboard-muted: var(--admin-muted, #6b7169);
+  --admin-dashboard-kicker: #8a6a24;
+  --admin-dashboard-bar: var(--admin-gold, #bea064);
+  --admin-dashboard-bar-edge: #a88a4a;
+  --admin-dashboard-track: #efe8d8;
+  --admin-dashboard-up: #2d6a4f;
+  --admin-dashboard-down: #a12e2e;
+  --admin-dashboard-serif: 'Cormorant Garamond', Georgia, serif;
+
+  container: admin-dashboard / inline-size;
+  display: grid;
+  /* A fixed single column: with `auto`, wide content could stretch the whole page past its container. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+  min-width: 0;
+  /* The shell breaks anywhere; here words stay whole unless one is too long for the line. */
+  overflow-wrap: break-word;
+}
+
+.admin-dashboard-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Header: title, date range filter, export */
+.admin-dashboard-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 24px;
+}
+
+/* The shared 50px page title shrinks only when the page area is too narrow for it. */
+.admin-dashboard .admin-dashboard-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 12cqi, 50px);
+}
+
+.admin-dashboard-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.admin-dashboard-ranges {
+  display: inline-flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  padding: 4px;
+  gap: 2px;
+  border: 1px solid var(--admin-dashboard-border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.admin-dashboard-range {
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: #4f5b54;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.admin-dashboard-range:hover:not([aria-pressed='true']) {
+  background: #edf3ee;
+}
+
+.admin-dashboard-range[aria-pressed='true'] {
+  background: var(--admin-sidebar, #1e3d30);
+  color: #fff;
+  font-weight: 600;
+}
+
+.admin-dashboard-range:focus-visible {
+  outline: 3px solid #52745d;
+  outline-offset: 2px;
+}
+
+.admin-dashboard-export-error {
+  color: var(--admin-dashboard-down);
+  font-size: 0.875rem;
+}
+
+/* Cards */
+.admin-dashboard-card {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--admin-dashboard-border);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgb(31 59 46 / 6%);
+}
+
+/* The global admin heading styles are overridden here; the extra class keeps them from winning. */
+.admin-dashboard .admin-dashboard-title {
+  margin: 0;
+  color: var(--admin-dashboard-heading);
+  font-family: var(--admin-dashboard-serif);
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: normal;
+}
+
+.admin-dashboard .admin-dashboard-kicker {
+  margin: 0 0 12px;
+  color: var(--admin-dashboard-kicker);
+  font-family: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+.admin-dashboard .admin-dashboard-eyebrow {
+  margin: 0;
+  color: var(--admin-dashboard-muted);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: normal;
+}
+
+.admin-dashboard .admin-dashboard-muted,
+.admin-dashboard .admin-dashboard-empty {
+  color: var(--admin-dashboard-muted);
+  font-size: 0.875rem;
+}
+
+.admin-dashboard .admin-dashboard-message {
+  display: grid;
+  justify-items: center;
+  gap: 16px;
+  padding: 28px 20px;
+  color: var(--admin-dashboard-muted);
+  text-align: center;
+}
+
+.admin-dashboard-message--card {
+  border: 1px solid var(--admin-dashboard-border);
+  border-radius: 20px;
+  background: #fff;
+}
+
+/* Revenue summary */
+.admin-dashboard-revenue-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px 24px;
+}
+
+.admin-dashboard .admin-dashboard-total,
+.admin-dashboard .admin-dashboard-orders-value {
+  color: var(--admin-dashboard-heading);
+  font-family: var(--admin-dashboard-serif);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.admin-dashboard .admin-dashboard-total {
+  margin: 4px 0 8px;
+  font-size: 2.75rem;
+}
+
+.admin-dashboard-orders {
+  text-align: right;
+}
+
+.admin-dashboard .admin-dashboard-orders-value {
+  margin-top: 4px;
+  font-size: 2rem;
+}
+
+/* Trends */
+.admin-dashboard .admin-dashboard-trend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+
+.admin-dashboard-trend--up {
+  color: var(--admin-dashboard-up);
+}
+
+.admin-dashboard-trend--down {
+  color: var(--admin-dashboard-down);
+}
+
+.admin-dashboard-trend--flat,
+.admin-dashboard-trend--none {
+  color: var(--admin-dashboard-muted);
+}
+
+.admin-dashboard-trend svg {
+  flex-shrink: 0;
+}
+
+.admin-dashboard-trend-value {
+  white-space: nowrap;
+}
+
+/* Bar chart: plain HTML and CSS; the hidden table carries the data for assistive technology */
+.admin-dashboard-chart {
+  margin: 24px 0 0;
+}
+
+.admin-dashboard-chart-caption {
+  display: grid;
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.admin-dashboard-chart-title {
+  color: var(--admin-dashboard-kicker);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-dashboard-chart-note {
+  color: var(--admin-dashboard-muted);
+  font-size: 0.75rem;
+}
+
+/*
+ * Scrolls sideways inside the card when there are too many bars for the width, and never
+ * vertically, so the mouse wheel over the chart scrolls the page. The top padding leaves
+ * room for the value label above the tallest bar and the top axis label.
+ */
+.admin-dashboard-chart-scroll {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 28px 4px 4px;
+}
+
+/* Hidden data table: pinned to the corner of the scroll area so it never adds overflow. */
+.admin-dashboard-chart-data {
+  top: 0;
+  left: 0;
+}
+
+.admin-dashboard-chart-scroll:focus-visible {
+  outline: 3px solid #52745d;
+  outline-offset: 3px;
+}
+
+.admin-dashboard-plot {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  grid-template-areas:
+    'axis area'
+    '. labels';
+  min-width: calc(40px + var(--admin-dashboard-columns) * 56px);
+}
+
+.admin-dashboard-axis,
+.admin-dashboard-area {
+  position: relative;
+  height: 220px;
+}
+
+.admin-dashboard-axis {
+  grid-area: axis;
+}
+
+.admin-dashboard-area {
+  grid-area: area;
+}
+
+.admin-dashboard-tick {
+  position: absolute;
+  right: 8px;
+  transform: translateY(50%);
+  color: var(--admin-dashboard-muted);
+  font-size: 0.75rem;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-dashboard-gridline {
+  position: absolute;
+  right: 0;
+  left: 0;
+  border-top: 1px solid #ebe5d7;
+}
+
+.admin-dashboard-bars,
+.admin-dashboard-labels {
+  display: grid;
+  grid-template-columns: repeat(var(--admin-dashboard-columns), minmax(0, 1fr));
+}
+
+.admin-dashboard-bars {
+  position: absolute;
+  inset: 0;
+  grid-template-rows: 100%;
+}
+
+.admin-dashboard-bar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.admin-dashboard-bar-value {
+  margin-bottom: 4px;
+  color: var(--admin-dashboard-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* The edge keeps the gold bar visible against white for people who cannot see the fill colour well. */
+.admin-dashboard-bar {
+  display: block;
+  width: 72%;
+  max-width: 76px;
+  border-radius: 10px 10px 3px 3px;
+  background: var(--admin-dashboard-bar);
+  box-shadow: inset 0 0 0 1px var(--admin-dashboard-bar-edge);
+}
+
+.admin-dashboard-labels {
+  grid-area: labels;
+  padding-top: 8px;
+}
+
+.admin-dashboard-label {
+  color: var(--admin-dashboard-muted);
+  font-size: 0.75rem;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* Popular products */
+.admin-dashboard-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 16px;
+  margin-bottom: 20px;
+}
+
+.admin-dashboard-products {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-dashboard-product-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.9375rem;
+}
+
+.admin-dashboard-product-quantity {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.admin-dashboard-track {
+  height: 6px;
+  margin-top: 8px;
+  border-radius: 999px;
+  background: var(--admin-dashboard-track);
+  overflow: hidden;
+}
+
+.admin-dashboard-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--admin-dashboard-bar);
+  box-shadow: inset 0 0 0 1px var(--admin-dashboard-bar-edge);
+}
+
+/* Business metrics: one joined card with dividers, separate cards when narrow */
+.admin-dashboard-metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+  border: 1px solid var(--admin-dashboard-border);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgb(31 59 46 / 6%);
+  overflow: hidden;
+}
+
+.admin-dashboard-metric {
+  min-width: 0;
+  padding: 18px 20px;
+}
+
+.admin-dashboard-metric + .admin-dashboard-metric {
+  border-left: 1px solid var(--admin-dashboard-border);
+}
+
+.admin-dashboard-metric dt {
+  color: var(--admin-dashboard-muted);
+  font-size: 0.8125rem;
+}
+
+.admin-dashboard-metric dd {
+  margin: 0;
+}
+
+.admin-dashboard-metric .admin-dashboard-metric-value {
+  margin: 4px 0 2px;
+  color: var(--admin-dashboard-heading);
+  font-family: var(--admin-dashboard-serif);
+  font-size: 1.875rem;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+/* Recent activity, poll, and events */
+.admin-dashboard-lower {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 300px);
+  gap: 24px;
+  align-items: start;
+}
+
+.admin-dashboard-aside {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+}
+
+.admin-dashboard-widget {
+  padding: 20px 22px;
+}
+
+.admin-dashboard-activity,
+.admin-dashboard-polls,
+.admin-dashboard-events {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-dashboard-activity {
+  margin-top: 16px;
+}
+
+.admin-dashboard-activity li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 4px 16px;
+  padding: 14px 0;
+  border-top: 1px solid var(--admin-dashboard-border);
+  font-size: 0.9375rem;
+}
+
+.admin-dashboard-activity li:first-child {
+  border-top: 0;
+}
+
+.admin-dashboard-activity p {
+  color: var(--admin-dashboard-muted);
+}
+
+.admin-dashboard-activity strong {
+  color: var(--admin-dashboard-heading);
+  font-weight: 600;
+}
+
+.admin-dashboard-activity-time {
+  color: var(--admin-dashboard-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.admin-dashboard-polls {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-dashboard .admin-dashboard-poll-title {
+  margin: 0 0 4px;
+  color: var(--admin-dashboard-heading);
+  font-family: inherit;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: normal;
+}
+
+.admin-dashboard-events {
+  display: grid;
+  gap: 8px;
+}
+
+.admin-dashboard-events li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.9375rem;
+}
+
+.admin-dashboard-events time {
+  color: var(--admin-dashboard-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+/* Narrower page area: stack the lower row and let the metrics wrap as cards. */
+@container admin-dashboard (max-width: 760px) {
+  .admin-dashboard-metrics {
+    grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr));
+    gap: 12px;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    overflow: visible;
+  }
+
+  .admin-dashboard-metric,
+  .admin-dashboard-metric + .admin-dashboard-metric {
+    border: 1px solid var(--admin-dashboard-border);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 2px 8px rgb(31 59 46 / 6%);
+  }
+
+  .admin-dashboard-lower {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@container admin-dashboard (max-width: 520px) {
+  .admin-dashboard-card {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .admin-dashboard-widget {
+    padding: 16px;
+  }
+
+  .admin-dashboard-controls,
+  .admin-dashboard-ranges {
+    width: 100%;
+  }
+
+  .admin-dashboard-range {
+    flex: 1 1 auto;
+    padding-inline: 8px;
+  }
+
+  .admin-dashboard .admin-dashboard-total {
+    font-size: 2.25rem;
+  }
+
+  .admin-dashboard-orders {
+    text-align: left;
+  }
+}
+
+/* Very narrow page area (for example a phone beside the expanded sidebar): one column, times under text. */
+@container admin-dashboard (max-width: 320px) {
+  .admin-dashboard-activity li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-dashboard-events li {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+/* High-contrast modes drop background colours, so the bars need real borders and system colours. */
+@media (forced-colors: active) {
+  .admin-dashboard-bar,
+  .admin-dashboard-fill {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .admin-dashboard-track {
+    border: 1px solid CanvasText;
+  }
+}

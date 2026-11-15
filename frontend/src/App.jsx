@@ -25,6 +25,7 @@ import StaffLogin from './pages/admin/StaffLogin.jsx'
 import AdminCommunity from './pages/admin/AdminCommunity'
 import TriviaQuestionBank from "./pages/admin/TriviaQuestionBank";
 import AdminCustomers from './pages/admin/AdminCustomers.jsx'
+import AdminDashboard from './pages/admin/AdminDashboard.jsx'
 import AdminOrders from './pages/admin/AdminOrders.jsx'
 import AdminProducts from './pages/admin/AdminProducts.jsx'
 import AdminRoles from './pages/admin/AdminRoles.jsx'
@@ -64,7 +65,7 @@ function App() {
       <Route path="/staff-portal" element={<StaffLogin />} />
 
       <Route path="/admin" element={<AdminLayout />}>
-        <Route index element={<AdminPlaceholder title="Dashboard" />} />
+        <Route index element={<AdminDashboard />} />
         <Route path="orders" element={<AdminOrders />} />
         <Route path="products" element={<AdminProducts />} />
         <Route path="customers" element={<AdminCustomers />} />

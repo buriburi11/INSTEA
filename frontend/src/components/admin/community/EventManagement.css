@@ -1,0 +1,299 @@
+/* Event management on the admin Community page. Matches the card look of the poll and announcement sections. */
+.event-management {
+  --event-management-ink: #1f3b2e;
+  --event-management-muted: #66756b;
+  --event-management-card-border: #e5d8c3;
+  --event-management-line: #e3ddcf;
+  --event-management-danger: #a4473e;
+
+  width: 100%;
+  margin-top: 32px;
+  color: var(--event-management-ink);
+}
+
+.event-management-card {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+  padding: 30px;
+  border: 1px solid var(--event-management-card-border);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgb(31 59 46 / 8%);
+}
+
+.event-management-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+
+.event-management-header h2,
+.event-management-form h3 {
+  margin: 0;
+  color: var(--event-management-ink);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.event-management-header h2 {
+  font-size: 34px;
+}
+
+.event-management-form h3 {
+  font-size: 28px;
+}
+
+.event-management .event-management-note,
+.event-management .event-management-hint {
+  color: var(--event-management-muted);
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.event-management .event-management-note {
+  margin-top: 4px;
+}
+
+/* Sits under the time fields it describes, closer than the usual form spacing. */
+.event-management .event-management-hint {
+  margin-top: -8px;
+}
+
+.event-management .event-management-notice:empty {
+  display: none;
+}
+
+.event-management .event-management-notice:not(:empty) {
+  padding: 12px 16px;
+  border: 1px solid #bed4c4;
+  border-radius: 8px;
+  background: #edf3ee;
+  color: #224f3b;
+  font-size: 0.875rem;
+}
+
+.event-management .event-management-error,
+.event-management .event-management-form-error {
+  padding: 12px 16px;
+  border: 1px solid #e9c9c5;
+  border-radius: 8px;
+  background: #fff5f3;
+  color: #a12e2e;
+  font-size: 0.875rem;
+}
+
+.event-management-form-error:focus-visible {
+  outline: 3px solid #52745d;
+  outline-offset: 3px;
+}
+
+.event-management .event-management-message {
+  display: grid;
+  justify-items: center;
+  gap: 12px;
+  padding: 28px 16px;
+  border: 1px dashed var(--event-management-line);
+  border-radius: 12px;
+  color: var(--event-management-muted);
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+/* ---- Form ---- */
+
+.event-management-form {
+  display: grid;
+  gap: 20px;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid var(--event-management-line);
+  border-radius: 14px;
+  background: #fcfaf5;
+}
+
+.event-management-fieldset,
+.event-management-registration {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  margin: 0;
+}
+
+.event-management-fieldset {
+  padding: 0;
+  border: 0;
+}
+
+.event-management-registration {
+  padding: 14px 16px 16px;
+  border: 1px solid var(--event-management-line);
+  border-radius: 10px;
+}
+
+.event-management-registration legend {
+  padding: 0 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.event-management-form-row {
+  display: grid;
+  gap: 16px;
+}
+
+.event-management-form-row--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.event-management-form-row--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.event-management-form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* ---- Event list ---- */
+
+.event-management-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.event-management-item {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  padding: 16px 18px;
+  border: 1px solid var(--event-management-line);
+  border-radius: 12px;
+  background: #fff;
+}
+
+.event-management-item--cancelled {
+  border-color: #ebc9c5;
+  background: #fdf6f5;
+}
+
+.event-management-item-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px 12px;
+}
+
+.event-management-item-title {
+  min-width: 0;
+}
+
+.event-management-item-title h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.event-management-item-title p {
+  color: var(--event-management-muted);
+  font-size: 0.75rem;
+}
+
+.event-management-status {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.event-management-status--active {
+  background: #e1efe5;
+  color: #285b3d;
+}
+
+.event-management-status--cancelled {
+  background: #fbe7e5;
+  color: var(--event-management-danger);
+}
+
+.event-management-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px 20px;
+  margin: 0;
+}
+
+.event-management-details > div {
+  min-width: 0;
+}
+
+.event-management-details dt {
+  color: var(--event-management-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.event-management-details dd {
+  margin: 2px 0 0;
+  font-size: 0.875rem;
+}
+
+.event-management-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.event-management-confirm {
+  display: grid;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid #d7b7af;
+  border-radius: 10px;
+  background: #fff;
+}
+
+.event-management-confirm p {
+  font-size: 0.875rem;
+}
+
+@media (max-width: 700px) {
+  .event-management-card {
+    padding: 20px;
+  }
+
+  .event-management-form {
+    padding: 16px;
+  }
+
+  .event-management-header h2 {
+    font-size: 30px;
+  }
+
+  .event-management-form-row--two,
+  .event-management-form-row--three {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .event-management-item-actions,
+  .event-management-form-actions {
+    justify-content: flex-start;
+  }
+}
