@@ -3,7 +3,7 @@
 // =============
 
 import {useState} from 'react';
-import {Link} from 'react-router';
+import {Link, useLocation} from 'react-router';
 import { Pencil, Trash2, Gift } from 'lucide-react';
 import {formatPrice, calculateCartTotals, calculateItemTotal, } from '../utils/cartPricing'
 import { locations } from '../data/locations';
@@ -18,6 +18,10 @@ import './ShoppingCart.css';
 function ShoppingCart() {
 
     const { isAuthenticated } = useAuth();                                                                             // Check whether the customer is signed in.
+
+    // ------- REORDER MESSAGE -------
+
+    const reorder = useLocation().state?.reorder;                                                                      // Set by Reorder on Order history (INST-70).
 
     // ------- CART INITIALIZATION -------
 
@@ -133,6 +137,26 @@ function ShoppingCart() {
                                 </button>
                             )}
                         </div>
+
+                        {/* ------- REORDER MESSAGE ------- */}
+
+                        {reorder && (
+                            <div className="cart-reorder-message" role="status">
+                                <p>Items from order #{reorder.orderNumber} were added to your cart. Review them before checkout.</p>
+
+                                {reorder.unavailableItems?.length > 0 && (
+                                    <p>
+                                        Currently unavailable and not added: <strong>{reorder.unavailableItems.join(', ')}</strong>
+                                    </p>
+                                )}
+
+                                {reorder.changedOptions?.map(({ productName, options }) => (
+                                    <p key={productName}>
+                                        {productName}: {options.join(', ')} {options.length === 1 ? 'is' : 'are'} no longer offered, so the menu's default was used.
+                                    </p>
+                                ))}
+                            </div>
+                        )}
 
                         {/* ------- CART ITEMS ------- */}
 

@@ -19,3 +19,19 @@ export async function getOrderById(id) {
   if (USE_MOCK) return mockResponse(orders.find((o) => o.id === id) ?? null)
   return apiGet(`/orders/${encodeURIComponent(id)}`)
 }
+
+/**
+ * A customer's orders, newest first.
+ *
+ * @param {string} customerId
+ * @returns {Promise<Order[]>} empty if the customer has no orders
+ */
+export async function getOrdersByCustomer(customerId) {
+  if (USE_MOCK) {
+    const customerOrders = orders
+      .filter((o) => o.customerId === customerId)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    return mockResponse(customerOrders)
+  }
+  return apiGet(`/customers/${encodeURIComponent(customerId)}/orders`)
+}

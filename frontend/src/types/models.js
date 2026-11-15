@@ -75,6 +75,7 @@
  * @property {string} [pickupDate]
  * @property {string} [pickupTime]
  * @property {"pending"|"paid"|"refunded"} paymentStatus
+ * @property {"online"|"in-store"} [channel] where the order was placed
  * @property {string} [specialInstructions]
  * @property {string} createdAt
  */

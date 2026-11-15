@@ -42,6 +42,7 @@ import NotificationPreferencesPage from './pages/customer/NotificationPreference
 import MemberDashboardPage from './pages/customer/MemberDashboardPage.jsx'
 import MemberCardPage from './pages/customer/MemberCardPage.jsx'
 import OrderHistoryPage from './pages/customer/OrderHistoryPage.jsx'
+import OrderDetailPage from './pages/customer/OrderDetailPage.jsx'
 
 import ProtectedRoute from './auth/ProtectedRoute.jsx'
 
@@ -114,6 +115,10 @@ function App() {
             <Route
               path="/orders"
               element={<OrderHistoryPage />}
+            />
+            <Route
+              path="/orders/:orderId"
+              element={<OrderDetailPage />}
             />
             <Route
               path="/notifications"
