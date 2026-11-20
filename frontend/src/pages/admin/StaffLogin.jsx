@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { Info, ShieldCheck } from 'lucide-react'
 import insteaLogo from '../../assets/instea-logo.svg'
@@ -6,7 +6,8 @@ import './StaffLogin.css'
 
 export default function StaffLogin() {
   const navigate = useNavigate()
-  const [showResetMessage, setShowResetMessage] = useState(false)
+  const resetDialogRef = useRef(null)
+  const forgotButtonRef = useRef(null)
 
   function handleSubmit(event) {
     event.preventDefault()
@@ -63,9 +64,12 @@ export default function StaffLogin() {
               <button
                 type="button"
                 className="staff-login__forgot"
-                onClick={() => setShowResetMessage(true)}
+                ref={forgotButtonRef}
+                aria-haspopup="dialog"
+                aria-controls="staff-password-help"
+                onClick={() => resetDialogRef.current?.showModal()}
               >
-                Forgot?
+                Forgot password?
               </button>
             </div>
 
@@ -78,12 +82,6 @@ export default function StaffLogin() {
             />
           </div>
 
-          <p className="staff-login__message" role="status">
-            {showResetMessage
-              ? 'Password reset will be available when authentication is implemented.'
-              : ''}
-          </p>
-
           <button type="submit" className="staff-login__submit">
             <ShieldCheck size={20} aria-hidden="true" />
             Sign in
@@ -94,6 +92,28 @@ export default function StaffLogin() {
           Back to customer site
         </Link>
       </section>
+      <dialog
+        ref={resetDialogRef}
+        id="staff-password-help"
+        className="staff-login__reset-dialog"
+        aria-labelledby="staff-password-help-title"
+        aria-describedby="staff-password-help-description"
+        onClose={() => forgotButtonRef.current?.focus()}
+      >
+        <h2 id="staff-password-help-title">Trouble signing in?</h2>
+        <p id="staff-password-help-description">
+          If you’ve forgotten your password or cannot access your account,
+          please contact an Admin or Manager for help.
+        </p>
+        <button
+          type="button"
+          className="staff-login__submit"
+          autoFocus
+          onClick={() => resetDialogRef.current?.close()}
+        >
+          Close
+        </button>
+      </dialog>
     </main>
   )
 }

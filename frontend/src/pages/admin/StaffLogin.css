@@ -131,14 +131,41 @@
   text-decoration: underline;
 }
 
-.staff-login .staff-login__message {
-  margin-bottom: 16px;
-  color: #686861;
-  font-size: 13px;
+.staff-login__reset-dialog {
+  width: min(440px, calc(100% - 32px));
+  max-width: none;
+  max-height: calc(100svh - 32px);
+  padding: clamp(20px, 5vw, 32px);
+  overflow-y: auto;
+  border: 1px solid #dfd3bf;
+  border-radius: 24px;
+  background: #faf6ee;
+  color: #2a2a27;
+  font: inherit;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 25%);
 }
 
-.staff-login__message:empty {
-  display: none;
+.staff-login__reset-dialog[open] {
+  display: grid;
+  gap: 20px;
+}
+
+.staff-login__reset-dialog::backdrop {
+  background: rgb(15 31 23 / 65%);
+}
+
+.staff-login__reset-dialog h2 {
+  margin: 0;
+  color: #1f3b2e;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: normal;
+}
+
+.staff-login__reset-dialog p {
+  line-height: 1.6;
 }
 
 .staff-login__submit {

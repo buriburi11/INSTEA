@@ -30,15 +30,30 @@ describe('mock administrator permissions', () => {
     expect(readAdminPermissions().permissions[role]['roles.manage']).toBe(false)
   })
 
-  it('defines all five roles and all twelve permission areas', () => {
+  it('defines all five roles and all thirteen permission areas', () => {
     const settings = createDefaultAdminPermissions()
     expect(Object.keys(settings)).toHaveLength(5)
-    for (const role of adminRoles) expect(Object.keys(settings[role.id])).toHaveLength(12)
+    for (const role of adminRoles) expect(Object.keys(settings[role.id])).toHaveLength(13)
     for (const permission of adminPermissionAreas) {
       expect(settings.administrator[permission.id]).toBe(true)
       expect(settings['loyalty-member'][permission.id]).toBe(false)
       expect(settings['regular-customer'][permission.id]).toBe(false)
     }
+  })
+
+  it('adds Administrator employee access to older settings without overwriting other grants or explicit denials', () => {
+    const permissions = createDefaultAdminPermissions()
+    for (const role of adminRoles) delete permissions[role.id]['employees.manage']
+    permissions.manager['menu.manage'] = false
+    localStorage.setItem(ADMIN_PERMISSIONS_STORAGE_KEY, JSON.stringify({ version: 1, permissions }))
+    const loaded = readAdminPermissions().permissions
+    expect(loaded.administrator['employees.manage']).toBe(true)
+    expect(loaded.manager['employees.manage']).toBe(false)
+    expect(loaded.staff['employees.manage']).toBe(false)
+    expect(loaded.manager['menu.manage']).toBe(false)
+    permissions.administrator['employees.manage'] = false
+    localStorage.setItem(ADMIN_PERMISSIONS_STORAGE_KEY, JSON.stringify({ version: 1, permissions }))
+    expect(readAdminPermissions().permissions.administrator['employees.manage']).toBe(false)
   })
 
   it('preserves explicit grants while rejecting unknown or non-boolean permissions', () => {

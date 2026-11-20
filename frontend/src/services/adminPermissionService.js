@@ -21,7 +21,14 @@ export function readAdminPermissions() {
     if (parsed?.version !== 1 || !parsed.permissions || typeof parsed.permissions !== 'object' || Array.isArray(parsed.permissions)) {
       throw new Error('Invalid saved permissions')
     }
-    return { permissions: normalizeAdminPermissions(parsed.permissions), warning: '' }
+    // Existing saved matrices predate Employee Management. Grant the new area to
+    // Administrator only when the setting is absent; keep explicit denials.
+    const administrator = parsed.permissions.administrator ?? {}
+    const migrated = Object.hasOwn(administrator, 'employees.manage') ? parsed.permissions : {
+      ...parsed.permissions,
+      administrator: { ...administrator, 'employees.manage': true },
+    }
+    return { permissions: normalizeAdminPermissions(migrated), warning: '' }
   } catch {
     return { permissions: createDefaultAdminPermissions(), warning: 'Saved preview permissions could not be loaded. Sample defaults are in use.' }
   }
