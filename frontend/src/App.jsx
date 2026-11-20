@@ -69,6 +69,8 @@ function App() {
         <Route path="orders" element={<AdminOrders />} />
         <Route path="products" element={<AdminProducts />} />
         <Route path="customers" element={<AdminCustomers />} />
+        {/* Replace this placeholder with the team's Employee Management page. */}
+        <Route path="employees" element={<AdminPlaceholder title="Employee Management" />} />
         <Route path="loyalty" element={<AdminLoyalty />} />
         <Route path="community" element={<AdminCommunity />} />
         <Route path="community/triviaquestions" element={<TriviaQuestionBank />} />
