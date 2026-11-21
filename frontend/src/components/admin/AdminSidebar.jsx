@@ -4,6 +4,7 @@ import {
   ClipboardList,
   Coffee,
   Users,
+  ContactRound,
   Award,
   MessagesSquare,
   ShieldCheck,
@@ -25,6 +26,7 @@ const navigation = [
   { label: 'Loyalty', path: '/admin/loyalty', icon: Award },
   { label: 'Community', path: '/admin/community', icon: MessagesSquare },
   { label: 'Roles & access', path: '/admin/roles', icon: ShieldCheck },
+  { label: 'Employee Management', path: '/admin/employees', icon: ContactRound },
 ]
 
 export default function AdminSidebar({ collapsed, onToggle }) {

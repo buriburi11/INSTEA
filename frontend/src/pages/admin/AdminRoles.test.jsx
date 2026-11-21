@@ -81,7 +81,7 @@ describe('roles and permissions matrix', () => {
       expect(table.getByRole('columnheader', { name })).toBeInTheDocument()
     }
     for (const area of adminPermissionAreas) expect(table.getByText(area.label)).toBeInTheDocument()
-    expect(table.getAllByRole('checkbox')).toHaveLength(60)
+    expect(table.getAllByRole('checkbox')).toHaveLength(65)
     const staffMenu = table.getByRole('checkbox', { name: 'Staff: Menu management' })
     expect(staffMenu).not.toBeChecked()
     fireEvent.click(staffMenu)
