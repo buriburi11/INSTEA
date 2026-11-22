@@ -17,7 +17,8 @@ import { getDailyTrivia } from "../services/triviaService";
 import { communityAnnouncements } from "../data/communityAnnouncements";
 import { events } from "../data/events";
 import { communityMilestone } from "../data/communityMilestone";
-import { getPublishedReviews } from '../services/reviewService.js'
+// Retrieve published reviews and save member edits for admin approval.
+import { getPublishedReviews, updateReview } from '../services/reviewService.js';
 
 //review date calculation
 import { getReviewDate } from "../utils/reviewDate";
@@ -28,7 +29,7 @@ function Community() {
     const { isAuthenticated, customer } = useAuth();
 
 
-    {/*get review from admin and displays the approved and only shows the 4 latest*/}
+    {/*get review from admin and displays the approved and only shows the 4 latest*/ }
     const [publishedReviews, setPublishedReviews] = useState([]);
     useEffect(() => {
         let isActive = true;
@@ -261,19 +262,99 @@ function Community() {
     const [reviewMessage, setReviewMessage] = useState("");
     const [reviewMessageType, setReviewMessageType] = useState("");
 
-    // checks the review form and displays a confirmation message
-    const handleReviewSubmit = () => {
-        const product = document.getElementById("community-review-product").value.trim();
-        const comment = document.getElementById("community-review-comment").value.trim();
+    const [reviewProduct, setReviewProduct] = useState("");
+    const [reviewComment, setReviewComment] = useState("");
 
+    // Tracks which existing review is being edited.
+    // null means the member is writing a new review.
+    const [editingReviewId, setEditingReviewId] = useState(null);
+
+    // Controls the confirmation dialog when saving an edited review.
+    const [showEditConfirmation, setShowEditConfirmation] = useState(false);
+
+    // Fills the review form with the selected review's information.
+    const handleEditReview = (review) => {
+        setEditingReviewId(review.id);
+        setReviewProduct(review.product);
+        setReviewRating(review.rating);
+        setReviewComment(review.comment);
+        setReviewMessage("");
+        setReviewMessageType("");
+    };
+
+
+    // Validates the review form before submitting.
+    // Edited reviews require confirmation before saving.
+    const handleReviewSubmit = () => {
+        const product = reviewProduct.trim();
+        const comment = reviewComment.trim();
+
+        // Make sure all required fields are completed.
         if (!product || reviewRating === 0 || !comment) {
             setReviewMessage("Please complete all fields and select a star rating before submitting.");
             setReviewMessageType("error");
             return;
         }
 
+        // Ask for confirmation before saving an edited review.
+        if (editingReviewId !== null) {
+            setReviewMessage("");
+            setReviewMessageType("");
+            setShowEditConfirmation(true);
+            return;
+        }
+
+        // Show the existing submission message for new reviews.
         setReviewMessage("Your review has been submitted! Check back soon to see it published.");
         setReviewMessageType("success");
+    };
+
+    // Cancels editing and resets the review form.
+    const handleCancelEdit = () => {
+        setEditingReviewId(null);
+        setReviewProduct("");
+        setReviewRating(0);
+        setReviewComment("");
+        setReviewMessage("");
+        setReviewMessageType("");
+        setShowEditConfirmation(false);
+    };
+
+    // Saves the edited review and sends it back for admin approval.
+    // After saving, the review disappears from the public Community page.
+    const handleConfirmEdit = async () => {
+        if (editingReviewId === null) return;
+
+        try {
+            // Save the updated review and change its status to pending.
+            await updateReview(editingReviewId, {
+                product: reviewProduct.trim(),
+                rating: reviewRating,
+                comment: reviewComment.trim(),
+            });
+
+            // Close the confirmation dialog and reset the editing form.
+            handleCancelEdit();
+
+            // Notify the member that admin approval is required.
+            setReviewMessage("Your changes were submitted for admin approval.");
+            setReviewMessageType("success");
+
+            // Refresh the public review list after editing.
+            // Display only the 4 most recent approved reviews.
+            const updatedReviews = await getPublishedReviews();
+
+            const recentReviews = [...updatedReviews]
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 4);
+
+            setPublishedReviews(recentReviews);
+        } catch (error) {
+            // Keep the form open if saving fails.
+            setShowEditConfirmation(false);
+            setReviewMessage(error.message || "Unable to save your changes.");
+            setReviewMessageType("error");
+        }
     };
 
     {/*===============*/ }
@@ -957,7 +1038,7 @@ function Community() {
                     {/*================*/}
                     <div className="community-review-form-container">
                         <h3 className="community-review-form-title">
-                            Share your review
+                            {editingReviewId !== null ? "Edit your review" : "Share your review"}
                         </h3>
 
                         {/*Product selection for review*/}
@@ -975,6 +1056,8 @@ function Community() {
                                 className="community-review-form-input"
                                 placeholder="e.g. Amber Peach Oolong"
                                 maxLength={60}
+                                value={reviewProduct}
+                                onChange={(e) => setReviewProduct(e.target.value)}
                                 required
                             />
                         </div>
@@ -1018,6 +1101,8 @@ function Community() {
                                     placeholder="What did you love? What could be better?"
                                     maxLength={500}
                                     rows={5}
+                                    value={reviewComment}
+                                    onChange={(e) => setReviewComment(e.target.value)}
                                     required
                                 />
                             </div>
@@ -1027,8 +1112,20 @@ function Community() {
                                 className="community-review-submit"
                                 onClick={handleReviewSubmit}
                             >
-                                Submit review
+                                {editingReviewId !== null ? "Save changes" : "Submit review"}
                             </button>
+
+                            {/* Allow members to cancel editing their review */}
+                            {editingReviewId !== null && (
+                                <button
+                                    type="button"
+                                    className="community-review-cancel"
+                                    onClick={handleCancelEdit}
+                                >
+                                    Cancel Edit
+                                </button>
+                            )}
+
                             {reviewMessage && (
                                 <p
                                     className={`community-review-message ${reviewMessageType}`}
@@ -1108,6 +1205,7 @@ function Community() {
                                             <button
                                                 type="button"
                                                 className="community-review-edit"
+                                                onClick={() => handleEditReview(review)}
                                             >
                                                 <Pencil size={15} />
                                                 Edit
@@ -1142,6 +1240,43 @@ function Community() {
                     </div>
                 </div>
             </section>
+            {/* Confirmation dialog for editing a review */}
+            {showEditConfirmation && (
+                <div className="community-edit-overlay">
+                    <div
+                        className="community-edit-dialog"
+                        role="alertdialog"
+                        aria-modal="true"
+                        aria-labelledby="edit-confirmation-title"
+                        aria-describedby="edit-confirmation-description"
+                    >
+                        <h3 id="edit-confirmation-title">
+                            Submit review changes?
+                        </h3>
+
+                        <p id="edit-confirmation-description">
+                            Editing your review will temporarily hide it from
+                            the Community page. Your updated review must be
+                            approved by an admin before it becomes visible again.
+                            Do you want to continue?
+                        </p>
+
+                        <div className="community-edit-dialog-actions">
+                            <button
+                                type="button"
+                                onClick={() => setShowEditConfirmation(false)}
+                            >
+                                Cancel
+                            </button>
+
+                            {/* Save the edited review when the member confirms. */}
+                            <button type="button" onClick={handleConfirmEdit}>
+                                Confirm changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </main >
     );

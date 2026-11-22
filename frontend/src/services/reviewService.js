@@ -39,6 +39,8 @@ import { reviewSubmissions } from '../data/reviewSubmissions.js'
 export const REVIEW_STATUSES = ['pending', 'published', 'rejected']
 export const REVIEW_MODERATION_STORAGE_KEY = 'instea.reviewModeration.v1'
 
+export const REVIEW_EDITS_STORAGE_KEY = 'instea.reviewEdits.v1'
+
 // There is no staff login behind the mock, so every action is attributed to this name.
 const MOCK_MODERATOR = 'Staff Member'
 
@@ -84,6 +86,36 @@ function toReview(source) {
   }
 }
 
+// Reads review edits saved in this browser.
+// Edited content is stored separately from the original mock reviews and admin moderation history, so the original data is preserved.
+// Returns an empty object if no valid saved edits exist.
+function readSavedEdits() {
+  try {
+    const saved = localStorage.getItem(REVIEW_EDITS_STORAGE_KEY)
+    if (!saved) return {}
+
+    const parsed = JSON.parse(saved)
+    if (parsed?.version !== 1 || !isRecord(parsed.reviews)) return {}
+
+    return parsed.reviews
+  } catch {
+    return {}
+  }
+}
+
+// Saves edited review content in this browser.
+// Uses separate storage so the original mock reviews and existing admin moderation history are preserved.
+function writeSavedEdits(edits) {
+  try {
+    localStorage.setItem(REVIEW_EDITS_STORAGE_KEY, JSON.stringify({
+      version: 1,
+      reviews: edits,
+    }))
+  } catch {
+    throw new Error('The review changes could not be saved in this browser.')
+  }
+}
+
 // Saved moderation per review id: { status, history }, where history holds only the
 // actions taken in this browser. Anything that is not valid, such as bad JSON, another
 // version, or an unknown status, is ignored and the mock data is used instead.
@@ -112,13 +144,38 @@ function writeSavedModeration(saved) {
   }
 }
 
+// Combines the original mock reviews with saved edits and moderation.
+// Edited content replaces the displayed fields without modifying
+// the original mock data or existing moderation history.
 function listMockReviews() {
   const saved = readSavedModeration()
+  const edits = readSavedEdits()
+
   return [...communityReviews, ...reviewSubmissions].map((source) => {
     const review = toReview(source)
     const moderation = saved.get(review.id)
-    if (!moderation) return review
-    return { ...review, status: moderation.status, history: [...review.history, ...moderation.history] }
+    const edit = edits[review.id]
+
+    // Use edited content when available, otherwise keep the original.
+    const updatedReview = isRecord(edit)
+      ? {
+          ...review,
+          product: typeof edit.product === 'string' ? edit.product : review.product,
+          rating: Number.isInteger(edit.rating) && edit.rating >= 1 && edit.rating <= 5
+            ? edit.rating
+            : review.rating,
+          comment: typeof edit.comment === 'string' ? edit.comment : review.comment,
+        }
+      : review
+
+    // Preserve the admin moderation status and history.
+    if (!moderation) return updatedReview
+
+    return {
+      ...updatedReview,
+      status: moderation.status,
+      history: [...updatedReview.history, ...moderation.history],
+    }
   })
 }
 
@@ -179,4 +236,51 @@ export async function getPublishedReviews() {
   const reviews = await getReviewSubmissions()
 
   return reviews.filter((review) => review.status === 'published')
+}
+
+/**
+ * Saves changes to an existing review and sends it back for admin approval.
+ * Mock mode stores edits separately from the original review data.
+ *
+ * @param {string} id review being edited
+ * @param {{ product: string, rating: number, comment: string }} changes
+ * @returns {Promise<ReviewSubmission>}
+ */
+export async function updateReview(id, changes) {
+  const product = changes.product?.trim()
+  const comment = changes.comment?.trim()
+  const rating = changes.rating
+
+  // Validate the edited review before saving.
+  if (!product || !comment || !Number.isInteger(rating) ||
+      rating < 1 || rating > 5) {
+    throw new Error('Please enter a product, rating, and comment.')
+  }
+
+  if (USE_MOCK) {
+    // Make sure the original review exists.
+    const review = listMockReviews().find((item) => item.id === String(id))
+    if (!review) throw new Error(`Review not found: ${id}`)
+
+    // Save edited content without changing the original mock data.
+    const edits = readSavedEdits()
+    writeSavedEdits({
+      ...edits,
+      [review.id]: { product, rating, comment },
+    })
+
+    // Hide the review until an admin approves the changes.
+    await setReviewStatus(review.id, 'pending')
+
+    return mockResponse({
+      ...review,
+      product,
+      rating,
+      comment,
+      status: 'pending',
+    })
+  }
+
+  // Backend integration will be added when the API is available.
+  throw new Error('Review editing is not available without the backend.')
 }

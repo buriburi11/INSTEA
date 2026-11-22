@@ -1341,3 +1341,100 @@ button.poll-login-button:disabled {
     align-items: center;
     justify-content: center;
 }
+
+/* Overlay behind the edit confirmation dialog */
+.community-edit-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.community-edit-dialog {
+    background: #FFFCF7;
+    border: 1px solid #E4DACA;
+    border-radius: 16px;
+    padding: 32px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18);
+    text-align: center;
+}
+
+.community-edit-dialog h3 {
+    margin: 0 0 14px;
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: #173d32;
+    line-height: 1.2;
+}
+
+.community-edit-dialog p {
+    line-height: 1.6;
+    margin-bottom: 24px;
+    color:#1F3B2E;
+    font-size: 16px;
+}
+
+
+/* Confirmation buttons */
+.community-edit-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.community-edit-dialog-actions button {
+    padding: 6px 18px;
+    border-radius: 25px;
+    border: 1px solid #1F3B2E;
+    background: transparent;
+    color: #1F3B2E;
+    font: inherit;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.community-edit-dialog-actions button:last-child {
+    background: #1F3B2E;
+    color: white;
+}
+
+.community-edit-dialog-actions button:focus-visible {
+    outline: 2px solid #1F3B2E;
+    outline-offset: 3px;
+}
+
+.community-edit-dialog-actions button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Cancel editing an existing review */
+.community-review-cancel {
+    width: 100%;
+    margin-top: 10px;
+    padding: 13px;
+    border: 1px solid #1F3B2E;
+    border-radius: 10px;
+    background: white;
+    color: #1F3B2E;
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.community-review-cancel:hover {
+    background: #F0F3EE;
+}
+
+.community-review-cancel:focus-visible {
+    outline: 2px solid #1F3B2E;
+    outline-offset: 3px;
+}

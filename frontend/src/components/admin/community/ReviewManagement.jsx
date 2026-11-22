@@ -277,8 +277,26 @@ export default function ReviewManagement() {
     element?.focus()
   })
 
+  // Keep all reviews available for the existing status tabs.
+  // The All tab shows reviews needing attention and rejected reviews,
+  // while Published and Rejected retain their original history views.
   const reviews = request.reviews
-  const visibleReviews = sortReviews(filter === 'all' ? reviews : reviews.filter((review) => review.status === filter))
+
+  const moderationQueue = reviews.filter(
+    (review) =>
+      review.status === 'pending' ||
+      review.status === 'rejected' ||
+      review.flagged === true
+  )
+
+  // The All tab excludes published reviews unless they are reported.
+  // The other tabs continue showing reviews by their original status.
+  const visibleReviews = sortReviews(
+    filter === 'all'
+      ? moderationQueue
+      : reviews.filter((review) => review.status === filter)
+  )
+
   const selectedReview = reviews.find((review) => review.id === selectedId)
   const filterLabel = filters.find((item) => item.value === filter)?.label ?? 'All'
 
@@ -372,7 +390,8 @@ export default function ReviewManagement() {
                   />
                   <span className="review-management-filter-pill">
                     {label} <span className="review-management-filter-count">
-                      {value === 'all' ? reviews.length : reviews.filter((review) => review.status === value).length}
+                      {/* Count only reviews displayed in the All tab. */}
+                      {value === 'all' ? moderationQueue.length : reviews.filter((review) => review.status === value).length}
                     </span>
                   </span>
                 </label>
