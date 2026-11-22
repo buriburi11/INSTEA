@@ -1438,3 +1438,27 @@ button.poll-login-button:disabled {
     outline: 2px solid #1F3B2E;
     outline-offset: 3px;
 }
+
+/* Display report reasons vertically with consistent spacing. */
+.community-report-reasons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0;
+    text-align: left;
+    color: #152A20;
+}
+
+/* Keep each radio button aligned with its reason. */
+.community-report-reasons label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+/* Keep radio buttons from shrinking or inheriting unwanted margins. */
+.community-report-reasons input[type="radio"] {
+    flex-shrink: 0;
+    margin: 0;
+}
