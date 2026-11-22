@@ -40,7 +40,7 @@ function Footer() {
             <div className="footer-members">
                 <h4>Members</h4>
 
-                <NavLink to="/instea_rewards">INSTEA Rewards</NavLink>
+                <NavLink to="/rewards">INSTEA Rewards</NavLink>
                 <NavLink to="/community">Community</NavLink>
                 <NavLink to="/profile">My Account</NavLink>
                 <NavLink to="/staff-portal">Staff Portal</NavLink>
