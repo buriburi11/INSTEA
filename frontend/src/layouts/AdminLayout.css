@@ -121,6 +121,10 @@
 .admin-shell__content {
   padding: 32px;
   overflow-wrap: anywhere;
+
+  width: 100%;
+  max-width: 1280px;
+  margin: 0;
 }
 
 /* Override the public site's global heading styles inside admin. */
@@ -190,5 +194,20 @@
   .admin-shell__header {
     height: auto;
     flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 700px) {
+  .admin-shell,
+  .admin-shell.admin-shell--collapsed {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-shell__content {
+    padding: 16px;
+  }
+
+  .admin-shell__header {
+    padding: 16px;
   }
 }

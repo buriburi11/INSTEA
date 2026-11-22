@@ -17,7 +17,13 @@ import { getDailyTrivia } from "../services/triviaService";
 import { communityAnnouncements } from "../data/communityAnnouncements";
 import { events } from "../data/events";
 import { communityMilestone } from "../data/communityMilestone";
-import { communityReviews } from "../data/communityReviews";
+// Handles published reviews, member edits, deletion, and reporting.
+import {
+    getPublishedReviews,
+    updateReview,
+    deleteReview,
+    reportReview,
+} from '../services/reviewService.js';
 
 //review date calculation
 import { getReviewDate } from "../utils/reviewDate";
@@ -27,11 +33,34 @@ import { getReviewDate } from "../utils/reviewDate";
 function Community() {
     const { isAuthenticated, customer } = useAuth();
 
-    {/*This will only display reviews that were aprroved by an admin, and only up to 4 (the most recent)*/ }
-    const publishedReviews = communityReviews
-        .filter(review => review.status === "published")
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 4);
+
+    {/*get review from admin and displays the approved and only shows the 4 latest*/ }
+    const [publishedReviews, setPublishedReviews] = useState([]);
+    useEffect(() => {
+        let isActive = true;
+
+        async function loadPublishedReviews() {
+            try {
+                const reviews = await getPublishedReviews();
+
+                if (isActive) {
+                    const recentReviews = [...reviews]
+                        .sort((a, b) => new Date(b.date) - new Date(a.date))
+                        .slice(0, 4);
+
+                    setPublishedReviews(recentReviews);
+                }
+            } catch (error) {
+                console.error("Failed to load published reviews:", error);
+            }
+        }
+
+        loadPublishedReviews();
+
+        return () => {
+            isActive = false;
+        };
+    }, []);
 
     {/*===================*/ }
     {/*Seasonal Poll Part */ }
@@ -238,19 +267,158 @@ function Community() {
     const [reviewMessage, setReviewMessage] = useState("");
     const [reviewMessageType, setReviewMessageType] = useState("");
 
-    // checks the review form and displays a confirmation message
-    const handleReviewSubmit = () => {
-        const product = document.getElementById("community-review-product").value.trim();
-        const comment = document.getElementById("community-review-comment").value.trim();
+    const [reviewProduct, setReviewProduct] = useState("");
+    const [reviewComment, setReviewComment] = useState("");
 
+    // Tracks which existing review is being edited.
+    // null means the member is writing a new review.
+    const [editingReviewId, setEditingReviewId] = useState(null);
+
+    // Controls the confirmation dialog when saving an edited review.
+    const [showEditConfirmation, setShowEditConfirmation] = useState(false);
+
+    // Stores the review selected for deletion.
+    // Null means no delete confirmation is currently open.
+    const [reviewToDelete, setReviewToDelete] = useState(null);
+
+    // Stores the review selected for reporting.
+    // Null means the report dialog is closed.
+    const [reviewToReport, setReviewToReport] = useState(null);
+
+    // Stores the reason selected when reporting a review.
+    // An empty string means no reason has been selected.
+    const [reportReason, setReportReason] = useState('');
+
+    // Fills the review form with the selected review's information.
+    const handleEditReview = (review) => {
+        setEditingReviewId(review.id);
+        setReviewProduct(review.product);
+        setReviewRating(review.rating);
+        setReviewComment(review.comment);
+        setReviewMessage("");
+        setReviewMessageType("");
+    };
+
+
+    // Validates the review form before submitting.
+    // Edited reviews require confirmation before saving.
+    const handleReviewSubmit = () => {
+        const product = reviewProduct.trim();
+        const comment = reviewComment.trim();
+
+        // Make sure all required fields are completed.
         if (!product || reviewRating === 0 || !comment) {
             setReviewMessage("Please complete all fields and select a star rating before submitting.");
             setReviewMessageType("error");
             return;
         }
 
+        // Ask for confirmation before saving an edited review.
+        if (editingReviewId !== null) {
+            setReviewMessage("");
+            setReviewMessageType("");
+            setShowEditConfirmation(true);
+            return;
+        }
+
+        // Show the existing submission message for new reviews.
         setReviewMessage("Your review has been submitted! Check back soon to see it published.");
         setReviewMessageType("success");
+    };
+
+    // Cancels editing and resets the review form.
+    const handleCancelEdit = () => {
+        setEditingReviewId(null);
+        setReviewProduct("");
+        setReviewRating(0);
+        setReviewComment("");
+        setReviewMessage("");
+        setReviewMessageType("");
+        setShowEditConfirmation(false);
+    };
+
+    // Saves the edited review and sends it back for admin approval.
+    // After saving, the review disappears from the public Community page.
+    const handleConfirmEdit = async () => {
+        if (editingReviewId === null) return;
+
+        try {
+            // Save the updated review and change its status to pending.
+            await updateReview(editingReviewId, {
+                product: reviewProduct.trim(),
+                rating: reviewRating,
+                comment: reviewComment.trim(),
+            });
+
+            // Close the confirmation dialog and reset the editing form.
+            handleCancelEdit();
+
+            // Notify the member that admin approval is required.
+            setReviewMessage("Your changes were submitted for admin approval.");
+            setReviewMessageType("success");
+
+            // Refresh the public review list after editing.
+            // Display only the 4 most recent approved reviews.
+            const updatedReviews = await getPublishedReviews();
+
+            const recentReviews = [...updatedReviews]
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 4);
+
+            setPublishedReviews(recentReviews);
+        } catch (error) {
+            // Keep the form open if saving fails.
+            setShowEditConfirmation(false);
+            setReviewMessage(error.message || "Unable to save your changes.");
+            setReviewMessageType("error");
+        }
+    };
+
+    // Confirms deletion and removes the review from the public list.
+    // The review remains in mock storage with a "deleted" status.
+    const handleConfirmDelete = async () => {
+        if (!reviewToDelete) return;
+
+        try {
+            // Soft-delete the selected review.
+            await deleteReview(reviewToDelete.id);
+
+            // Close the confirmation dialog.
+            setReviewToDelete(null);
+
+            // Reload published reviews so the next review fills the empty spot.
+            const reviews = await getPublishedReviews();
+            const latestReviews = [...reviews]
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 4);
+
+            setPublishedReviews(latestReviews);
+        } catch (error) {
+            console.error('Failed to delete review:', error);
+            alert('Unable to delete your review. Please try again.');
+        }
+    };
+
+
+    // Submits a member's report for admin review.
+    // The reported review stays public until an admin moderates it.
+    const handleSubmitReport = async () => {
+        // Make sure a review and a reason have been selected.
+        if (!reviewToReport || !reportReason) return;
+
+        try {
+            await reportReview(reviewToReport.id, reportReason);
+
+            // Close the dialog and reset the selected reason.
+            setReviewToReport(null);
+            setReportReason('');
+
+            // Notify the member that their report was submitted.
+            alert('Your report has been submitted for admin review.');
+        } catch (error) {
+            console.error('Failed to report review:', error);
+            alert(error.message || 'Unable to submit your report. Please try again.');
+        }
     };
 
     {/*===============*/ }
@@ -793,24 +961,31 @@ function Community() {
                         This month's leaderboard
                     </h2>
 
-                    {mockTriviaLeaderboard.map((player, index) => (
-                        <div
-                            key={player.id}
-                            className={`trivia-leaderboard-row ${isAuthenticated && player.isCurrentUser ? "current-user" : ""
-                                }`}
-                        >
-                            <span className="trivia-rank">{index + 1}</span>
+                    {mockTriviaLeaderboard.map((player, index) => {
+                        const isYou =
+                            isAuthenticated &&
+                            customer?.id != null &&
+                            player.customerId === customer.id;
 
-                            <span className="trivia-player-name">
-                                {player.name}
-                                {isAuthenticated && player.isCurrentUser && " (you)"}
-                            </span>
+                        return (
+                            <div
+                                key={player.id}
+                                className={`trivia-leaderboard-row ${isYou ? "current-user" : ""}`}
+                            >
+                                <span className="trivia-rank">{index + 1}</span>
 
-                            <span className="trivia-player-points">
-                                {player.points.toLocaleString()}
-                            </span>
-                        </div>
-                    ))}
+                                <span className="trivia-player-name">
+                                    {player.name}
+                                    {isYou && " (you)"}
+                                </span>
+
+                                <span className="trivia-player-points">
+                                    {player.points.toLocaleString()}
+                                </span>
+                            </div>
+                        )
+                    })}
+
                 </aside>
             </section>
 
@@ -927,7 +1102,7 @@ function Community() {
                     {/*================*/}
                     <div className="community-review-form-container">
                         <h3 className="community-review-form-title">
-                            Share your review
+                            {editingReviewId !== null ? "Edit your review" : "Share your review"}
                         </h3>
 
                         {/*Product selection for review*/}
@@ -945,6 +1120,8 @@ function Community() {
                                 className="community-review-form-input"
                                 placeholder="e.g. Amber Peach Oolong"
                                 maxLength={60}
+                                value={reviewProduct}
+                                onChange={(e) => setReviewProduct(e.target.value)}
                                 required
                             />
                         </div>
@@ -988,6 +1165,8 @@ function Community() {
                                     placeholder="What did you love? What could be better?"
                                     maxLength={500}
                                     rows={5}
+                                    value={reviewComment}
+                                    onChange={(e) => setReviewComment(e.target.value)}
                                     required
                                 />
                             </div>
@@ -997,8 +1176,20 @@ function Community() {
                                 className="community-review-submit"
                                 onClick={handleReviewSubmit}
                             >
-                                Submit review
+                                {editingReviewId !== null ? "Save changes" : "Submit review"}
                             </button>
+
+                            {/* Allow members to cancel editing their review */}
+                            {editingReviewId !== null && (
+                                <button
+                                    type="button"
+                                    className="community-review-cancel"
+                                    onClick={handleCancelEdit}
+                                >
+                                    Cancel Edit
+                                </button>
+                            )}
+
                             {reviewMessage && (
                                 <p
                                     className={`community-review-message ${reviewMessageType}`}
@@ -1078,6 +1269,7 @@ function Community() {
                                             <button
                                                 type="button"
                                                 className="community-review-edit"
+                                                onClick={() => handleEditReview(review)}
                                             >
                                                 <Pencil size={15} />
                                                 Edit
@@ -1086,6 +1278,8 @@ function Community() {
                                             <button
                                                 type="button"
                                                 className="community-review-delete"
+                                                // Remember which review the member wants to delete.
+                                                onClick={() => setReviewToDelete(review)}
                                             >
                                                 <Trash2 size={15} />
                                                 Delete
@@ -1098,6 +1292,8 @@ function Community() {
                                             <button
                                                 type="button"
                                                 className="community-review-report"
+                                                // Remember which review the member wants to report.
+                                                onClick={() => setReviewToReport(review)}
                                             >
                                                 <Flag size={16} />
                                                 Report
@@ -1112,6 +1308,169 @@ function Community() {
                     </div>
                 </div>
             </section>
+            {/* Confirmation dialog for editing a review */}
+            {showEditConfirmation && (
+                <div className="community-edit-overlay">
+                    <div
+                        className="community-edit-dialog"
+                        role="alertdialog"
+                        aria-modal="true"
+                        aria-labelledby="edit-confirmation-title"
+                        aria-describedby="edit-confirmation-description"
+                    >
+                        <h3 id="edit-confirmation-title">
+                            Submit review changes?
+                        </h3>
+
+                        <p id="edit-confirmation-description">
+                            Editing your review will temporarily hide it from
+                            the Community page. Your updated review must be
+                            approved by an admin before it becomes visible again.
+                            Do you want to continue?
+                        </p>
+
+                        <div className="community-edit-dialog-actions">
+                            <button
+                                type="button"
+                                onClick={() => setShowEditConfirmation(false)}
+                            >
+                                Cancel
+                            </button>
+
+                            {/* Save the edited review when the member confirms. */}
+                            <button type="button" onClick={handleConfirmEdit}>
+                                Confirm changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Confirm deletion before removing a member's review. */}
+            {reviewToDelete && (
+                <div className="community-edit-overlay">
+                    <div
+                        className="community-edit-dialog"
+                        role="alertdialog"
+                        aria-modal="true"
+                        aria-labelledby="delete-confirmation-title"
+                        aria-describedby="delete-confirmation-description"
+                    >
+                        <h3 id="delete-confirmation-title">
+                            Delete your review?
+                        </h3>
+
+                        <p id="delete-confirmation-description">
+                            Are you sure you want to delete your review?
+                            It will no longer appear on the Community page.
+                        </p>
+
+                        <div className="community-edit-dialog-actions">
+                            <button
+                                type="button"
+                                onClick={() => setReviewToDelete(null)}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                // Delete the selected review when the member confirms.
+                                onClick={handleConfirmDelete}
+                            >
+                                Confirm Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Allow members to select a reason for reporting a review. */}
+            {reviewToReport && (
+                <div className="community-edit-overlay">
+                    <div
+                        className="community-edit-dialog"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="report-dialog-title"
+                        aria-describedby="report-dialog-description"
+                    >
+                        <h3 id="report-dialog-title">Report this review</h3>
+
+                        <p id="report-dialog-description">
+                            Why are you reporting this review?
+                        </p>
+
+                        <div className="community-report-reasons">
+                            {/* Allow the member to select one reason for reporting. */}
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="Inappropriate content"
+                                    checked={reportReason === 'Inappropriate content'}
+                                    onChange={() => setReportReason('Inappropriate content')}
+                                />
+                                Inappropriate or offensive content
+                            </label>
+
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="Spam"
+                                    checked={reportReason === 'Spam'}
+                                    onChange={() => setReportReason('Spam')}
+                                />
+                                Spam or advertising
+                            </label>
+
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="Misleading review"
+                                    checked={reportReason === 'Misleading review'}
+                                    onChange={() => setReportReason('Misleading review')}
+                                />
+                                Fake or misleading review
+                            </label>
+
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="Other"
+                                    checked={reportReason === 'Other'}
+                                    onChange={() => setReportReason('Other')}
+                                />
+                                Other
+                            </label>
+                        </div>
+
+                        <div className="community-edit-dialog-actions">
+                            <button
+                                type="button"
+                                // Close the dialog and clear the previously selected reason.
+                                onClick={() => {
+                                    setReviewToReport(null);
+                                    setReportReason('');
+                                }}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                // Submit the selected review and reason for admin moderation.
+                                onClick={handleSubmitReport}
+                                disabled={!reportReason}
+                            >
+                                Submit Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </main >
     );

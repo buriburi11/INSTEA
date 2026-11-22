@@ -12,14 +12,13 @@
     align-self: flex-start;
 }
 
-.footer .logo{
+.footer .logo {
     width: 280px;
+    max-width: 100%;
     height: auto;
+    display: block;
     flex-shrink: 0;
-    /*inverts the color of the logo to white*/
     filter: brightness(0) invert(1);
-    transform: translateX(-75px);
-    padding-left: 30px;
 }
 
 /*text under the logo*/
@@ -32,7 +31,7 @@
     line-height: 1.6;
     max-width: 280px;
     margin-top: 5px;
-    padding-left: 35px;
+    padding-left: 0;
 }
 
 /*visit column*/
@@ -53,7 +52,7 @@
 }
 
 .footer-visit a:hover {
-    color: #8A6A35;
+    color: #C2A066;
     text-decoration: underline;
     text-underline-offset: 4px;
 }
@@ -76,7 +75,7 @@
 }
 
 .footer-members a:hover {
-    color: #8A6A35;
+    color: #C2A066;
     text-decoration: underline;
     text-underline-offset: 4px;
 }
@@ -99,7 +98,7 @@
 }
 
 .footer-policies a:hover {
-    color: #8A6A35;
+    color: #C2A066;
     text-decoration: underline;
     text-underline-offset: 4px;
 }
@@ -133,15 +132,15 @@
 
 
 .footer-contact a:hover {
-    color: #8A6A35;
+    color: #C2A066;
     opacity: 0.8;
     text-decoration: underline;
     text-underline-offset: 4px;
 }
 
-.footer-visit h4, 
-.footer-members h4, 
-.footer-policies h4, 
+.footer-visit h4,
+.footer-members h4,
+.footer-policies h4,
 .footer-contact h4 {
     margin: 0 0 10px 0;
     color: #C2A066;
@@ -155,7 +154,7 @@
     align-items: center;
     gap: 15px;
     margin-top: 20px;
-    padding-left: 35px;
+    padding-left: 0px;
 
 }
 
@@ -192,7 +191,6 @@
 @media (min-width: 769px) and (max-width: 1100px) {
     .footer {
         grid-template-columns: repeat(2, minmax(0, 1fr));
-
     }
 }
 
@@ -207,20 +205,15 @@
         padding-left: 0;
     }
 
-    .footer .logo{
+    .footer .logo {
         width: 200px;
-        max-width: 100%;
-        transform: none;
-        padding-left: 0;
     }
 
     .footer-hours {
         width: 100%;
     }
-    
+
 }
-
-
 
 /*
 .footer-socials .youtube-logo{

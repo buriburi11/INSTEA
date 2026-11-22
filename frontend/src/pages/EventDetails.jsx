@@ -118,7 +118,11 @@ export default function EventDetails() {
 
 
 
-                    {isAuthenticated ? (
+                    {event.spotsRemaining === 0 ? (
+                        <p role="status" className="event-sold-out">
+                            This event is fully booked. No spots are currently available.
+                        </p>
+                    ) : isAuthenticated ? (
                         <form
                             className="event-rsvp-form"
                             onSubmit={(e) => {

@@ -51,7 +51,7 @@ export const mockTriviaLeaderboard = [
         id: 3,
         name: "Alex R.",
         points: 2390,
-        isCurrentUser: true
+        customerId: "cust-alex-rivera",
     },
     {
         id: 4,

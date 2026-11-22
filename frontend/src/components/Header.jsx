@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Bell, Menu, ShoppingBag, X } from 'lucide-react'
-import { NavLink } from 'react-router'
+import { NavLink, useLocation } from 'react-router'
 import instealogo from '../assets/instea-logo.svg'
 import useAuth from '../auth/useAuth.js'
 import useNotifications from '../notifications/useNotifications.js'
@@ -11,9 +11,16 @@ function Header() {
   const { unreadCount } = useNotifications()
   const [menuOpen, setMenuOpen] = useState(false)
 
+  const location = useLocation()
+
+  // Close the menu whenever the page changes
+  useEffect(() => {
+    setMenuOpen(false)
+  }, [location.pathname])
+
   const userInitials = customer
     ? `${customer.firstName?.[0] ?? ''}${customer.lastName?.[0] ?? ''}`
-        .toUpperCase()
+      .toUpperCase()
     : 'IN'
 
   const accountPath = isAuthenticated ? '/member' : '/login'
@@ -26,10 +33,10 @@ function Header() {
 
       return Array.isArray(cart)
         ? cart.reduce(
-            (total, item) =>
-              total + (Number(item.quantity) || 0),
-            0,
-          )
+          (total, item) =>
+            total + (Number(item.quantity) || 0),
+          0,
+        )
         : 0
     } catch {
       return 0
@@ -38,6 +45,24 @@ function Header() {
 
   const [cartCount, setCartCount] = useState(getCartCount)
   const closeMenu = () => setMenuOpen(false)
+
+  // Close the mobile menu when Escape is pressed
+  useEffect(() => {
+    if (!menuOpen) return
+
+    const handleEscape = (event) => {
+      if (event.key === 'Escape') {
+        setMenuOpen(false)
+        document.querySelector('.mobile-menu-toggle')?.focus()
+      }
+    }
+
+    window.addEventListener('keydown', handleEscape)
+
+    return () => {
+      window.removeEventListener('keydown', handleEscape)
+    }
+  }, [menuOpen])
 
   useEffect(() => {
     const updateCartCount = () => setCartCount(getCartCount())

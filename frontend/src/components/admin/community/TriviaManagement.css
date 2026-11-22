@@ -49,6 +49,12 @@
     background-color: #2c5140;
 }
 
+/* Keyboard focus for Manage Question Bank */
+.trivia-manage-button:focus-visible {
+    outline: 3px solid #D4A84B;
+    outline-offset: 4px;
+}
+
 /*Daily Trivia Settings*/
 .trivia-settings {
     display: flex;

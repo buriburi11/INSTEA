@@ -151,8 +151,12 @@ function ReviewCard({ review, selected, detailsId, saving, openerRef, onView, on
       <p className="review-management-meta">Submitted <SubmittedDate value={review.date} /></p>
       <p className="review-management-comment">{commentPreview(review.comment)}</p>
       {review.flagged && (
-        <p className="review-management-flag"><Flag size={14} aria-hidden="true" /> Flagged as possible spam</p>
-      )}
+        /* Display a general warning because reports can have different reasons. */
+        < p className="review-management-flag">
+          <Flag size={14} aria-hidden="true" /> Flagged for review
+        </p>
+      )
+      }
       <div className="review-management-card-actions">
         <ModerationActions review={review} saving={saving} onModerate={(item, status) => onModerate(item, status, 'list')} />
         <AdminButton
@@ -168,7 +172,7 @@ function ReviewCard({ review, selected, detailsId, saving, openerRef, onView, on
           View
         </AdminButton>
       </div>
-    </article>
+    </article >
   )
 }
 
@@ -277,8 +281,29 @@ export default function ReviewManagement() {
     element?.focus()
   })
 
+  // Keep all reviews available for the existing status tabs.
+  // The All tab shows reviews needing attention and rejected reviews,
+  // while Published and Rejected retain their original history views.
   const reviews = request.reviews
-  const visibleReviews = sortReviews(filter === 'all' ? reviews : reviews.filter((review) => review.status === filter))
+  // Show reviews needing moderation, but never show deleted reviews.
+  const moderationQueue = reviews.filter(
+    (review) =>
+      review.status !== 'deleted' &&
+      (
+        review.status === 'pending' ||
+        review.status === 'rejected' ||
+        review.flagged === true
+      )
+  );
+
+  // The All tab excludes published reviews unless they are reported.
+  // The other tabs continue showing reviews by their original status.
+  const visibleReviews = sortReviews(
+    filter === 'all'
+      ? moderationQueue
+      : reviews.filter((review) => review.status === filter)
+  )
+
   const selectedReview = reviews.find((review) => review.id === selectedId)
   const filterLabel = filters.find((item) => item.value === filter)?.label ?? 'All'
 
@@ -372,7 +397,8 @@ export default function ReviewManagement() {
                   />
                   <span className="review-management-filter-pill">
                     {label} <span className="review-management-filter-count">
-                      {value === 'all' ? reviews.length : reviews.filter((review) => review.status === value).length}
+                      {/* Count only reviews displayed in the All tab. */}
+                      {value === 'all' ? moderationQueue.length : reviews.filter((review) => review.status === value).length}
                     </span>
                   </span>
                 </label>
