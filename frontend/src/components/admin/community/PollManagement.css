@@ -44,6 +44,12 @@
     background-color: #315743;
 }
 
+/* Keyboard focus for Create Poll button */
+.poll-management-create button:focus-visible {
+    outline: 3px solid #D4A84B;
+    outline-offset: 4px;
+}
+
 /* Poll Type Selection*/
 .poll-type-selection {
     background-color: #ffffff;
@@ -346,6 +352,12 @@
     background-color: #1F3B2E;
     color: #ffffff;
     border: 1px solid #1F3B2E;
+}
+
+/* Keyboard focus for Publish Poll button */
+.poll-form-actions button:last-child:focus-visible {
+    outline: 3px solid #D4A84B;
+    outline-offset: 4px;
 }
 
 /* Publish button hover */
