@@ -159,7 +159,17 @@ export default function TriviaQuestionBank() {
                     <button
                         type="button"
                         className="trivia-add-button"
-                        onClick={() => setShowCreateForm(!showCreateForm)}
+                        onClick={() => {
+                            if (showCreateForm) {
+                                setNewQuestion("");
+                                setAnswerA("");
+                                setAnswerB("");
+                                setAnswerC("");
+                                setCorrectAnswer("");
+                            }
+
+                            setShowCreateForm(!showCreateForm);
+                        }}
                     >
                         {showCreateForm ? "Cancel" : "Create a Question"}
                     </button>
