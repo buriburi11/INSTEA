@@ -17,8 +17,13 @@ import { getDailyTrivia } from "../services/triviaService";
 import { communityAnnouncements } from "../data/communityAnnouncements";
 import { events } from "../data/events";
 import { communityMilestone } from "../data/communityMilestone";
-// Handles published reviews, member edits, and soft deletion.
-import { getPublishedReviews, updateReview, deleteReview } from '../services/reviewService.js';
+// Handles published reviews, member edits, deletion, and reporting.
+import {
+    getPublishedReviews,
+    updateReview,
+    deleteReview,
+    reportReview,
+} from '../services/reviewService.js';
 
 //review date calculation
 import { getReviewDate } from "../utils/reviewDate";
@@ -276,6 +281,14 @@ function Community() {
     // Null means no delete confirmation is currently open.
     const [reviewToDelete, setReviewToDelete] = useState(null);
 
+    // Stores the review selected for reporting.
+    // Null means the report dialog is closed.
+    const [reviewToReport, setReviewToReport] = useState(null);
+
+    // Stores the reason selected when reporting a review.
+    // An empty string means no reason has been selected.
+    const [reportReason, setReportReason] = useState('');
+
     // Fills the review form with the selected review's information.
     const handleEditReview = (review) => {
         setEditingReviewId(review.id);
@@ -383,6 +396,28 @@ function Community() {
         } catch (error) {
             console.error('Failed to delete review:', error);
             alert('Unable to delete your review. Please try again.');
+        }
+    };
+
+
+    // Submits a member's report for admin review.
+    // The reported review stays public until an admin moderates it.
+    const handleSubmitReport = async () => {
+        // Make sure a review and a reason have been selected.
+        if (!reviewToReport || !reportReason) return;
+
+        try {
+            await reportReview(reviewToReport.id, reportReason);
+
+            // Close the dialog and reset the selected reason.
+            setReviewToReport(null);
+            setReportReason('');
+
+            // Notify the member that their report was submitted.
+            alert('Your report has been submitted for admin review.');
+        } catch (error) {
+            console.error('Failed to report review:', error);
+            alert(error.message || 'Unable to submit your report. Please try again.');
         }
     };
 
@@ -1257,6 +1292,8 @@ function Community() {
                                             <button
                                                 type="button"
                                                 className="community-review-report"
+                                                // Remember which review the member wants to report.
+                                                onClick={() => setReviewToReport(review)}
                                             >
                                                 <Flag size={16} />
                                                 Report
@@ -1341,6 +1378,94 @@ function Community() {
                                 onClick={handleConfirmDelete}
                             >
                                 Confirm Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Allow members to select a reason for reporting a review. */}
+            {reviewToReport && (
+                <div className="community-edit-overlay">
+                    <div
+                        className="community-edit-dialog"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="report-dialog-title"
+                        aria-describedby="report-dialog-description"
+                    >
+                        <h3 id="report-dialog-title">Report this review</h3>
+
+                        <p id="report-dialog-description">
+                            Why are you reporting this review?
+                        </p>
+
+                        <div className="community-report-reasons">
+                            {/* Allow the member to select one reason for reporting. */}
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="Inappropriate content"
+                                    checked={reportReason === 'Inappropriate content'}
+                                    onChange={() => setReportReason('Inappropriate content')}
+                                />
+                                Inappropriate or offensive content
+                            </label>
+
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="Spam"
+                                    checked={reportReason === 'Spam'}
+                                    onChange={() => setReportReason('Spam')}
+                                />
+                                Spam or advertising
+                            </label>
+
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="Misleading review"
+                                    checked={reportReason === 'Misleading review'}
+                                    onChange={() => setReportReason('Misleading review')}
+                                />
+                                Fake or misleading review
+                            </label>
+
+                            <label>
+                                <input
+                                    type="radio"
+                                    name="reportReason"
+                                    value="Other"
+                                    checked={reportReason === 'Other'}
+                                    onChange={() => setReportReason('Other')}
+                                />
+                                Other
+                            </label>
+                        </div>
+
+                        <div className="community-edit-dialog-actions">
+                            <button
+                                type="button"
+                                // Close the dialog and clear the previously selected reason.
+                                onClick={() => {
+                                    setReviewToReport(null);
+                                    setReportReason('');
+                                }}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                // Submit the selected review and reason for admin moderation.
+                                onClick={handleSubmitReport}
+                                disabled={!reportReason}
+                            >
+                                Submit Report
                             </button>
                         </div>
                     </div>

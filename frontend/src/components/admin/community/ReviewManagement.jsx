@@ -151,8 +151,12 @@ function ReviewCard({ review, selected, detailsId, saving, openerRef, onView, on
       <p className="review-management-meta">Submitted <SubmittedDate value={review.date} /></p>
       <p className="review-management-comment">{commentPreview(review.comment)}</p>
       {review.flagged && (
-        <p className="review-management-flag"><Flag size={14} aria-hidden="true" /> Flagged as possible spam</p>
-      )}
+        /* Display a general warning because reports can have different reasons. */
+        < p className="review-management-flag">
+          <Flag size={14} aria-hidden="true" /> Flagged for review
+        </p>
+      )
+      }
       <div className="review-management-card-actions">
         <ModerationActions review={review} saving={saving} onModerate={(item, status) => onModerate(item, status, 'list')} />
         <AdminButton
@@ -168,7 +172,7 @@ function ReviewCard({ review, selected, detailsId, saving, openerRef, onView, on
           View
         </AdminButton>
       </div>
-    </article>
+    </article >
   )
 }
 

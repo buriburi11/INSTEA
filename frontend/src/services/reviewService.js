@@ -128,7 +128,19 @@ function readSavedModeration() {
     if (parsed?.version !== 1 || !isRecord(parsed.reviews)) return new Map()
     return new Map(Object.entries(parsed.reviews)
       .filter(([, entry]) => isRecord(entry) && isStatus(entry.status))
-      .map(([id, entry]) => [id, { status: entry.status, history: normalizeHistory(entry.history) }]))
+      .map(([id, entry]) => [
+        id,
+        {
+          status: entry.status,
+          history: normalizeHistory(entry.history),
+
+          // Restore saved reports when the page reloads.
+          flagged: entry.flagged === true,
+          flagReason: typeof entry.flagReason === 'string'
+            ? entry.flagReason
+            : '',
+        },
+      ]))
   } catch {
     return new Map()
   }
@@ -176,6 +188,10 @@ function listMockReviews() {
       ...updatedReview,
       status: moderation.status,
       history: [...updatedReview.history, ...moderation.history],
+
+      // Restore saved report information for the existing admin flag styling.
+      flagged: moderation.flagged || updatedReview.flagged,
+      flagReason: moderation.flagReason || updatedReview.flagReason,
     }
   })
 }
@@ -215,7 +231,14 @@ export async function setReviewStatus(id, status) {
 
     const saved = readSavedModeration()
     const entry = { status, at: new Date().toISOString(), by: MOCK_MODERATOR }
-    saved.set(review.id, { status, history: [...(saved.get(review.id)?.history ?? []), entry] })
+    // Preserve existing report information when Admin approves or rejects a review.
+    saved.set(review.id, {
+      status,
+      history: [...(saved.get(review.id)?.history ?? []), entry],
+      flagged: review.flagged,
+      flagReason: review.flagReason,
+    })
+    // Persist the updated review status and moderation history.
     writeSavedModeration(saved)
     return mockResponse({ ...review, status, history: [...review.history, entry] })
   }
@@ -313,4 +336,56 @@ export async function deleteReview(id) {
 
   // Backend integration will be added when the API is available.
   throw new Error('Review deletion is not available without the backend.')
+}
+
+/**
+ * Flags an existing review for admin moderation.
+ * The review keeps its current status, so published
+ * reviews remain visible until an admin takes action.
+ *
+ * @param {string} id review being reported
+ * @param {string} reason selected by the member
+ * @returns {Promise<ReviewSubmission>}
+ */
+export async function reportReview(id, reason) {
+  if (!reason?.trim()) {
+    throw new Error('Please select a reason for reporting.')
+  }
+
+  if (USE_MOCK) {
+    // Find the review in the existing mock data.
+    const review = listMockReviews().find((item) => item.id === String(id))
+
+    if (!review || review.status === 'deleted') {
+      throw new Error('Review not found or already deleted.')
+    }
+
+    // Prevent duplicate reports on reviews that are already flagged.
+    if (review.flagged) {
+      throw new Error('This review has already been reported.')
+    }
+
+    // Save the report alongside the existing moderation data.
+    const saved = readSavedModeration()
+    const existing = saved.get(review.id)
+
+    saved.set(review.id, {
+      status: review.status,
+      history: existing?.history ?? [],
+      flagged: true,
+      flagReason: reason.trim(),
+    })
+
+    writeSavedModeration(saved)
+
+    // Return the review with its new report information.
+    return mockResponse({
+      ...review,
+      flagged: true,
+      flagReason: reason.trim(),
+    })
+  }
+
+  // Backend integration will be added when the API is available.
+  throw new Error('Review reporting is not available without the backend.')
 }
