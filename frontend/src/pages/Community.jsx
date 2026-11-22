@@ -17,8 +17,8 @@ import { getDailyTrivia } from "../services/triviaService";
 import { communityAnnouncements } from "../data/communityAnnouncements";
 import { events } from "../data/events";
 import { communityMilestone } from "../data/communityMilestone";
-// Retrieve published reviews and save member edits for admin approval.
-import { getPublishedReviews, updateReview } from '../services/reviewService.js';
+// Handles published reviews, member edits, and soft deletion.
+import { getPublishedReviews, updateReview, deleteReview } from '../services/reviewService.js';
 
 //review date calculation
 import { getReviewDate } from "../utils/reviewDate";
@@ -272,6 +272,10 @@ function Community() {
     // Controls the confirmation dialog when saving an edited review.
     const [showEditConfirmation, setShowEditConfirmation] = useState(false);
 
+    // Stores the review selected for deletion.
+    // Null means no delete confirmation is currently open.
+    const [reviewToDelete, setReviewToDelete] = useState(null);
+
     // Fills the review form with the selected review's information.
     const handleEditReview = (review) => {
         setEditingReviewId(review.id);
@@ -354,6 +358,31 @@ function Community() {
             setShowEditConfirmation(false);
             setReviewMessage(error.message || "Unable to save your changes.");
             setReviewMessageType("error");
+        }
+    };
+
+    // Confirms deletion and removes the review from the public list.
+    // The review remains in mock storage with a "deleted" status.
+    const handleConfirmDelete = async () => {
+        if (!reviewToDelete) return;
+
+        try {
+            // Soft-delete the selected review.
+            await deleteReview(reviewToDelete.id);
+
+            // Close the confirmation dialog.
+            setReviewToDelete(null);
+
+            // Reload published reviews so the next review fills the empty spot.
+            const reviews = await getPublishedReviews();
+            const latestReviews = [...reviews]
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 4);
+
+            setPublishedReviews(latestReviews);
+        } catch (error) {
+            console.error('Failed to delete review:', error);
+            alert('Unable to delete your review. Please try again.');
         }
     };
 
@@ -1214,6 +1243,8 @@ function Community() {
                                             <button
                                                 type="button"
                                                 className="community-review-delete"
+                                                // Remember which review the member wants to delete.
+                                                onClick={() => setReviewToDelete(review)}
                                             >
                                                 <Trash2 size={15} />
                                                 Delete
@@ -1272,6 +1303,44 @@ function Community() {
                             {/* Save the edited review when the member confirms. */}
                             <button type="button" onClick={handleConfirmEdit}>
                                 Confirm changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Confirm deletion before removing a member's review. */}
+            {reviewToDelete && (
+                <div className="community-edit-overlay">
+                    <div
+                        className="community-edit-dialog"
+                        role="alertdialog"
+                        aria-modal="true"
+                        aria-labelledby="delete-confirmation-title"
+                        aria-describedby="delete-confirmation-description"
+                    >
+                        <h3 id="delete-confirmation-title">
+                            Delete your review?
+                        </h3>
+
+                        <p id="delete-confirmation-description">
+                            Are you sure you want to delete your review?
+                            It will no longer appear on the Community page.
+                        </p>
+
+                        <div className="community-edit-dialog-actions">
+                            <button
+                                type="button"
+                                onClick={() => setReviewToDelete(null)}
+                            >
+                                Cancel
+                            </button>
+
+                            <button
+                                type="button"
+                                // Delete the selected review when the member confirms.
+                                onClick={handleConfirmDelete}
+                            >
+                                Confirm Delete
                             </button>
                         </div>
                     </div>

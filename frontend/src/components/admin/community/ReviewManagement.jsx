@@ -281,13 +281,16 @@ export default function ReviewManagement() {
   // The All tab shows reviews needing attention and rejected reviews,
   // while Published and Rejected retain their original history views.
   const reviews = request.reviews
-
+  // Show reviews needing moderation, but never show deleted reviews.
   const moderationQueue = reviews.filter(
     (review) =>
-      review.status === 'pending' ||
-      review.status === 'rejected' ||
-      review.flagged === true
-  )
+      review.status !== 'deleted' &&
+      (
+        review.status === 'pending' ||
+        review.status === 'rejected' ||
+        review.flagged === true
+      )
+  );
 
   // The All tab excludes published reviews unless they are reported.
   // The other tabs continue showing reviews by their original status.

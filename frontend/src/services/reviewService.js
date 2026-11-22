@@ -4,7 +4,7 @@ import { communityReviews } from '../data/communityReviews.js'
 import { reviewSubmissions } from '../data/reviewSubmissions.js'
 
 /**
- * @typedef {'pending' | 'published' | 'rejected'} ReviewStatus
+ * @typedef {'pending' | 'published' | 'rejected' | 'deleted'} ReviewStatus
  */
 
 /**
@@ -35,8 +35,9 @@ import { reviewSubmissions } from '../data/reviewSubmissions.js'
 // published reviews plus the submissions in src/data/, and status changes are saved to
 // localStorage in this browser only. Backend team: the API paths below are placeholders,
 // so tell us the real ones.
-
-export const REVIEW_STATUSES = ['pending', 'published', 'rejected']
+// Deleted reviews are retained in storage but hidden from public display.
+// This allows member deletion without changing the original mock data.
+export const REVIEW_STATUSES = ['pending', 'published', 'rejected', 'deleted']
 export const REVIEW_MODERATION_STORAGE_KEY = 'instea.reviewModeration.v1'
 
 export const REVIEW_EDITS_STORAGE_KEY = 'instea.reviewEdits.v1'
@@ -159,13 +160,13 @@ function listMockReviews() {
     // Use edited content when available, otherwise keep the original.
     const updatedReview = isRecord(edit)
       ? {
-          ...review,
-          product: typeof edit.product === 'string' ? edit.product : review.product,
-          rating: Number.isInteger(edit.rating) && edit.rating >= 1 && edit.rating <= 5
-            ? edit.rating
-            : review.rating,
-          comment: typeof edit.comment === 'string' ? edit.comment : review.comment,
-        }
+        ...review,
+        product: typeof edit.product === 'string' ? edit.product : review.product,
+        rating: Number.isInteger(edit.rating) && edit.rating >= 1 && edit.rating <= 5
+          ? edit.rating
+          : review.rating,
+        comment: typeof edit.comment === 'string' ? edit.comment : review.comment,
+      }
       : review
 
     // Preserve the admin moderation status and history.
@@ -206,6 +207,10 @@ export async function setReviewStatus(id, status) {
   if (USE_MOCK) {
     const review = listMockReviews().find((item) => item.id === String(id))
     if (!review) throw new Error(`Review not found: ${id}`)
+    // Deleted reviews cannot be restored through admin moderation.
+    if (review.status === 'deleted') {
+      throw new Error('Deleted reviews cannot be moderated.')
+    }
     if (review.status === status) return mockResponse(review)
 
     const saved = readSavedModeration()
@@ -253,7 +258,7 @@ export async function updateReview(id, changes) {
 
   // Validate the edited review before saving.
   if (!product || !comment || !Number.isInteger(rating) ||
-      rating < 1 || rating > 5) {
+    rating < 1 || rating > 5) {
     throw new Error('Please enter a product, rating, and comment.')
   }
 
@@ -283,4 +288,29 @@ export async function updateReview(id, changes) {
 
   // Backend integration will be added when the API is available.
   throw new Error('Review editing is not available without the backend.')
+}
+
+/**
+ * Soft-deletes a review by changing its status to deleted.
+ * The original mock review remains saved, but is hidden
+ * from the public Community page and moderation queue.
+ *
+ * @param {string} id review being deleted
+ * @returns {Promise<ReviewSubmission>}
+ */
+export async function deleteReview(id) {
+  if (USE_MOCK) {
+    // Make sure the review exists and has not already been deleted.
+    const review = listMockReviews().find((item) => item.id === String(id))
+
+    if (!review || review.status === 'deleted') {
+      throw new Error('Review not found or already deleted.')
+    }
+
+    // Preserve the review data and record its deleted status.
+    return setReviewStatus(review.id, 'deleted')
+  }
+
+  // Backend integration will be added when the API is available.
+  throw new Error('Review deletion is not available without the backend.')
 }
