@@ -46,6 +46,12 @@
     background-color: #315746;
 }
 
+/* Keyboard focus for Create Announcement */
+.announcement-create-button:focus-visible {
+    outline: 3px solid #D4A84B;
+    outline-offset: 4px;
+}
+
 /*Announcement Form*/
 .announcement-form {
     margin-top: 24px;
@@ -129,6 +135,12 @@
 
 .announcement-form-actions button:last-child:hover {
     background-color: #315541;
+}
+
+/* Keyboard focus for Publish Announcement */
+.announcement-form-actions button:last-child:focus-visible {
+    outline: 3px solid #D4A84B;
+    outline-offset: 4px;
 }
 
 /*Counters*/
