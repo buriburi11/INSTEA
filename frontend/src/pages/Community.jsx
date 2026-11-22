@@ -17,7 +17,7 @@ import { getDailyTrivia } from "../services/triviaService";
 import { communityAnnouncements } from "../data/communityAnnouncements";
 import { events } from "../data/events";
 import { communityMilestone } from "../data/communityMilestone";
-import { communityReviews } from "../data/communityReviews";
+import { getPublishedReviews } from '../services/reviewService.js'
 
 //review date calculation
 import { getReviewDate } from "../utils/reviewDate";
@@ -27,11 +27,34 @@ import { getReviewDate } from "../utils/reviewDate";
 function Community() {
     const { isAuthenticated, customer } = useAuth();
 
-    {/*This will only display reviews that were aprroved by an admin, and only up to 4 (the most recent)*/ }
-    const publishedReviews = communityReviews
-        .filter(review => review.status === "published")
-        .sort((a, b) => new Date(b.date) - new Date(a.date))
-        .slice(0, 4);
+
+    {/*get review from admin and displays the approved and only shows the 4 latest*/}
+    const [publishedReviews, setPublishedReviews] = useState([]);
+    useEffect(() => {
+        let isActive = true;
+
+        async function loadPublishedReviews() {
+            try {
+                const reviews = await getPublishedReviews();
+
+                if (isActive) {
+                    const recentReviews = [...reviews]
+                        .sort((a, b) => new Date(b.date) - new Date(a.date))
+                        .slice(0, 4);
+
+                    setPublishedReviews(recentReviews);
+                }
+            } catch (error) {
+                console.error("Failed to load published reviews:", error);
+            }
+        }
+
+        loadPublishedReviews();
+
+        return () => {
+            isActive = false;
+        };
+    }, []);
 
     {/*===================*/ }
     {/*Seasonal Poll Part */ }
@@ -793,24 +816,31 @@ function Community() {
                         This month's leaderboard
                     </h2>
 
-                    {mockTriviaLeaderboard.map((player, index) => (
-                        <div
-                            key={player.id}
-                            className={`trivia-leaderboard-row ${isAuthenticated && player.isCurrentUser ? "current-user" : ""
-                                }`}
-                        >
-                            <span className="trivia-rank">{index + 1}</span>
+                    {mockTriviaLeaderboard.map((player, index) => {
+                        const isYou =
+                            isAuthenticated &&
+                            customer?.id != null &&
+                            player.customerId === customer.id;
 
-                            <span className="trivia-player-name">
-                                {player.name}
-                                {isAuthenticated && player.isCurrentUser && " (you)"}
-                            </span>
+                        return (
+                            <div
+                                key={player.id}
+                                className={`trivia-leaderboard-row ${isYou ? "current-user" : ""}`}
+                            >
+                                <span className="trivia-rank">{index + 1}</span>
 
-                            <span className="trivia-player-points">
-                                {player.points.toLocaleString()}
-                            </span>
-                        </div>
-                    ))}
+                                <span className="trivia-player-name">
+                                    {player.name}
+                                    {isYou && " (you)"}
+                                </span>
+
+                                <span className="trivia-player-points">
+                                    {player.points.toLocaleString()}
+                                </span>
+                            </div>
+                        )
+                    })}
+
                 </aside>
             </section>
 

@@ -135,7 +135,7 @@
 }
 
 /*for smaller screens the community milestone*/
-@media (max-width: 480px) {
+@media (max-width: 1350px) {
     .community-banner-image {
         height: 440px;
     }
@@ -318,7 +318,7 @@ button.poll-login-button:disabled {
 
 /*Poll confirmation message and voting hint*/
 .poll-confirmation,
-.keep-retire-hint{
+.keep-retire-hint {
     font-family: "Inter", sans-serif;
     font-size: 14px;
     font-weight: 600;
@@ -724,6 +724,22 @@ button.poll-login-button:disabled {
     color: #66655E;
 }
 
+@media (max-width: 1100px) {
+    .community-trivia {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .trivia-game,
+    .trivia-leaderboard {
+        min-width: 0;
+    }
+
+    .trivia-leaderboard {
+        border-left: none;
+        border-top: 1px solid #E2D8C7;
+    }
+}
+
 
 /* Announcements and Social Calendar layout */
 .community-announcements-calendar {
@@ -774,7 +790,7 @@ button.poll-login-button:disabled {
 }
 
 /* Announcement and social calendar title */
-.announcement-title, 
+.announcement-title,
 .social-calendar-title {
     font-family: "Inter", sans-serif;
     font-size: 20px;
@@ -798,6 +814,7 @@ button.poll-login-button:disabled {
     word-break: normal;
     white-space: normal;
 }
+
 .announcement-content {
     min-width: 0;
 }
@@ -837,6 +854,7 @@ button.poll-login-button:disabled {
     color: #1F3B2E;
     text-decoration: none;
 }
+
 .social-calendar-link:hover {
     opacity: 0.8;
 }
@@ -882,6 +900,7 @@ button.poll-login-button:disabled {
     line-height: 1.3;
     color: #8A6A35;
 }
+
 /*  Day  */
 .social-calendar-day {
     font-family: "Cormorant Garamond", serif;
@@ -945,6 +964,7 @@ button.poll-login-button:disabled {
     flex-direction: column;
     gap: 16px;
 }
+
 .community-review-card {
     background-color: #ffffff;
     border: 1px solid #e5d9c7;
@@ -959,12 +979,14 @@ button.poll-login-button:disabled {
     font-size: 13px;
     text-align: left;
 }
+
 /*reviewer's name*/
 .community-review-name {
     font-weight: 600;
     color: #2A2A27;
     font-size: 18px;
 }
+
 /* for the star ratings */
 .community-review-stars {
     display: flex;
@@ -1036,6 +1058,7 @@ button.poll-login-button:disabled {
 .community-review-own {
     background-color: #f7f0e3;
 }
+
 /* when owner font is a little smaller */
 .community-review-own .community-review-heading {
     font-size: 14px;
@@ -1139,6 +1162,7 @@ button.poll-login-button:disabled {
     margin: 0 0 20px;
     text-align: left;
 }
+
 /* each review form label with imput*/
 .community-review-form-field {
     display: flex;
@@ -1146,6 +1170,7 @@ button.poll-login-button:disabled {
     gap: 8px;
     margin-bottom: 18px;
 }
+
 /*each form label */
 .community-review-form-label {
     font-family: "Inter", sans-serif;
@@ -1157,8 +1182,8 @@ button.poll-login-button:disabled {
 }
 
 /*product name text input & the review comment area*/
-.community-review-form-input, 
-.community-review-form-textarea{
+.community-review-form-input,
+.community-review-form-textarea {
     width: 100%;
     padding: 10px;
     border: 2px solid #E4DACA;
@@ -1190,6 +1215,7 @@ button.poll-login-button:disabled {
     gap: 8px;
     color: #C2A066;
 }
+
 /* makes the stars clickable*/
 .community-review-star-button {
     display: flex;

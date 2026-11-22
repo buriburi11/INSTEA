@@ -13,7 +13,7 @@ export const getReviewDate = (date) => {
     const weeks = Math.floor(days / 7);
 
     if (weeks === 1) return "1 week ago";
-    if (weeks < 4) return `${weeks} weeks ago`;
+    if (days < 30) return `${weeks} weeks ago`;
 
     const months = Math.floor(days / 30);
 

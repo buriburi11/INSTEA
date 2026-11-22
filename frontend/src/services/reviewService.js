@@ -168,3 +168,15 @@ export async function setReviewStatus(id, status) {
   }
   return toReview(await response.json())
 }
+
+/**
+ * Returns only published reviews for the public Community page.
+ * Reuses the same review data and moderation status as the Admin Dashboard.
+ *
+ * @returns {Promise<ReviewSubmission[]>}
+ */
+export async function getPublishedReviews() {
+  const reviews = await getReviewSubmissions()
+
+  return reviews.filter((review) => review.status === 'published')
+}
