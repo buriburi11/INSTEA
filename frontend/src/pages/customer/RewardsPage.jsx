@@ -67,7 +67,8 @@ export default function RewardsPage() {
     }
   })
   const [copied, setCopied] = useState(false)
-  const [activeTab, setActiveTab] = useState('Rewards wallet')
+  const [selection, setSelection] = useState({ tab: 'Rewards wallet', wasLoading: false })
+  const activeTab = selection.tab
   const [transactions, setTransactions] = useState(null)
   const [historyError, setHistoryError] = useState('')
   const [stamps, setStamps] = useState(null)
@@ -101,6 +102,25 @@ export default function RewardsPage() {
       ignore = true
     }
   }, [customer.id])
+
+  const requestStatusByTab = {
+    'Leaves history': historyError ? 'error' : transactions === null ? 'loading' : 'loaded',
+    'Stamp cards': stampsError ? 'error' : stamps === null ? 'loading' : 'loaded',
+  }
+  const activeRequestStatus = requestStatusByTab[activeTab]
+  const loading = activeRequestStatus === 'loading'
+  // Announce completion only if this visit to the tab showed the loading message.
+  const statusMessage = loading
+    ? `Loading ${activeTab.toLowerCase()}…`
+    : selection.wasLoading && activeRequestStatus === 'loaded'
+      ? `${activeTab} loaded.`
+      : ''
+
+  function selectTab(tab) {
+    if (tab === activeTab || !readyTabs.has(tab)) return
+
+    setSelection({ tab, wasLoading: requestStatusByTab[tab] === 'loading' })
+  }
 
   // Auth supplies mock customer data today. Keep missing/invalid balances distinct
   // from zero so progress and redemption never imply a balance we don't know.
@@ -236,12 +256,20 @@ export default function RewardsPage() {
               type="button"
               className={tab === activeTab ? 'active' : ''}
               aria-pressed={tab === activeTab}
-              onClick={() => readyTabs.has(tab) && setActiveTab(tab)}
+              onClick={() => selectTab(tab)}
             >
               {tab}
             </button>
           ))}
         </nav>
+
+        <p
+          className={loading ? 'rewards-section rewards-muted' : 'rewards-sr-only'}
+          role="status"
+          aria-atomic="true"
+        >
+          {statusMessage}
+        </p>
 
         {/* ------- CHECK-INS & STREAKS TAB ------- */}
         {activeTab === 'Check-ins & streaks' && (
@@ -249,7 +277,7 @@ export default function RewardsPage() {
             <CheckInCalendar />
             <CheckInStreaks
               currentStreak={currentStreak}
-              onViewRewards={() => setActiveTab('Rewards wallet')}
+              onViewRewards={() => selectTab('Rewards wallet')}
             />
           </div>
         )}
@@ -260,17 +288,13 @@ export default function RewardsPage() {
             <p className="rewards-section" role="alert">{historyError}</p>
           ) : transactions ? (
             <LeavesHistory transactions={transactions} available={leaves} expiring={expiringLeaves} />
-          ) : (
-            <p className="rewards-section rewards-muted">Loading leaves history…</p>
-          ))}
+          ) : null)}
 
         {/* ------- STAMP CARDS TAB ------- */}
         {activeTab === 'Stamp cards' &&
           (stampsError ? (
             <p className="rewards-section" role="alert">{stampsError}</p>
-          ) : !stamps ? (
-            <p className="rewards-section rewards-muted">Loading stamp cards…</p>
-          ) : (
+          ) : stamps ? (
             <>
               <section className="rewards-section" aria-label="Stamp cards">
                 {stamps.cards.length === 0 ? (
@@ -314,7 +338,7 @@ export default function RewardsPage() {
                 )}
               </section>
             </>
-          ))}
+          ) : null)}
 
         {activeTab === 'Rewards wallet' && (
           <>
