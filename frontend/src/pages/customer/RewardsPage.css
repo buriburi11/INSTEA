@@ -358,15 +358,6 @@
   margin: 0;
 }
 
-.rewards-dark-button {
-  padding: 9px 16px;
-  border: 0;
-  border-radius: 7px;
-  background: #1d4232;
-  color: #fff;
-  font-size: 0.85rem;
-}
-
 .rewards-code {
   display: flex;
   justify-content: space-between;
@@ -414,14 +405,14 @@
   font-weight: 600;
 }
 
-.rewards-redeem-locked {
+.rewards-container .rewards-unavailable-button {
   padding: 8px 14px;
   border: 1px solid #dfd2bd;
   border-radius: 7px;
   background: #fff;
   color: #5f5b54;
   font-size: 0.85rem;
-  cursor: not-allowed !important;
+  cursor: not-allowed;
 }
 
 .rewards-past {

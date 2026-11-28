@@ -318,10 +318,9 @@ export default function RewardsPage() {
 
         {activeTab === 'Rewards wallet' && (
           <>
-            {/* ------- READY TO USE ------- */}
-            {/* TODO: "Apply at checkout" has no handler yet; it should attach the voucher to the cart. */}
-            <section className="rewards-section" aria-labelledby="ready-heading">
-              <h2 id="ready-heading">Ready to use</h2>
+            {/* ------- VOUCHERS & OFFERS ------- */}
+            <section className="rewards-section" aria-labelledby="offers-heading">
+              <h2 id="offers-heading">Vouchers &amp; offers</h2>
               <div className="rewards-ready">
                 <article className="rewards-card rewards-offer">
                   <p className="rewards-eyebrow">Reward milestone</p>
@@ -329,9 +328,17 @@ export default function RewardsPage() {
                   <p className="rewards-muted">
                     Valid for any size Botanical Cold Brew, Cloud Matcha, or Classic Milk Tea.
                   </p>
-                  <button type="button" className="rewards-dark-button">
+                  <button
+                    type="button"
+                    className="rewards-unavailable-button"
+                    disabled
+                    aria-describedby="voucher-availability"
+                  >
                     <Ticket size={16} aria-hidden="true" /> Apply at checkout
                   </button>
+                  <p id="voucher-availability" className="rewards-small">
+                    Applying this voucher at checkout is currently unavailable.
+                  </p>
                   <p className="rewards-small">Expires Dec 31</p>
                 </article>
 
@@ -353,7 +360,6 @@ export default function RewardsPage() {
             </section>
 
             {/* ------- REDEEM TEA LEAVES ------- */}
-            {/* TODO: Redeem buttons have no handler yet; redeeming needs a backend call that deducts leaves. */}
             <section className="rewards-section" aria-labelledby="redeem-heading">
               <div className="rewards-section-top">
                 <h2 id="redeem-heading">Redeem Tea Leaves</h2>
@@ -361,6 +367,9 @@ export default function RewardsPage() {
                   Balance <strong>{leaves === null ? 'Unavailable' : leaves.toLocaleString()}</strong>
                 </span>
               </div>
+              <p id="redemption-availability" className="rewards-small">
+                Redeeming Tea Leaves is currently unavailable.
+              </p>
               <ul className="rewards-card rewards-redeem-list">
                 {redeemOptions.map((option) => {
                   const locked = leaves === null || option.cost > leaves
@@ -380,9 +389,10 @@ export default function RewardsPage() {
                       </div>
                       <button
                         type="button"
-                        className={locked ? 'rewards-redeem-locked' : 'rewards-dark-button'}
-                        disabled={locked}
+                        className="rewards-unavailable-button"
+                        disabled
                         aria-label={`Redeem ${option.name}`}
+                        aria-describedby="redemption-availability"
                       >
                         {locked && <Lock size={13} aria-hidden="true" />} Redeem
                       </button>
