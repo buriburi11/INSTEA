@@ -46,12 +46,37 @@ describe('RewardsPage', () => {
     }
   })
 
-  it('locks rewards that cost more than the balance', () => {
+  it('shows why checkout and redemption are unavailable while preserving reward costs and eligibility', () => {
     renderWithLeaves(820)
-    expect(screen.getByRole('button', { name: 'Redeem Any Handcrafted Drink' })).toBeEnabled()
-    expect(screen.getByRole('button', { name: 'Redeem Reserve Tasting Flight' })).toBeDisabled()
-    expect(screen.getByRole('button', { name: 'Redeem Ceremonial Kyusu Teapot' })).toBeDisabled()
-    expect(screen.getByText('180 more leaves to unlock')).toBeInTheDocument()
+
+    const applyButton = screen.getByRole('button', { name: 'Apply at checkout' })
+    const checkoutMessage = 'Applying this voucher at checkout is currently unavailable.'
+    expect(applyButton).toBeDisabled()
+    expect(applyButton).toHaveAccessibleDescription(checkoutMessage)
+    expect(screen.getByText(checkoutMessage)).toBeVisible()
+
+    const redeemButtons = screen.getAllByRole('button', { name: /^Redeem / })
+    const redemptionMessage = 'Redeeming Tea Leaves is currently unavailable.'
+    expect(redeemButtons).toHaveLength(5)
+    for (const button of redeemButtons) {
+      expect(button).toBeDisabled()
+      expect(button).toHaveAccessibleDescription(redemptionMessage)
+    }
+    expect(screen.getByText(redemptionMessage)).toBeVisible()
+    expect(screen.getByText('600')).toBeVisible()
+    expect(screen.getByText('Any size, any drink on the menu.')).toBeVisible()
+    expect(screen.getByText('180 more leaves to unlock')).toBeVisible()
+  })
+
+  it('copies the member promo code', async () => {
+    const { default: userEvent } = await import('@testing-library/user-event')
+    const user = userEvent.setup()
+    renderWithLeaves(820)
+
+    await user.click(screen.getByRole('button', { name: 'Copy' }))
+
+    expect(screen.getByRole('button', { name: 'Copied' })).toBeEnabled()
+    expect(await navigator.clipboard.readText()).toBe('HARVEST15')
   })
 
   it('shows progress toward the next milestone', () => {
