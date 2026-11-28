@@ -126,7 +126,7 @@ export default function RewardsPage() {
   }
 
   return (
-    <main className="rewards-page">
+    <div className="rewards-page">
       <div className="rewards-container">
         <p className="rewards-eyebrow">My rewards</p>
         <h1>{fullName}</h1>
@@ -407,6 +407,6 @@ export default function RewardsPage() {
           </>
         )}
       </div>
-    </main>
+    </div>
   )
 }

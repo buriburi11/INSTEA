@@ -1,10 +1,12 @@
 import { fireEvent, render, screen } from '@testing-library/react'
+import { MemoryRouter } from 'react-router'
+import App from '../../App.jsx'
 import { AuthContext } from '../../auth/AuthContext.js'
+import { NotificationContext } from '../../notifications/NotificationContext.js'
 import RewardsPage from './RewardsPage.jsx'
 import { mockStreakSummary } from '../../data/checkIns.js'
 
-// Renders the page with a fake logged-in customer instead of going through AuthProvider.
-function renderWithLeaves(rewardLeaves) {
+function renderWithLeaves(rewardLeaves, children = <RewardsPage />) {
   const customer = {
     id: 'cust-alex-rivera',
     firstName: 'Alex',
@@ -15,13 +17,27 @@ function renderWithLeaves(rewardLeaves) {
   }
 
   return render(
-    <AuthContext.Provider value={{ customer }}>
-      <RewardsPage />
+    <AuthContext.Provider value={{ customer, isAuthenticated: true }}>
+      {children}
     </AuthContext.Provider>,
   )
 }
 
 describe('RewardsPage', () => {
+  it('renders the signed-in rewards route within a single main landmark', () => {
+    renderWithLeaves(820, (
+      <NotificationContext.Provider value={{ unreadCount: 0 }}>
+        <MemoryRouter initialEntries={['/rewards']}>
+          <App />
+        </MemoryRouter>
+      </NotificationContext.Provider>
+    ))
+
+    const main = screen.getByRole('main')
+    expect(main).toHaveAttribute('id', 'main-content')
+    expect(main).toContainElement(screen.getByRole('heading', { name: 'Alex Rivera' }))
+  })
+
   it.each([0, 1, 4])('displays the mock streak of %s weeks consistently across the dashboard', (streak) => {
     const originalStreak = mockStreakSummary.currentStreak
     mockStreakSummary.currentStreak = streak
