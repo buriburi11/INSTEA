@@ -84,7 +84,7 @@ function Header() {
 
   return (
     <header className="header">
-      <NavLink to="/">
+      <NavLink to="/" className="header-logo-link">
         <img
           src={instealogo}
           alt="INSTEA"
