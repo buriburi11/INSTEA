@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { AuthContext } from '../../auth/AuthContext.js'
 import RewardsPage from './RewardsPage.jsx'
 import { mockStreakSummary } from '../../data/checkIns.js'
@@ -33,6 +34,30 @@ function renderWithLeaves(rewardLeaves) {
 }
 
 describe('RewardsPage', () => {
+  it('moves keyboard focus to the wallet content when previewing a milestone reward', async () => {
+    const user = userEvent.setup()
+    renderWithLeaves(820)
+
+    const checkInsTab = screen.getByRole('button', { name: 'Check-ins & streaks' })
+    checkInsTab.focus()
+    await user.keyboard('{Enter}')
+    await user.tab()
+    await user.tab()
+    await user.tab()
+    expect(screen.getByRole('button', { name: 'Preview milestone reward' })).toHaveFocus()
+
+    await user.keyboard('{Enter}')
+
+    expect(screen.getByRole('heading', { name: 'Complimentary Drink Voucher' })).toHaveFocus()
+
+    await user.click(checkInsTab)
+    const walletTab = screen.getByRole('button', { name: 'Rewards wallet' })
+    walletTab.focus()
+    await user.keyboard('{Enter}')
+
+    expect(walletTab).toHaveFocus()
+  })
+
   it.each([0, 1, 4])('displays the mock streak of %s weeks consistently across the dashboard', (streak) => {
     const originalStreak = mockStreakSummary.currentStreak
     mockStreakSummary.currentStreak = streak
