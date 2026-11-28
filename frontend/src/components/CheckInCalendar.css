@@ -43,6 +43,16 @@
   gap: 8px;
 }
 
+@media (max-width: 480px) {
+  .checkin-calendar {
+    padding: 16px;
+  }
+
+  .checkin-weekdays {
+    font-size: 12px;
+  }
+}
+
 .checkin-day {
   min-height: 70px;
   display: flex;
