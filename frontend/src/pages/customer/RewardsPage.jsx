@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Check, Copy, Flame, Lock, QrCode, Ticket } from 'lucide-react'
 import useAuth from '../../auth/useAuth.js'
 import LeavesHistory from '../../components/LeavesHistory.jsx'
@@ -73,6 +73,15 @@ export default function RewardsPage() {
   const [historyError, setHistoryError] = useState('')
   const [stamps, setStamps] = useState(null)
   const [stampsError, setStampsError] = useState('')
+  const milestoneHeading = useRef(null)
+  const focusMilestoneOnOpen = useRef(false)
+
+  useEffect(() => {
+    if (activeTab === 'Rewards wallet' && focusMilestoneOnOpen.current) {
+      focusMilestoneOnOpen.current = false
+      milestoneHeading.current.focus()
+    }
+  }, [activeTab])
 
   // ------- LOAD LEAVES HISTORY -------
   // `ignore` stops a slow response from updating state after the page unmounts or the
@@ -120,6 +129,11 @@ export default function RewardsPage() {
     if (tab === activeTab || !readyTabs.has(tab)) return
 
     setSelection({ tab, wasLoading: requestStatusByTab[tab] === 'loading' })
+  }
+
+  function previewMilestoneReward() {
+    focusMilestoneOnOpen.current = true
+    selectTab('Rewards wallet')
   }
 
   // Auth supplies mock customer data today. Keep missing/invalid balances distinct
@@ -277,7 +291,7 @@ export default function RewardsPage() {
             <CheckInCalendar />
             <CheckInStreaks
               currentStreak={currentStreak}
-              onViewRewards={() => selectTab('Rewards wallet')}
+              onViewRewards={previewMilestoneReward}
             />
           </div>
         )}
@@ -349,7 +363,7 @@ export default function RewardsPage() {
               <div className="rewards-ready">
                 <article className="rewards-card rewards-offer">
                   <p className="rewards-eyebrow">Reward milestone</p>
-                  <h3>Complimentary Drink Voucher</h3>
+                  <h3 ref={milestoneHeading} tabIndex={-1}>Complimentary Drink Voucher</h3>
                   <p className="rewards-muted">
                     Valid for any size Botanical Cold Brew, Cloud Matcha, or Classic Milk Tea.
                   </p>
