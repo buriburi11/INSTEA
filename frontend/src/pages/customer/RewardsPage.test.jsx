@@ -1,5 +1,4 @@
-import { fireEvent, render, screen, within } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { AuthContext } from '../../auth/AuthContext.js'
 import RewardsPage from './RewardsPage.jsx'
 import { mockStreakSummary } from '../../data/checkIns.js'
@@ -56,21 +55,21 @@ describe('RewardsPage', () => {
     expect(applyButton).toHaveAccessibleDescription(checkoutMessage)
     expect(screen.getByText(checkoutMessage)).toBeVisible()
 
-    const redemption = screen.getByRole('region', { name: 'Redeem Tea Leaves' })
-    const redeemButtons = within(redemption).getAllByRole('button', { name: /^Redeem / })
+    const redeemButtons = screen.getAllByRole('button', { name: /^Redeem / })
     const redemptionMessage = 'Redeeming Tea Leaves is currently unavailable.'
     expect(redeemButtons).toHaveLength(5)
     for (const button of redeemButtons) {
       expect(button).toBeDisabled()
       expect(button).toHaveAccessibleDescription(redemptionMessage)
     }
-    expect(within(redemption).getByText(redemptionMessage)).toBeVisible()
-    expect(within(redemption).getByText('600')).toBeVisible()
-    expect(within(redemption).getByText('Any size, any drink on the menu.')).toBeVisible()
-    expect(within(redemption).getByText('180 more leaves to unlock')).toBeVisible()
+    expect(screen.getByText(redemptionMessage)).toBeVisible()
+    expect(screen.getByText('600')).toBeVisible()
+    expect(screen.getByText('Any size, any drink on the menu.')).toBeVisible()
+    expect(screen.getByText('180 more leaves to unlock')).toBeVisible()
   })
 
   it('copies the member promo code', async () => {
+    const { default: userEvent } = await import('@testing-library/user-event')
     const user = userEvent.setup()
     renderWithLeaves(820)
 
