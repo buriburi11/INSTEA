@@ -64,6 +64,27 @@
   color: #a83c2c;
 }
 
+.checkin-day__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.checkin-day__visual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.checkin-status-icon {
+  width: 14px;
+  height: 14px;
+}
+
 /*makes space for side component*/
 .checkin-layout {
   display: grid;
@@ -240,18 +261,20 @@
   font-size: 14px;
 }
 
-.checkin-legend-color {
-  width: 16px;
-  height: 16px;
+.checkin-legend-symbol {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
   border-radius: 5px;
-  display: inline-block;
 }
 
-.checkin-legend-color.checked-in {
-  background-color: #203b2f;
+.checkin-legend-symbol.checked-in {
+  background-color: #1f3b2e;
+  color: #faf6ee;
 }
 
-.checkin-legend-color.missed {
-  background-color: #a83c2c;
-  opacity: 60%;
+.checkin-legend-symbol.missed {
+  background-color: #f9ebe8;
+  color: #a83c2c;
 }
