@@ -211,3 +211,17 @@
     padding: 16px;
   }
 }
+
+@media (max-width: 400px) {
+  .admin-shell__profile {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    width: 100%;
+    text-align: left;
+  }
+
+  .admin-shell__profile .admin-field {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+}

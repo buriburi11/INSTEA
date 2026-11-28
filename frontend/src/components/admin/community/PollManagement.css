@@ -1,6 +1,7 @@
 /* Main poll management container */
 .poll-management {
     width: 100%;
+    container-type: inline-size;
 }
 
 /* Create Poll card */
@@ -424,4 +425,29 @@
 .poll-vote-count svg {
     color: #52745d;
     flex-shrink: 0;
+}
+
+@container (max-width: 500px) {
+    .poll-published-item {
+        grid-template-columns: minmax(0, 1fr) auto;
+        row-gap: 8px;
+    }
+
+    .poll-published-info,
+    .poll-delete-button {
+        grid-column: 1 / -1;
+    }
+
+    .poll-vote-count {
+        justify-self: start;
+        white-space: normal;
+    }
+
+    .poll-delete-button {
+        justify-self: end;
+    }
+
+    .poll-form-actions {
+        flex-wrap: wrap;
+    }
 }
