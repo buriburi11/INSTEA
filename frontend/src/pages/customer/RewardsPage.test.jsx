@@ -1,7 +1,18 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { act, fireEvent, render, screen } from '@testing-library/react'
 import { AuthContext } from '../../auth/AuthContext.js'
 import RewardsPage from './RewardsPage.jsx'
 import { mockStreakSummary } from '../../data/checkIns.js'
+import * as loyaltyService from '../../services/loyaltyService.js'
+
+afterEach(() => {
+  vi.restoreAllMocks()
+})
+
+function deferred() {
+  const result = {}
+  result.promise = new Promise((resolve, reject) => Object.assign(result, { resolve, reject }))
+  return result
+}
 
 // Renders the page with a fake logged-in customer instead of going through AuthProvider.
 function renderWithLeaves(rewardLeaves) {
@@ -96,5 +107,68 @@ describe('RewardsPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Stamp cards' }))
     expect(await screen.findByText('Milk Tea Ritual')).toBeInTheDocument()
     expect(screen.getAllByText('+1 stamp')).toHaveLength(3)
+  })
+
+  it.each([
+    ['Leaves history', 'getLeavesTransactions'],
+    ['Stamp cards', 'getStampCards'],
+  ])('announces loading and completion for %s in the same live region', async (tab, method) => {
+    const request = deferred()
+    vi.spyOn(loyaltyService, method).mockReturnValueOnce(request.promise)
+    vi.spyOn(loyaltyService, 'getStampHistory').mockResolvedValueOnce([])
+
+    renderWithLeaves(820)
+    const status = screen.getByRole('status', { name: '' })
+    expect(status).toBeEmptyDOMElement()
+
+    const tabButton = screen.getByRole('button', { name: tab })
+    fireEvent.click(tabButton)
+    expect(screen.getByText(`Loading ${tab.toLowerCase()}…`)).toBe(status)
+
+    await act(async () => { request.resolve([]) })
+    expect(screen.getByRole('status', { name: '' })).toBe(status)
+    expect(status).toHaveTextContent(`${tab} loaded.`)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Rewards wallet' }))
+    fireEvent.click(tabButton)
+    expect(status).toBeEmptyDOMElement()
+  })
+
+  it('keeps the active status when data finishes loading in a different tab', async () => {
+    const leaves = deferred()
+    const stamps = deferred()
+    const stampHistory = deferred()
+    vi.spyOn(loyaltyService, 'getLeavesTransactions').mockReturnValueOnce(leaves.promise)
+    vi.spyOn(loyaltyService, 'getStampCards').mockReturnValueOnce(stamps.promise)
+    vi.spyOn(loyaltyService, 'getStampHistory').mockReturnValueOnce(stampHistory.promise)
+
+    renderWithLeaves(820)
+    const status = screen.getByRole('status', { name: '' })
+    const leavesTab = screen.getByRole('button', { name: 'Leaves history' })
+    fireEvent.click(leavesTab)
+    expect(status).toHaveTextContent('Loading leaves history…')
+    fireEvent.click(screen.getByRole('button', { name: 'Stamp cards' }))
+
+    await act(async () => { leaves.resolve([]) })
+    await act(async () => { stamps.resolve([]) })
+    expect(status).toHaveTextContent('Loading stamp cards…')
+
+    await act(async () => { stampHistory.resolve([]) })
+    expect(status).toHaveTextContent('Stamp cards loaded.')
+
+    fireEvent.click(leavesTab)
+    expect(status).toBeEmptyDOMElement()
+  })
+
+  it('reports a failed request through its existing alert without announcing success', async () => {
+    const request = deferred()
+    vi.spyOn(loyaltyService, 'getLeavesTransactions').mockReturnValueOnce(request.promise)
+
+    renderWithLeaves(820)
+    fireEvent.click(screen.getByRole('button', { name: 'Leaves history' }))
+
+    await act(async () => { request.reject(new Error('Request failed')) })
+    expect(screen.getByRole('alert')).toHaveTextContent("We couldn't load your leaves history.")
+    expect(screen.getByRole('status', { name: '' })).toBeEmptyDOMElement()
   })
 })
