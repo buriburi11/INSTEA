@@ -645,12 +645,6 @@
   background: #faf6ee;
 }
 
-.stamp-card.expired h3,
-.stamp-card.expired .stamp-card-count,
-.stamp-card.expired .stamp-card-top .rewards-small {
-  opacity: 0.6;
-}
-
 .stamp-card.expired .stamp.earned {
   background: #6f7d72;
   color: #d9d4c7;
