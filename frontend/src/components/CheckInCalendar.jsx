@@ -1,10 +1,15 @@
 /*makes the calendar from react not hardcoded*/
 import { useState } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { Check, ChevronLeft, ChevronRight, X } from 'lucide-react'
 import './CheckInCalendar.css'
 import { mockCheckIns, mockMissedDates } from '../data/checkIns.js'
 
 const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+const dateFormatter = new Intl.DateTimeFormat('en-US', { dateStyle: 'full' })
+const dayStatuses = {
+  'checked-in': { icon: Check, label: 'Checked in', legend: 'Check-in' },
+  missed: { icon: X, label: 'Missed week', legend: 'Missed week' },
+}
 
 export default function CheckInCalendar() {
   const checkInDates = new Set(mockCheckIns.map((checkIn) => checkIn.date))
@@ -58,34 +63,37 @@ export default function CheckInCalendar() {
       </div>
       <div className="checkin-calendar-grid">
         {calendarDays.map((day, index) => {
-          const date = day === null
-            ? null
-            : `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+          if (day === null) {
+            return <div key={`empty-${index}`} className="checkin-day" aria-hidden="true" />
+          }
 
-          const isCheckIn = date !== null && checkInDates.has(date)
-          const isMissed = date !== null && missedDates.has(date)
+          const date = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+          const status = checkInDates.has(date) ? 'checked-in' : missedDates.has(date) ? 'missed' : ''
+          const statusLabel = dayStatuses[status]?.label ?? 'No check-in recorded'
+          const StatusIcon = dayStatuses[status]?.icon
 
           return (
-            <div
-              key={day === null ? `empty-${index}` : day}
-              className={`checkin-day ${isCheckIn ? 'checked-in' : ''} ${isMissed ? 'missed' : ''}`}
-            >
-              {day}
-            </div>
+            <time key={day} dateTime={date} className={`checkin-day ${status}`}>
+              <span className="checkin-day__label">
+                {`${dateFormatter.format(new Date(year, month, day))}: ${statusLabel}`}
+              </span>
+              <span className="checkin-day__visual" aria-hidden="true">
+                {day}
+                {StatusIcon && <StatusIcon className="checkin-status-icon" />}
+              </span>
+            </time>
           )
         })}
       </div>
-      {/*The little squares inform customer of what they mean*/}
       <div className="checkin-legend">
-        <div className="checkin-legend-item">
-          <span className="checkin-legend-color checked-in"></span>
-          <span>Check-in</span>
-        </div>
-
-        <div className="checkin-legend-item">
-          <span className="checkin-legend-color missed"></span>
-          <span>Missed week</span>
-        </div>
+        {Object.entries(dayStatuses).map(([status, { icon: StatusIcon, legend }]) => (
+          <div key={status} className="checkin-legend-item">
+            <span className={`checkin-legend-symbol ${status}`} aria-hidden="true">
+              <StatusIcon className="checkin-status-icon" />
+            </span>
+            <span>{legend}</span>
+          </div>
+        ))}
       </div>
     </section>
   )
